@@ -1,0 +1,16 @@
+\begin{algorithm}[t]
+\caption{Merkle-Damg\r{a}rd construction of hash functions}
+\label{alg:md_construction}
+\begin{algorithmic}[1]
+\Procedure{\MD{}}{$m$}
+    \State $m_{0}||m_{1}||\cdots||m_{k-1} \algAssign{} \textsf{pad}(m)$
+    \Comment{Pad $m$ appropriately}
+    \State $h_{0} \algAssign{} h(\textsf{IV}, m_{0})$
+    \Comment{\textsf{IV} is the \gls{initialization vector}}
+    \For{$i=1$; $i<k$; $i{+}{+}$}
+        \State $h_{i} \algAssign{} h(h_{i-1}, m_{i})$
+    \EndFor
+    \State \Return $h_{k-1}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

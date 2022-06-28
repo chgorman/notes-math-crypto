@@ -1,0 +1,19 @@
+\begin{algorithm}[t]
+\caption{Double-and-add formula for elliptic curve
+    scalar multiplication}
+\label{alg:ec_double_and_add}
+\begin{algorithmic}[1]
+\Require $P$ point on \gls{elliptic curve}; $k\in\N$
+\Procedure{DoubleAndAdd}{$P$, $k$}
+    \If {$k=0$}
+        \State \Return $\mathcal{O}$
+    \ElsIf {$k=1$}
+        \State \Return $P$
+    \ElsIf {$k\equiv0\mod 2$}
+        \State \Return $\textsc{DoubleAndAdd}(P+P, k/2)$
+    \Else
+        \State \Return $\textsc{DoubleAndAdd}(P+P, (k-1)/2)+P$
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

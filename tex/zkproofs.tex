@@ -1,0 +1,678 @@
+\chapter{Zero-Knowledge Proofs}
+\label{chap:zkproofs}
+
+We now give a brief introduction to \glspl{zkproof}.
+
+
+
+\section{The Need for Zero-Knowledge Proofs}
+
+The purpose of \glspl{zkproof} is to \emph{prove}
+something is true without revealing \emph{any additional information}.
+
+We note that all \glspl{signature} are a form of \gls{zkproof}.
+As discussed in Chapter~\ref{chap:signatures},
+If Alice signs a message $m$ resulting in signature $\sigma$
+and sends $\parens{m,\sigma}$ to Bob,
+he is able to prove to Charlie that Alice did send him the message $m$.
+In this case, Charlie sees the message along with the signature
+and knows that Alice signed the message and sent the pair to Bob,
+but he does not learn any additional information;
+in particular, he does not gain the ability to forge
+signatures of Alice.
+\Glspl{zkproof} attempt to generalize this to proofs about
+other knowledge.
+
+
+
+\section{Group for Examples}
+\label{sec:zkproofs_group}
+
+Throughout this chapter we will be using a particular
+\gls{finite cyclic group} for the examples.
+We have the following:
+
+\begin{align}
+    p &= rq + 1 \nonumber\\
+    q &= 2^{32} + 15 \nonumber\\
+    r &= 12.
+\end{align}
+
+\noindent
+It can be shown that $p$ and $q$ are prime numbers.
+Additionally, it can also be shown that
+
+\begin{equation}
+    h = 7
+\end{equation}
+
+\noindent
+is a generator for $\F_{p}^{*}$.
+Thus, we set
+
+\begin{equation}
+    g = h^{r} \mod p.
+\end{equation}
+
+\noindent
+From this, we know that $\abs{\angles{g}} = q$.
+
+When we need two generators, we set
+
+\begin{align}
+    h_{1} &= 7 \nonumber\\
+    h_{2} &= 6
+\end{align}
+
+\noindent
+and
+
+\begin{align}
+    g_{1} &= h_{1}^{r} \mod p \nonumber\\
+    g_{2} &= h_{2}^{r} \mod p.
+\end{align}
+
+\noindent
+It can also be shown that $6$ is also a generator of $\F_{p}^{*}$;
+see Appendix~\ref{app:math_finite_fields_primitive} for more information.
+
+
+
+\section{Proving knowledge of Discrete Logarithms}
+
+We now work through \glspl{zkproof} involving
+\glspl{discrete log};
+this section uses examples found in~\cite{GeneralDiscreteLogProofs}.
+
+Throughout we suppose $G = \angles{g}$ is a \gls{finite cyclic group}
+of order $q$.
+Furthermore, we suppose that we have a \gls{hash function}
+$H:\braces{0,1}^{*}\to\braces{0,1}^{b}$.
+
+\subsection{Knowledge of Discrete Logarithm}
+
+\subsubsection{Definition}
+
+We let $x\chooseRandom{}\Z_{q}^{*}$ and set $y = g^{x}$.
+To prove knowledge of $x$, 
+
+\begin{enumerate}
+\item We let $v\chooseRandom{}\Z_{q}$ and set $t = g^{v}$;
+    $t$ is the \emph{commitment}.
+\item We have the \emph{challenge}
+
+\begin{equation}
+    c = H(g,y,t).
+\end{equation}
+
+\item We have the \emph{response}
+
+\begin{equation}
+    r = v - cx \mod q.
+\end{equation}
+\end{enumerate}
+
+The challenge-response pair $\parens{c,r}$ can be verified by anyone.
+The proof involves constructing the commitment
+
+\begin{equation}
+    t' = g^{r}y^{c}
+\end{equation}
+
+\noindent
+and verifying
+
+\begin{equation}
+    c = H(g,y,t').
+\end{equation}
+
+\noindent
+As noted in~\cite{GeneralDiscreteLogProofs},
+this is essentially a Schnorr signature of the message $\parens{g,y}$.
+Schnorr signatures are discussed in Chapter~\ref{sec:signatures_schnorr}.
+
+\subsubsection{Verification}
+
+If $\parens{c,r}$ is as defined, then we see
+
+\begin{align}
+    t' &= g^{r}y^{c}
+            \nonumber\\
+        &= g^{v-cx}\cdot\parens{g^{x}}^{c}
+            \nonumber\\
+        &= g^{v}\cdot g^{-cx}\cdot g^{xc}
+            \nonumber\\
+        &= g^{v}
+            \nonumber\\
+        &= t.
+\end{align}
+
+\noindent
+Thus, we have
+
+\begin{align}
+    H(g,y,t') &= H(g,y,t) \nonumber\\
+        &= c.
+\end{align}
+
+\subsubsection{Example}
+
+\begin{example}[Knowledge of Discrete Logarithm]
+\exampleCodeReference{examples/zk\_proofs/dl\_proof\_1.py}
+
+We use the \gls{cyclic group} described in Chapter~\ref{sec:zkproofs_group};
+see Listing~\ref{list:zkproof_dl_proof_1}.
+
+\paragraph{Secret Information}
+In this case, we let
+
+\begin{align}
+    g &= 13841287201 \nonumber\\
+    y &= 34063925739.
+\end{align}
+
+\noindent
+We have
+
+\begin{equation}
+    y = g^{x} \mod p
+\end{equation}
+
+\noindent
+with
+
+\begin{equation}
+    x = 710124910.
+\end{equation}
+
+\paragraph{Setup Challenge-Response}
+To make our challenge-response, we set
+
+\begin{align}
+    v &= 979360098 \nonumber\\
+    t &= g^{v} \mod p \nonumber\\
+        &= 26735074229.
+\end{align}
+
+\noindent
+This allows us to compute
+
+\begin{align}
+    c &= \text{\MDFive{}}\parens{g,y,t} \mod q \nonumber\\
+        &= 2451489814 \nonumber\\
+    r &= v - cx \mod q \nonumber\\
+        &= 3624355949.
+\end{align}
+
+\noindent
+This implies that $\parens{2451489814,3624355949}$
+is the challenge-response for knowledge of the \gls{discrete log} for
+$\parens{13841287201,34063925739}$.
+
+\paragraph{Validate Challenge-Response}
+To validate the \gls{zkproof}, we see
+
+\begin{align}
+    t' &= g^{r}y^{c} \mod p \nonumber\\
+        &= 26735074229 \nonumber\\
+    c' &= \text{\MDFive{}}\parens{g,y,t'} \mod q \nonumber\\
+        &= 2451489814.
+\end{align}
+
+\noindent
+The proof is valid because $c=c'$.
+
+\input{code/zk_proofs/dl_proof_1.tex}
+\end{example}
+
+\subsubsection{Intuition}
+
+We take some time to try to explain what is happening intuitively.
+
+We are building a challenge-response test where the challenge
+is a pseudorandom number (from a \gls{hash function}).
+For an arbitrary $\parens{c',r'}$ pair, we have
+
+\begin{align}
+    t' &= g^{r'}y^{c'} \nonumber\\
+        &= g^{r'+c'x}.
+\end{align}
+
+\noindent
+If $x$ is unknown, then this will appear to be a random element of $G$.
+Given a \gls{hash function} (with a sufficiently large output),
+it should be computational infeasible to ensure
+
+\begin{equation}
+    c' = H(g,y,t')
+\end{equation}
+
+\noindent
+unless $x$ is known.
+
+
+\subsection{Knowledge of Two Discrete Logarithms}
+\label{sec:zkproofs_2_dlog}
+
+\subsubsection{Definition}
+
+In this case, we assume $g_{1}$ and $g_{2}$ are independent generators of $G$.
+For $x\chooseRandom{}\Z_{q}^{*}$, we set $y_{1} = g_{1}^{x}$ and
+$y_{2} = g_{2}^{x}$.
+We wish to prove that $x$ is known.
+
+We proceed in a manner similar as before:
+
+\begin{enumerate}
+\item We let $v\chooseRandom{}\Z_{q}$ and set $t_{1} = g_{1}^{v}$
+    and $t_{2} = g_{2}^{v}$.
+\item We have the \emph{challenge}
+
+\begin{equation}
+    c = H(g_{1},y_{1},g_{2},y_{2},t_{1},t_{2}).
+\end{equation}
+
+\item We have the \emph{response}
+
+\begin{equation}
+    r = v - cx \mod q.
+\end{equation}
+\end{enumerate}
+
+The challenge-response pair $\parens{c,r}$ can be verified by anyone.
+The proof involves constructing the commitment
+
+\begin{align}
+    t_{1}' &= g_{1}^{r}y_{1}^{c} \nonumber\\
+    t_{2}' &= g_{2}^{r}y_{2}^{c}
+\end{align}
+
+\noindent
+and confirming
+
+\begin{equation}
+    c = H(g_{1},y_{1},g_{2},y_{2},t_{1}',t_{2}').
+\end{equation}
+
+\subsubsection{Verification}
+
+If $\parens{c,r}$ is as defined, then we see
+
+\begin{align}
+    t_{i}' &= g_{i}^{r}y_{i}^{c}
+            \nonumber\\
+        &= g_{i}^{v-cx}\cdot\parens{g_{i}^{x}}^{c}
+            \nonumber\\
+        &= g_{i}^{v}\cdot g_{i}^{-cx}\cdot g_{i}^{xc}
+            \nonumber\\
+        &= g_{i}^{v}
+            \nonumber\\
+        &= t_{i}.
+\end{align}
+
+\noindent
+Thus, we have
+
+\begin{align}
+    H(g_{1},y_{1}, g_{2},y_{2},t_{1}',t_{2}')
+        &= H(g_{1},y_{1}, g_{2},y_{2},t_{1},t_{2}) \nonumber\\
+        &= c.
+\end{align}
+
+\subsubsection{Example}
+
+\begin{example}[Knowledge of Two Discrete Logarithms]
+\exampleCodeReference{examples/zk\_proofs/dl\_proof\_2.py}
+
+We use the \gls{cyclic group} described in Chapter~\ref{sec:zkproofs_group};
+see Listing~\ref{list:zkproof_dl_proof_2}.
+
+\paragraph{Secret Information}
+In this case, we let
+
+\begin{align}
+    g_{1} &= 13841287201
+        \nonumber\\
+    g_{2} &= 2176782336
+        \nonumber\\
+    y_{1} &= 34063925739
+        \nonumber\\
+    y_{2} &= 42077908773.
+\end{align}
+
+\noindent
+We have
+
+\begin{align}
+    y_{1} &= g_{1}^{x}
+        \nonumber\\
+    y_{2} &= g_{2}^{x}
+\end{align}
+
+\noindent
+with
+
+\begin{equation}
+    x = 710124910.
+\end{equation}
+
+\paragraph{Setup Challenge-Response}
+To make our challenge-response, we set
+
+\begin{align}
+    v &= 979360098 \nonumber\\
+    t_{1} &= g_{1}^{v} \mod p \nonumber\\
+        &= 26735074229 \nonumber\\
+    t_{2} &= g_{2}^{v} \mod p \nonumber\\
+        &= 14645668233.
+\end{align}
+
+\noindent
+This allows us to compute
+
+\begin{align}
+    c &= \text{\MDFive{}}\parens{g_{1},y_{1},g_{2},y_{2},t_{1},t_{2}} \mod q
+            \nonumber\\
+        &= 820804763 \nonumber\\
+    r &= v - cx \mod q \nonumber\\
+        &= 1837574845.
+\end{align}
+
+\noindent
+This implies that $\parens{820804763,1837574845}$
+is the challenge-response for knowledge of the two \glspl{discrete log}
+$\parens{13841287201,34063925739}$ and $\parens{2176782336,42077908773}$.
+
+\paragraph{Validate Challenge-Response}
+To validate the \gls{zkproof}, we see
+
+\begin{align}
+    t_{1}' &= g_{1}^{r}y_{1}^{c} \mod p \nonumber\\
+        &= 26735074229 \nonumber\\
+    t_{2}' &= g_{2}^{r}y_{2}^{c} \mod p \nonumber\\
+        &= 14645668233 \nonumber\\
+    c' &= \text{\MDFive{}}\parens{g_{1},y_{1},g_{2},y_{2},t_{1}',t_{2}'} \mod q
+            \nonumber\\
+        &= 820804763.
+\end{align}
+
+\noindent
+The proof is valid because $c=c'$.
+
+\input{code/zk_proofs/dl_proof_2.tex}
+\end{example}
+
+
+\subsection{Knowledge of Multiple Discrete Logarithms}
+
+The situation for two values can be generalized to multiple values.
+
+\subsection{Knowledge of Linear Combination of Two Discrete Logarithms}
+
+\subsubsection{Definition}
+
+We now suppose that $g_{1}$ and $g_{2}$ are distinct generators of $G$
+and  $x_{1},x_{2}\chooseRandom{}\Z_{q}^{*}$.
+We want to prove that
+
+\begin{align}
+    y_{1} &= g_{1}^{x_{1}} \nonumber\\
+    y_{2} &= g_{2}^{x_{2}} \nonumber\\
+    a_{1}x_{1} + a_{2}x_{2} &= b \mod q
+\end{align}
+
+\noindent
+for specified $\parens{a_{1},a_{2}}\in\Z_{q}^{2}$.
+That is, we know the \glspl{discrete log} and a linear combination of them.
+This is more involved than the previous proofs.
+
+\begin{enumerate}
+\item Let 
+
+\begin{equation}
+    \parens{v_{1},v_{2}}\chooseRandom{}
+        \braces{\parens{u_{1},u_{2}}\in\Z_{q}^{2}
+            \mid a_{1}u_{1} + a_{2}u_{2} = 0 \mod q}.
+\end{equation}
+
+We have the commitments
+
+\begin{align}
+    t_{1} &= g_{1}^{v_{1}} \nonumber\\
+    t_{2} &= g_{2}^{v_{2}}.
+\end{align}
+
+\item We have the challenge
+
+\begin{equation}
+    c = H(g_{1},y_{1},g_{2},y_{2},a_{1},a_{2},b,t_{1},t_{2}).
+\end{equation}
+
+\item We have the responses
+
+\begin{align}
+    r_{1} &= v_{1} - cx_{1} \mod q \nonumber\\
+    r_{2} &= v_{2} - cx_{2} \mod q.
+\end{align}
+\end{enumerate}
+
+\noindent
+The proof is $\parens{c,r_{1},r_{2}}$.
+
+The verify the proof, we set
+
+\begin{align}
+    t_{1}' &= g_{1}^{r_{1}}y_{1}^{c} \nonumber\\
+    t_{2}' &= g_{2}^{r_{2}}y_{2}^{c}.
+\end{align}
+
+\noindent
+The proof is valid if
+
+\begin{equation}
+    c = H(g_{1},y_{1},g_{2},y_{2},a_{1},a_{2},b,t_{1}',t_{2}')
+\end{equation}
+
+\noindent
+and
+
+\begin{equation}
+    a_{1}r_{1} + a_{2}r_{2} = -cb \mod q.
+\end{equation}
+
+\subsubsection{Verification}
+
+We now show that if $\parens{c,r_{1},r_{2}}$ is as defined
+then the proof is valid.
+
+First, we see
+
+\begin{align}
+    t_{i}' &= g_{i}^{r_{i}}y_{i}^{c}
+            \nonumber\\
+        &= g_{i}^{v_{i}-cx_{i}}\cdot\parens{g_{i}^{x_{i}}}^{c}
+            \nonumber\\
+        &= g_{i}^{v_{i}}
+            \nonumber\\
+        &= t_{i}.
+\end{align}
+
+\noindent
+Thus, the commitments are valid, so we have that
+
+\begin{align}
+    H(g_{1},y_{1},g_{2},y_{2},a_{1},a_{2},b,t_{1}',t_{2}').
+        &= H(g_{1},y_{1},g_{2},y_{2},a_{1},a_{2},b,t_{1},t_{2})
+            \nonumber\\
+        &= c.
+\end{align}
+
+\noindent
+We next see that
+
+\begin{align}
+    a_{1}r_{1} + a_{2}r_{2}
+        &= a_{1}\parens{v_{1}-cx_{1}} + a_{2}\parens{v_{2}-cx_{2}} \mod q
+            \nonumber\\
+        &= \parens{a_{1}v_{1} + a_{2}v_{2}} - c\parens{a_{1}x_{1} + a_{2}x_{2}}
+                \mod q
+            \nonumber\\
+        &= -c\parens{a_{1}x_{1} + a_{2}x_{2}} \mod q
+            \nonumber\\
+        &= -cb \mod q.
+\end{align}
+
+\noindent
+Between the first and second lines, we rearrange terms.
+The first term from the second line is zero from the assumptions
+on $\parens{v_{1},v_{2}}$.
+The fourth line follows from the third by assumption as well.
+
+\subsubsection{Example}
+
+\begin{example}[Knowledge of Linear Combination of Two Discrete Logarithms]
+\exampleCodeReference{examples/zk\_proofs/dl\_proof\_linear.py}
+
+We use the \gls{cyclic group} described in Chapter~\ref{sec:zkproofs_group};
+see Listing~\ref{list:zkproof_dl_proof_linear}.
+We note that some of the output is missing due to its length.
+
+\paragraph{Secret Information}
+In this case, we let
+
+\begin{align}
+    g_{1} &= 13841287201
+        \nonumber\\
+    g_{2} &= 2176782336
+        \nonumber\\
+    y_{1} &= 34063925739
+        \nonumber\\
+    y_{2} &= 6808289188
+\end{align}
+
+\noindent
+with
+
+\begin{align}
+    y_{1} &= g_{1}^{x_{1}}
+        \nonumber\\
+    y_{2} &= g_{2}^{x_{2}}
+\end{align}
+
+\noindent
+for
+
+\begin{align}
+    x_{1} &= 710124910
+        \nonumber\\
+    x_{2} &= 285758093.
+\end{align}
+
+\noindent
+We have
+
+\begin{equation}
+    a_{1}x_{1} + a_{2}x_{2} = b
+\end{equation}
+
+\noindent
+with
+
+\begin{align}
+    a_{1} &= 521
+        \nonumber\\
+    a_{2} &= 523
+        \nonumber\\
+    b &= 4030483429.
+\end{align}
+
+\paragraph{Setup Challenge-Response}
+To make our challenge-response, we set
+
+\begin{align}
+    v_{1} &= 979360098 \nonumber\\
+    v_{2} &= 2333891425 \nonumber\\
+    t_{1} &= g_{1}^{v_{1}} \mod p \nonumber\\
+        &= 26735074229 \nonumber\\
+    t_{2} &= g_{2}^{v_{2}} \mod p \nonumber\\
+        &= 47139203830.
+\end{align}
+
+\noindent
+This allows us to compute
+
+\begin{align}
+    c &= \text{\MDFive{}}\parens{g_{1},y_{1},g_{2},y_{2},a_{1},a_{2},b,
+            t_{1},t_{2}} \mod q \nonumber\\
+        &= 1236818951 \nonumber\\
+    r_{1} &= v_{1} - cx_{1} \mod q \nonumber\\
+        &= 1952959998 \nonumber\\
+    r_{2} &= v_{2} - cx_{2} \mod q \nonumber\\
+        &= 3581019185.
+\end{align}
+
+\noindent
+This implies that $\parens{1236818951,1952959998,3581019185}$
+is the challenge-response for knowledge of the linear combination
+of \glspl{discrete log}.
+
+\paragraph{Validate Challenge-Response}
+To validate the \gls{zkproof}, we see
+
+\begin{align}
+    t_{1}' &= g_{1}^{r_{1}}y_{1}^{c} \mod p \nonumber\\
+        &= 26735074229 \nonumber\\
+    t_{2}' &= g_{2}^{r_{2}}y_{2}^{c} \mod p \nonumber\\
+        &= 47139203830 \nonumber\\
+    c' &= \text{\MDFive{}}\parens{g_{1},y_{1},g_{2},y_{2},a_{1},a_{2},b,
+            t_{1}',t_{2}'} \mod q \nonumber\\
+        &= 1236818951.
+\end{align}
+
+\noindent
+We see that $c=c'$ and that
+
+\begin{align}
+    a_{1}r_{1} + a_{2}r_{2} \mod q &= 4147159721 \nonumber\\
+    -cb \mod q &= 4147159721.
+\end{align}
+
+\noindent
+Thus, we have
+
+\begin{equation}
+    a_{1}r_{1} + a_{2}r_{2} = -cb \mod q.
+\end{equation}
+
+\noindent
+The proof is valid because $c=c'$ and the correct linear combination.
+
+\input{code/zk_proofs/dl_proof_linear.tex}
+\end{example}
+
+\subsection{Knowledge of Linear Combination of Multiple Discrete Logarithms}
+
+We can easily generalize the results from the previous section
+to a linear combination of $n$ \gls{discrete log} values.
+
+
+
+\section{Concluding Discussion}
+
+We walked through some basic examples of \glspl{zkproof}
+by focusing on proving knowledge of \glspl{discrete log}.
+There is much more which could be said on this topic
+but we will not at this time.
+See~\cite{GeneralDiscreteLogProofs} for more information
+and a more thorough discussion.
+
+We note some extensions of \glspl{zkproof} include
+Non-Interactive Zero-Knowledge Proofs
+(NIZKs)~\cite{rackoff1991nizk,santis1987nizk},
+Zero-Knowledge Succinct Non-interactive ARguments of Knowledge
+(zk-SNARKs)~\cite{cryptoeprint:2011:443},
+and Zero-Knowledge Scalable Transparent ARguments of Knowledge
+(zk-STARKs)~\cite{cryptoeprint:2018:046,cryptoeprint:2018:1098}.
+The interest in \glspl{zkproof} may be related
+to interest in \gls{ethereum}~\cite{EthereumYellowpaper}
+and related cryptocurrencies.

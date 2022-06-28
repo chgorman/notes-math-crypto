@@ -1,0 +1,42 @@
+\chapter{Mathematical Review: Elliptic Curves, Pairings, and Interpolation}
+\chaptermark{Mathematical Review 3}
+\label{chap:math_3}
+
+In this chapter we continue on to more advanced mathematics.
+Understanding the information here is not required before reading
+other parts of the document.
+Even so, the more advanced parts of this document will require some familiarity
+with these topics.
+
+\section{Important Information}
+
+\begin{itemize}
+\item \Gls{publiccrypto}, such as the \gls{dhke},
+    requires \glspl{cyclic group}.
+    Many \glspl{cyclic group} may be constructed from \glspl{elliptic curve}
+    with greater flexibility than the other \glspl{group}
+    discussed in Chapter~\ref{sec:math_groups}
+    or Example~\ref{example:math_field_p_more}.
+\item \Glspl{bilinear} allow for many interesting possibilities;
+    in particular, they allow for \glspl{signature}
+    like BLS signatures~\cite{BLSSignatures}.
+    More generally, they allow for \Gls{pairingcrypto}
+    as discussed in Chapter~\ref{chap:pairing}.
+\item \Gls{lagrange interpolation} is used in the secret sharing protocols
+    in Chapter~\ref{chap:secret_sharing}.
+\end{itemize}
+
+\input{tex/math_elliptic.tex}
+\input{tex/math_bilinear.tex}
+\input{tex/math_lagrange.tex}
+
+\section{Conclusion of Mathematical Review}
+
+A lot of important and difficult material was covered
+in the previous chapters.
+There is still more mathematics that could be learned
+and that would be useful for cryptography.
+With that said, these are the main ideas and the most useful.
+Studying additional mathematics would be recommended to anyone
+who wants to dive deeper into cryptography;
+see Chapter~\ref{chap:conclusion} for additional resources.

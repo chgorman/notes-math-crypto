@@ -1,0 +1,26 @@
+\begin{algorithm}[p]
+\caption{Sponge construction of hash functions;
+    based on~\cite[Alg.~1]{KeccakSponge2011}}
+\label{alg:sponge_construction}
+\begin{algorithmic}[1]
+\Require $r < b$
+\Procedure{Sponge}{$m$, $\ell$}
+    \State $m_{0}||m_{1}||\cdots||m_{k-1} \algAssign{} \textsf{pad}(m, r)$
+    \Comment{Pad $m$ to a multiple of $r$}
+    \State $s \algAssign{} 0^{b}$
+    \Comment{$s$ is initialized to $b$ zero bits}
+    \For{$i=0$; $i<k$; $i{+}{+}$}
+        \Comment{Absorbing Phase}
+        \State $s \algAssign{} s \oplus (m_{i}||0^{b-r})$
+        \State $s \algAssign{} f(s)$
+    \EndFor
+    \State $z \algAssign{} \textsf{trunc}(s, r)$
+    \Comment{Squeezing Phase}
+    \While{$\text{len}(z) < \ell$}
+        \State $s \algAssign{} f(s)$
+        \State $z \algAssign{} z||\textsf{trunc}(s, r)$
+    \EndWhile
+    \State \Return $\textsf{trunc}(z, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

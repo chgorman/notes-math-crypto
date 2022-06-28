@@ -1,0 +1,173 @@
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+    \centering
+    \begin{tikzpicture}
+        [level 1/.style={sibling distance=80mm},
+         level 2/.style={sibling distance=40mm},
+         level 3/.style={sibling distance=20mm}]
+        \node[circle,draw] (root) {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{1}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{1}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{2}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[right] {$y_{2}$}
+                    }
+                edge from parent[<-,thick]
+                    node[left] {$y_{9}$}
+                }
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{3}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{3}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{4}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[right] {$y_{4}$}
+                    }
+                edge from parent[<-,thick]
+                    node[right] {$y_{10}$}
+                }
+            edge from parent[<-,thick]
+                node[left] {$y_{13}$}
+            }
+            child {node[circle,draw] {$H$}
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{5}$}}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{5}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{6}$}}
+                    edge from parent[<-,thick]
+                        node[right] {$y_{6}$}
+                    }
+                edge from parent[<-,thick]
+                    node[left] {$y_{11}$}
+                }
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{7}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{7}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{8}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[right] {$y_{8}$}
+                    }
+                edge from parent[<-,thick]
+                    node[right] {$y_{12}$}
+                }
+            edge from parent[<-,thick]
+                node[right] {$y_{14}$}
+            };
+        \node[above=of root] (header) {};
+        \draw[->,thick] (root) to node[auto,swap] {$y_{15}$} (header);
+    \end{tikzpicture}
+    \caption{3-layer Merkle Tree}
+    \label{fig:merkle_tree_3}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+    \centering
+    \begin{tikzpicture}
+        [level 1/.style={sibling distance=80mm},
+         level 2/.style={sibling distance=40mm},
+         level 3/.style={sibling distance=20mm}]
+        \node[circle,draw] (root) {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{1}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{1}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{2}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[right] {$y_{2}$}
+                    }
+                edge from parent[<-,thick]
+                    node[left] {$y_{9}$}
+                }
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{3}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{3}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{4}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[right] {$y_{4}$}
+                    }
+                edge from parent[<-,thick]
+                    node[right] {$y_{10}$}
+                }
+            edge from parent[<-,thick]
+                node[left,red] {$y_{13}$}
+            }
+            child {node[circle,draw] {$H$}
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw,very thick,blue] {$x_{5}$}}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{5}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{6}$}}
+                    edge from parent[<-,thick]
+                        node[right,red] {$y_{6}$}
+                    }
+                edge from parent[<-,thick]
+                    node[left] {$y_{11}$}
+                }
+                child {node[circle,draw] {$H$}
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{7}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[left] {$y_{7}$}
+                    }
+                    child {node[circle,draw] {$H$}
+                        child {node[rectangle,draw] {$x_{8}$}
+                        edge from parent[<-,thick]}
+                    edge from parent[<-,thick]
+                        node[right] {$y_{8}$}
+                    }
+                edge from parent[<-,thick]
+                    node[right,red] {$y_{12}$}
+                }
+            edge from parent[<-,thick]
+                node[right] {$y_{14}$}
+            };
+        \node[above=of root] (header) {};
+        \draw[->,thick] (root) to node[auto,swap] {$y_{15}$} (header);
+    \end{tikzpicture}
+    \caption{3-layer Merkle Tree with Merkle Proof of $x_{5}$}
+    \label{fig:merkle_tree_3_proof}
+\end{subfigure}
+\caption[3-Layer Merkle Tree and Merkle Proof]{Here
+    is a 3-layer Merkle Tree.
+    There is also a Merkle Proof for $x_{5}$.}
+\end{figure}

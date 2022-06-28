@@ -1,0 +1,175 @@
+\section{Rings}
+\label{sec:math_rings}
+
+\subsection{Why do we care about Rings?}
+\Glspl{ring} arise in many different areas.
+We use \glspl{ring} to ease our way into the discussion about
+\glspl{field} in Chapter~\ref{sec:math_fields}.
+
+\subsection{Intuition and Examples}
+\emph{\Glspl{ring}} are mathematical objects which we will sometimes encounter.
+They are a generalization of the integers when we look
+at both addition \emph{and} multiplication of integers.
+We begin with some examples.
+
+\begin{example}[Integers under addition and multiplication]
+We know that we can add and multiply integers and remain
+in the set of integers.
+In this way, the integers are closed under addition
+and closed under multiplication.
+We also note that both addition and multiplication are \gls{associative}.
+We know that both addition is \gls{commutative};
+multiplication is also \gls{commutative},
+but here we emphasize the \gls{commutative} nature of addition.
+
+In the case of addition, we know that $0\in\Z$ is the additive inverse:
+for every $a\in\Z$, we have
+
+\begin{equation}
+    0 + a = a + 0 = a.
+\end{equation}
+
+\noindent
+Similarly, we have that $1\in\Z$ is the multiplicative inverse:
+we have
+
+\begin{equation}
+    1\cdot a = a\cdot1 = a
+\end{equation}
+
+\noindent
+for all $a\in\Z$.
+
+We also know that addition and multiplication follow certain rules.
+In particular, given $a,b,c\in\Z$, we have
+
+\begin{equation}
+    a\cdot\parens{b+c} = \parens{a\cdot b} + \parens{a\cdot c};
+\end{equation}
+
+\noindent
+that is, we can \emph{distribute} multiplication over addition.
+We also have
+
+\begin{equation}
+    \parens{a+b}\cdot c = \parens{a\cdot c} + \parens{b\cdot c}.
+\end{equation}
+\end{example}
+
+\begin{example}[Integers modulo $n$]
+We now look at modular arithmetic.
+To be concrete, we look at $\Z_{6}$.
+This satisfies all of the properties of the integers under addition
+and multiplication.
+
+One interesting property of $\Z_{6}$ but not $\Z$ is that $2,3\in\Z_{6}$
+with $2\ne0$ and $3\ne0$ but
+
+\begin{equation}
+    2\cdot 3 = 0 \mod 6.
+\end{equation}
+
+\noindent
+This is an example where two nonzero elements may be multiplied
+together to equal zero.
+Thus, we can see that there is something distinctly different
+between $\Z$ and $\Z_{6}$.
+\end{example}
+
+\subsection{Formal Definition}
+
+\begin{defn}[Ring]
+A \gls{ring} is a \gls{set} $R$ together with two binary operations addition $+$
+and multiplication $\cdot$.
+First, $R$ is closed under addition and multiplication.
+Furthermore, we have the following properties:
+
+\begin{itemize}
+\item $\parens{R,+}$ is an \gls{abelian group} with additive identity $0$.
+    This implies that addition is \gls{associative}.
+\item Multiplication is \gls{associative} on $R$; that is,
+    for all $a,b,c \in R$, we have
+
+\begin{equation}
+    \parens{a\cdot b}\cdot c = a\cdot\parens{b\cdot c}.
+\end{equation}
+\item There is multiplicative identity $1\in R$; that is, 
+    for all $a\in R$, we have
+
+\begin{equation}
+    1\cdot a = a\cdot 1 = a.
+\end{equation}
+
+\noindent
+Furthermore, $0\ne 1$.
+
+\item We have the following distribution laws between multiplication
+    and addition.
+    For all $a,b,c\in R$, we have
+
+\begin{align}
+    a\cdot\parens{b + c} &= \parens{a\cdot b} + \parens{a\cdot c}
+        \nonumber\\
+    \parens{b + c}\cdot a &= \parens{b\cdot a} + \parens{c\cdot a}
+\end{align}
+\end{itemize}
+
+\noindent
+We formally write $\parens{R,+,\cdot}$ is a ring.
+\end{defn}
+
+The above definition holds for all rings.
+A \emph{\gls{commutative ring}} is one where multiplication
+is \gls{commutative};
+that is $a\cdot b = b\cdot a$ for all $a,b\in R$.
+We will focus on \glspl{commutative ring} here because those will arise
+in our work moving forward.
+Thus, our distribution law reduces to 
+
+\begin{equation}
+    a\cdot\parens{b + c} = \parens{a\cdot b} + \parens{a\cdot c}.
+\end{equation}
+
+\subsection{Continued Discussion}
+
+We say that  $a\in R\setminus\braces{0}$ is a \emph{zero divisor}
+if there exists $b\in R\setminus\braces{0}$ such that $ab = 0$.
+
+\begin{example}[Example of Zero Divisors]
+We continue to look at the \gls{ring} $\Z_{6}$.
+We have $2,3\in\Z_{6}$ with $2\ne0$ and $3\ne0$, yet we know
+
+\begin{equation}
+    2\cdot 3 = 6 \equiv 0 \mod 6.
+\end{equation}
+
+\noindent
+This implies that $2$ and $3$ are zero divisors in $\Z_{6}$.
+
+More generally, let $n = pq$ for distinct primes $p$ and $q$.
+Then $p,q\in\Z_{n}$ and we know
+
+\begin{equation}
+    p\cdot q = n \equiv 0 \mod n.
+\end{equation}
+
+\noindent
+This shows that $p$ and $q$ are zero divisors in $\Z_{n}$.
+\end{example}
+
+\begin{example}[Non-example of Zero Divisors]
+While we may not have used this language before,
+$\Z$ has no zero divisors.
+We know (although we have not shown) that for $a,b\in\Z$ with
+$ab = 0$ implies that $a=0$ or $b=0$.
+
+This shows that the \gls{ring} $\parens{\Z,+,\cdot}$
+is very different from the \glspl{ring} $\parens{\Z_{n},+,\cdot}$
+when $n$ is composite.
+\end{example}
+
+\subsection{Encoding Rings}
+
+When working with the \gls{ring} $\Z_{n}$, we can encode $k\in\Z_{n}$
+by its binary representation.
+Other rings have different representations.

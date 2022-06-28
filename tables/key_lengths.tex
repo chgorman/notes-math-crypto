@@ -1,0 +1,26 @@
+\begin{table}[t]
+\centering
+\begin{tabular}{c|c|c}
+\hline
+\multirowthead{3}{Effective \\ Key Length} &
+    \multicolumn{2}{c}{\thead{Discrete Logarithm}} \\
+\cline{2-3}
+& \thead{Order-$q$ \\ Subgroup of $\F_{p}^{*}$} &
+    \thead{Elliptic Curve \\ Group Order $q$} \\
+\hline
+112 & $p$: 2048,  $q$: 224 & 224 \\
+128 & $p$: 3072,  $q$: 256 & 256 \\
+192 & $p$: 7680,  $q$: 384 & 384 \\
+256 & $p$: 15360, $q$: 512 & 512 \\
+\hline
+\end{tabular}
+\caption[Key Length Estimates]{Estimated key lengths for specified
+    security levels~\cite[Page 381]{IntroModernCrypto}.
+    The effective key length determines the required number of operations.
+    An effective key length of 128 bits means that
+    it will take approximately $2^{128}$ operations to break the cryptosystem.
+    As we can see, the order of \gls{elliptic curve} \glspl{group}
+    are \emph{significantly smaller} than those required for
+    \glspl{subgroup} of $\F_{p}$.}
+\label{table:key_lengths}
+\end{table}

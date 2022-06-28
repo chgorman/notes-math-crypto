@@ -1,0 +1,284 @@
+\section{Number Theory}
+
+We review some basic facts of \gls{number theory} related to divisibility,
+prime numbers, and modular arithmetic.
+Additional material may be found in Appendix~\ref{app:math_nt}.
+A more systematic treatment
+may be found in~\cite{ComputationalIntroNTA}.
+
+\subsection{Divisibility and Prime Numbers}
+
+Given $a,b\in\Z$, we say $a$ divides $b$, written as $a\mid b$, when
+$b = ca$ for $c\in\Z$;
+in this case, we call $a$ a \emph{divisor} of $b$.
+We write $a\nmid b$ when $a$ does not divide $b$ and say $a$ is not
+a divisor of $b$.
+Because $a = 1\cdot a$, we see that $1\mid a$ and $a\mid a$;
+thus, $1$ and $a$ are always divisors of $a$.
+
+If $p\in\N\setminus\braces{0,1}$ and we \emph{only} have
+$1\mid p$ and $p\mid p$,
+then we say that $p$ is a \emph{prime number}.
+We frequently use $p$ and $q$ to denote prime numbers.
+If $n\in\N\setminus\braces{0,1}$ and $n$ is not prime,
+then we say that $n$ is \emph{composite}.
+
+By convention, mathematicians do not consider $0$ or $1$
+to be prime or composite numbers.
+
+\begin{example}[Prime and Composite Numbers]
+We know that $15 = 3\cdot 5$, so $15$ is a composite number.
+We know that we only have $3 = 1\cdot 3$ and $5 = 1\cdot 5$,
+so $3$ and $5$ are prime numbers.
+\end{example}
+
+\subsection{Greatest Common Divisor}
+
+Given $a,b\in\Z$ (with $a\ne0$ or $b\ne0$), $d\ge0$ is the
+\emph{greatest common divisor} of $a$ and $b$, written as
+$\gcd(a,b) = d$, if $d$ is a divisor of $a$ and $b$ and that
+if $r\ge0$ is also a divisor of $a$ and $b$ then $r\le d$.
+When $\gcd(a,b) = 1$, we say that $a$ and $b$ are \emph{coprime}:
+they have no common divisors.
+Stated another way, coprime numbers have no common prime factors.
+
+There are efficient algorithms to compute $\gcd(a,b)$;
+see Appendix~\ref{app:math_nt} for more details.
+One inefficient method involves computing the prime factorization
+of $a$ and $b$ and then collecting the common factors.
+
+\begin{example}[GCD Examples]
+\label{example:bnt_gcd}
+\exampleCodeReference{examples/math\_review/gcd.py}
+
+We have $3 = 1\cdot3$ and $5 = 1\cdot5$;
+this implies
+
+\begin{equation}
+    \gcd(3,5) = 1.
+\end{equation}
+
+\noindent
+We know $15 = 3\cdot 5$;
+this implies that
+
+\begin{align}
+    \gcd(15,5) &= 5 \nonumber\\
+    \gcd(15,3) &= 3.
+\end{align}
+
+\noindent
+We know $1872 = 2^{4}\cdot3^{2}\cdot13$ and
+$1080 = 2^{3}\cdot3^{3}\cdot5$;
+this implies that
+
+\begin{align}
+    \gcd(1872, 1080) &= 2^{3}\cdot3^{2} \nonumber\\
+        &= 72.
+\end{align}
+
+\noindent
+This is worked out in
+Example~\ref{example:app_math_euclidean_alg}.
+\end{example}
+
+If $\gcd(a,b) = d$, then we can always find $x,y\in\Z$ such that
+
+\begin{equation}
+    ax + by = d.
+\end{equation}
+
+\noindent
+There are efficient algorithms to compute this;
+see Appendix~\ref{app:math_nt} for more details.
+
+\begin{example}
+\label{example:bnt_extended_gcd}
+\exampleCodeReference{examples/math\_review/gcd.py}
+
+We continue the previous example for $\gcd(1872, 1080) = 72$.
+We see
+
+\begin{equation}
+    1872 \cdot (-4) + 1080 \cdot 7 = 72.
+\end{equation}
+
+\noindent
+This is worked out in
+Example~\ref{example:app_math_extended_euclidean_alg}.
+\end{example}
+
+\subsection{Congruent Numbers}
+
+Let $n>1$ be an integer.
+Given $a,b\in\Z$, we say that $a$ is congruent to $b$ modulo $n$
+if $n\mid a-b$;
+that is, we have $a-b = kn$ for some $k\in\Z$.
+We also write this as $a \equiv b \mod n$.
+
+\begin{example}[Examples of Congruent Numbers Mod 2]
+We let $n=2$.
+In this case, we see that $1 \equiv 11\mod 2$ because
+
+\begin{equation}
+    1 - 11 = \parens{-5}\cdot2.
+\end{equation}
+
+\noindent
+Similarly, $2 \equiv 10 \mod 2$:
+
+\begin{equation}
+    2 - 10 = \parens{-4}\cdot2.
+\end{equation}
+
+\noindent
+Continuing on, we see that all even numbers are congruent modulo $2$
+and all odd numbers are congruent modulo $2$.
+
+We show this now.
+Let $a = 2k$ and $b = 2\ell$.
+Then
+
+\begin{equation}
+    a - b = 2\parens{k-\ell}.
+\end{equation}
+
+\noindent
+Thus, $a\equiv b \mod 2$.
+This gives us the result for even numbers.
+If $c = 2m+1$ and $d = 2n + 1$, then we see
+
+\begin{equation}
+    c - d = 2\parens{m-n}.
+\end{equation}
+
+\noindent
+Thus, $c\equiv d \mod 2$.
+This gives us the result for odd numbers.
+
+We just showed that all even numbers are congruent to $0$ modulo $2$
+and all odd numbers are congruent to $1$ modulo $2$.
+\end{example}
+
+
+
+\subsection{Modular Arithmetic}
+
+Let $n>1$ be an integer.
+Given $a\in\Z$, we can always compute $q, r\in\Z$ such that
+
+\begin{equation}
+    a = qn + r,
+\end{equation}
+
+\noindent
+where $q$ the \emph{quotient}
+and $0\le r < n$ the \emph{remainder};
+this is called \emph{Euclidean Division}
+and is discussed in Appendix~\ref{app:math_nt}.
+From our previous discussion, we see that
+
+\begin{equation}
+    a\equiv r\mod n.
+\end{equation}
+
+\noindent
+Using this fact, we will show that addition and multiplication
+are always well-defined in modular arithmetic.
+From there, exponentiation and other operations follow.
+The only operation which requires care is division,
+which we will look at separately.
+
+\paragraph{Addition} We let $a_{1}, a_{2}\in\Z$ with
+
+\begin{align}
+    a_{1} &= q_{1}n + r_{1} \nonumber\\
+    a_{2} &= q_{2}n + r_{2},
+\end{align}
+
+\noindent
+where $q_{i}\in\Z$ and $0\le r_{i} < n$.
+Then we see
+
+\begin{align}
+    a_{1} + a_{2} &= \parens{q_{1} + q_{2}}n + \parens{r_{1}+r_{2}}
+        \nonumber\\
+    &= r_{1} + r_{2} \mod n.
+\end{align}
+
+\noindent
+This shows that addition behaves as we would expect.
+
+\paragraph{Multiplication} We let $a_{1}$ and $a_{2}$ be as before.
+Then
+
+\begin{align}
+    a_{1}a_{2} &= \parens{q_{1}q_{2}n + r_{1}q_{2} + r_{2}q_{1}}n + r_{1}r_{2}
+        \nonumber\\
+    &= r_{1}r_{2} \mod n.
+\end{align}
+
+\noindent
+This shows that multiplication behaves as we would expect.
+
+\paragraph{Division} We need to be careful in order to define division.
+Within the rational or real numbers, when we say that $x$
+is the multiplicative inverse of $a$,
+we mean that
+
+\begin{equation}
+    ax = 1.
+\end{equation}
+
+We look for something similar in modular arithmetic.
+Thus, if $a\in\Z\setminus\braces{0}$, then we look for an $x\ne0$ such that
+
+\begin{equation}
+    ax \equiv 1 \mod n.
+\end{equation}
+
+\noindent
+This implies that there is $k\in\Z$ such that
+
+\begin{equation}
+    ax - 1 = -nk,
+\end{equation}
+
+\noindent
+or rather
+
+\begin{equation}
+    ax + nk = 1.
+\end{equation}
+
+The above equality implies that
+
+\begin{equation}
+    \gcd(a,n) = 1.
+\end{equation}
+
+\noindent
+Thus, if $\gcd(a,n) = 1$, then $a$ has a multiplicative inverse
+modulo $n$.
+
+\begin{example}[Modular Arithmetic Example]
+\exampleCodeReference{examples/math\_review/modular\_arithmetic.py}
+
+We let $n = 256$.
+We have
+
+\begin{align}
+    27 + 241 &\equiv 12 \mod 256 \nonumber\\
+    27 \cdot 241 &\equiv 107 \mod 256.
+\end{align}
+
+\noindent
+Because $\gcd(27,256) = 1$ and $\gcd(241,256) = 1$,
+$27$ and $241$ have multiplicative inverses.
+We find that
+
+\begin{align}
+    27 \cdot 19 &\equiv 1 \mod 256 \nonumber\\
+    241 \cdot 17 &\equiv 1 \mod 256.
+\end{align}
+\end{example}

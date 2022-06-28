@@ -1,0 +1,168 @@
+\section{Size of Numbers}
+
+In \gls{publiccrypto} (which we discuss in Chapter~\ref{chap:public}),
+we will need numbers to be of various magnitudes so that certain
+mathematical problems are deemed sufficiently difficult;
+the particular sizes are discussed in Chapter~\ref{chap:hardness}
+when we talk about computational hardness assumptions.
+We frequently represent integers in binary expansion,
+so we use that to describe their sizes here.
+
+Given $a\in\N$, we say that $a$ is a $k$-bit number if
+$2^{k-1} \le a < 2^{k}$;
+that is, the largest set bit in $a$'s binary expansion
+is in the $k$th position.
+
+\begin{example}[Size of Numbers]
+\exampleCodeReference{examples/math\_review/size\_of\_numbers.py}
+
+Here are some good order-of-magnitude estimates to keep in mind:
+
+\begin{align}
+    2^{32}   &\simeq 4\cdot10^{9}   \nonumber\\
+    2^{64}   &\simeq 2\cdot10^{19}  \nonumber\\
+    2^{128}  &\simeq 3\cdot10^{38}  \nonumber\\
+    2^{256}  &\simeq 1\cdot10^{77}  \nonumber\\
+    2^{512}  &\simeq 1\cdot10^{154} \nonumber\\
+    2^{1024} &\simeq 2\cdot10^{308}.
+\end{align}
+
+\noindent
+For reference, we note that the total number of particles
+in the known universe is estimated to be $10^{80}$.
+Additionally, a standard year has $31536000 \simeq 2^{25}$ seconds in it.
+\end{example}
+
+When working with cryptography in practice,
+we may seek a certain level of security.
+For instance, we may want ``128-bit security''.
+This means that we want the most efficient algorithm for breaking
+the underlying cryptosystem to require \emph{at least} $2^{128}$ operations.
+As we can see, this is a large number.
+Analogously, having $k$-bit security amounts to requiring
+the most efficient algorithm must perform at least $2^{k}$ operations.
+
+\begin{example}[How large is $2^{128}$?]
+Let us suppose that we have $P$ processors
+performing $F$ operations per second and run those processors for $S$ seconds.
+The total number of operations $T$ that will be performed
+in that amount of time will be
+
+\begin{equation}
+    T = P\cdot F\cdot S \quad\text{operations.}
+\end{equation}
+
+We now put in some concrete numbers.
+Assume $P = 2^{30}$ processors (approximately one billion)
+performing $F = 2^{30}$ operations per second (1 GHz)
+for one year $S = 2^{25}$.
+Then we have
+
+\begin{align}
+    T &= 2^{30}\cdot 2^{30} \cdot 2^{25} \nonumber\\
+        &= 2^{85} \quad\text{operations.}
+\end{align}
+
+\noindent
+At this rate, to perform $2^{128}$ operations would require
+$2^{128-85} = 2^{43} \simeq 9\cdot10^{12}$ years.
+It would take almost 10 trillion years at current capabilities
+for perform $2^{128}$ operations.
+
+While we should never try to estimate how computing will
+advance in the future, it is clear that performing
+$2^{128}$ operations is a daunting task.
+Presumably, this is infeasible for at least the near future.
+\end{example}
+
+\subsection*{Converting between Powers of 2 and Powers of 10}
+
+We have the following useful approximations:
+
+\begin{align}
+    10   &\simeq 2^{3} \nonumber\\
+    100  &\simeq 2^{7} \nonumber\\
+    1000 &\simeq 2^{10}.
+\end{align}
+
+\noindent
+These approximations are slightly better:
+
+\begin{align}
+    10   &\simeq 2^{3.3} \nonumber\\
+    100  &\simeq 2^{6.6} \nonumber\\
+    1000 &\simeq 2^{10}.
+\end{align}
+
+\noindent
+Even so, these approximations are probably not needed in practice,
+especially if we just care about order-of-magnitude \emph{estimates}.
+
+Based on $10^{3} = 1000 \simeq 1024 = 2^{10}$, we have the following:
+
+\begin{align}
+    2^{10} &\simeq 10^{3} \nonumber\\
+    2^{20} &\simeq 10^{6} \nonumber\\
+    2^{30} &\simeq 10^{9}.
+\end{align}
+
+\noindent
+In general, we have
+
+\begin{equation}
+    2^{10k} \simeq 10^{3k}.
+\end{equation}
+
+\begin{example}[Power Conversions]
+\exampleCodeReference{examples/math\_review/power\_conversion.py}
+
+We will now work through some conversions.
+We see
+
+\begin{align}
+    2^{86} &= 2^{6 + 10\cdot8} \nonumber\\
+        &= 2^{6}\cdot2^{10\cdot8} \nonumber\\
+        &\simeq 100\cdot10^{3\cdot8} \nonumber\\
+        &= 10^{26}.
+\end{align}
+
+\noindent
+A more exact approximation is
+
+\begin{equation}
+    2^{86} \simeq 7.7\cdot10^{25}.
+\end{equation}
+
+\noindent
+Thus, $10^{26}$ is a good order-of-magnitude estimate.
+
+Similarly,
+
+\begin{align}
+    10^{86} &= 10^{2 + 3\cdot28} \nonumber\\
+        &= 100\cdot10^{3\cdot28} \nonumber\\
+        &\simeq 2^{7}\cdot 2^{280} \nonumber\\
+        &= 2^{287}.
+\end{align}
+
+\noindent
+We see that
+
+\begin{equation}
+    \log_{2}(10^{86}) \simeq 285.7.
+\end{equation}
+
+\noindent
+Thus, our approximation was not too far off:
+we are within a factor of 4.
+
+If instead we use the more accurate approximation $100 \simeq 2^{6.6}$,
+then we have
+
+\begin{equation}
+    10^{86} \simeq 2^{286.6}.
+\end{equation}
+
+\noindent
+This is within a factor of 2.
+\end{example}

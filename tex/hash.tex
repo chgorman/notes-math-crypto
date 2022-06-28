@@ -1,0 +1,333 @@
+\chapter{Cryptographic Hash Functions}
+\label{chap:hash}
+
+This chapter is devoted to introducing \glsfirstplural{hash function}.
+\Glspl{hash function} are used all over cryptography.
+
+\emph{Note:} In Chapters~\ref{chap:hash} and \ref{chap:hash_applications},
+we will frequently use the \MDFive{} and \ShaOne{} \glspl{hash function}
+in the examples due to their small output size.
+As explained below, \MDFive{} and \ShaOne{}
+\emph{should never be used in practice}.
+
+
+
+\section{The Need for Cryptographic Hash Functions}
+
+In cryptography, we want to be able to work with arbitrary data;
+the challenge, of course, is that it may be difficult to design
+algorithms which can handle arbitrary-length data.
+It would be better if, instead of working with the raw data,
+we would work with a ``fingerprint'' or ``hash'' of the data;
+in this way, algorithms would be able to work with identifiers
+of a fixed size.
+For this to be useful in a cryptographic setting,
+we would want hashes to be effectively unique.
+Furthermore, additional intuitive properties are desired:
+each hash should be easy to compute and appear random;
+the only way to determine a hash is to explicitly compute it; and
+it should be hard to find two different files with the same hash.
+
+Thus, we are interested in \glsfirstplural{hash function};
+these are hash functions with additional properties to defend against
+cryptographic adversaries.
+
+
+
+\section{Desired Properties of Cryptographic Hash Functions}
+\label{sec:hash_properties}
+
+In the cryptographic setting, the \glspl{hash function} we are concerned about
+are generally called \emph{\glsfirstplural{hash function}}.
+We let $H:\braces{0,1}^{*}\to\braces{0,1}^{b}$ be a
+\glsfirst{hash function} with an output of $b$ bits.
+We want $H$ to satisfy a number of properties:
+
+\begin{description}
+\item [Easy to Compute]
+    Given an input $x$, we want to be able to easily compute $H(x)$.
+
+    \emph{Discussion:} Most \glspl{hash function} have
+        some inherent message length limitations,
+        but in practice these lengths are extremely long
+        and so are treated as infinite.
+\item [Random Output]
+    Given an input $x$, we want $H(x)$ to be a ``random'' element
+    of $\braces{0,1}^{b}$.
+
+    \emph{Discussion:} One of the important assumptions
+        involving \glspl{hash function} is that it should not be possible
+        to obtain \emph{any} information about the output
+        without explicitly computing $H(x)$.
+        In particular, even if $x'$ is somehow related to $x$,
+        $H(x')$ should be completely unrelated to $H(x)$
+        provided $x\ne x'$.
+\item [Preimage Resistance]
+    Given an output $y$, it should be impractical to find $x$ such that
+
+\begin{equation}
+    H(x) = y.
+\end{equation}
+
+    \emph{Discussion:} We expect that every possible output has some input
+        (in fact, many inputs) which maps to it,
+        but the challenge is that it is not clear how
+        to find such inputs efficiently.
+        We expect that the best choice is just to try all possible inputs
+        (or rather, around $2^{b}$ possible inputs) to find $x$.
+
+\item [Second-Preimage Resistance]
+    Given $x_{1}$, it should be impractical to find a distinct $x_{2}$ such that
+
+\begin{equation}
+    H(x_{1}) = H(x_{2}).
+\end{equation}
+
+    \emph{Discussion:} Given $x_{1}$, we realize it should be possible
+        to find $x_{2}$ which results in the same hash output,
+        but the emphasis here is that there should be no
+        efficient method for finding such pairs.
+        We expect the best choice would be to try around $2^{b}$ inputs
+        to find $x_{2}$.
+
+\item [Collision Resistance]
+    It should be impractical to find any $x_{1}\ne x_{2}$ such that
+
+\begin{equation}
+    H(x_{1}) = H(x_{2}).
+\end{equation}
+
+    \emph{Discussion:} We expect there to be no efficient method
+        to find \emph{any} pairs $x_{1}$ and $x_{2}$ that hash to the
+        same output.
+        We expect the best choice would be to try around $2^{b/2}$ inputs
+        to find $x_{1}$ and $x_{2}$.
+\end{description}
+
+Although here we have restricted ourselves to \glspl{hash function}
+from bit strings to bit strings,
+it is possible to expand the definition from any \gls{set} to
+any other \gls{set}.
+In particular, we look at hashing to \glspl{elliptic curve} in
+Chapter~\ref{chap:pairing}.
+
+Some standard \glspl{hash function} include \MDFive{}~\cite{rfc1321},
+\ShaOne{}~\cite{FIPS-180-1-1995},
+\ShaTwo{}~\cite{FIPS-180-4-2015},
+and \ShaThree{}~\cite{FIPS-202}.
+\MDFive{} and \ShaOne{} should \emph{never} be used except when required
+for legacy systems;
+they are \emph{cryptographically-broken}
+\glspl{hash function}~\cite{rfc6151,rfc6194}.
+We note that \ShaThree{} is a \gls{hash function} which modifies the original
+specification of
+\Keccak{}~\cite{KeccakSponge2011}.
+
+\emph{Note well:} It is important to note that hashing data
+\emph{does not}, by itself, have anything to do with encrypting
+said data.
+Additionally, the relationship between preimage resistance,
+second-preimage resistance, and collision resistance is intricate;
+see~\cite{cryptoeprint:2004:035} for an extended discussion about
+the relationships between them.
+
+
+
+\section{Random Oracle: The Ideal Cryptographic Hash Function}
+\label{sec:random_oracle}
+
+A \emph{\gls{random oracle}} is an idealized form of a
+\glsfirst{hash function}.
+Put another way, when cryptographers write proofs they may
+assume that all parties have access to a \gls{random oracle};
+in practice, the \gls{random oracle} is instantiated with a specific
+\gls{hash function}.
+
+Suppose we have a \gls{random oracle} $H:\braces{0,1}^{*}\to\braces{0,1}^{b}$.
+A \gls{random oracle} $H(\cdot)$ has the property that,
+for any $x\in\braces{0,1}^{*}$,
+the output $H(x)$ is uniformly distributed on $\braces{0,1}^{b}$.
+
+
+
+\section{Additional Properties}
+\label{sec:additional_hash_properties}
+
+There are additional properties that we want in a \glsfirst{hash function}:
+
+\begin{description}
+\item [Correlation Resistance]
+    Even if $x$ and $y$ are correlated, $H(x)$ and $H(y)$
+        should be unrelated.
+
+    \emph{Discussion:} This provides greater detail related to
+        the \textbf{Random Output} property.
+        It is common that correlated inputs are hashed.
+        In fact, in some instances $x$ and $y$ may vary by only \emph{one bit},
+        yet we want the outputs $H(x)$ and $H(y)$ to be completely
+        unrelated.
+ \item [Length-extension Resistance]
+    If $H(x) = H(y)$ with $x\ne y$, then for any bit string $z$
+    of positive length, $H(x||z)$ and $H(y||z)$ are independent.
+
+    \emph{Discussion:} Again, this provides greater detail related to
+        the \textbf{Random Output} property.
+    \emph{There are \glspl{hash function} which do not satisfy this property};
+        see Chapter~\ref{ssec:hash_challenges_length_extension}.
+\end{description}
+
+
+
+\section{Examples}
+\label{sec:hash_examples}
+
+We will now spend some time looking at the outputs of various
+\glspl{hash function}.
+\exampleCodeReference{examples/hash\_functions/}
+One way to gain some understanding about \glspl{hash function}
+is to repeatedly hash data.
+
+\input{code/hash_functions/md5_output.tex}
+\input{code/hash_functions/sha1_output.tex}
+\input{code/hash_functions/sha2_output.tex}
+\input{code/hash_functions/sha3_output.tex}
+
+\MDFive{} example hashes can be found in Listing~\ref{list:md5},
+\ShaOne{} example hashes in Listing~\ref{list:sha1},
+\ShaTwo{}-256 example hashes in Listing~\ref{list:sha2}, and
+\ShaThree{}-256 example hashes in Listing~\ref{list:sha3}.
+For each \gls{hash function}, we look at three different examples:
+hashing the empty byte slice;
+hashing the byte slice corresponding to the sentence
+``The quick brown fox jumps over the lazy dog'';
+and hashing the byte slice corresponding to the sentence
+``The quick brown fox jumps over the lazy dog.''
+(note the added period).
+When we compare the last two hash values, we notice that there
+is a drastic change in the hash output when we add the period.
+This drastic change is also known as the \emph{avalanche effect}:
+any change in input should result in a vastly different output,
+as we expect the outputs to be completely unrelated.
+
+We note that the \MDFive{} and \ShaOne{} \glspl{hash function} have been
+used only as examples.
+As mentioned above, \emph{they should not be used in practice.}
+
+
+
+\section{Domain Separation}
+
+It may happen that, due to resource constraints, only \emph{one}
+\gls{hash function} may be implemented.
+Sometimes it is desired to instantiate different \glspl{hash function}
+for different uses.
+We can do this with \emph{domain separation}:
+adding a value to specify the specific domain.
+This will ensure that the queries to the underlying \gls{hash function}
+are unique regardless of input.
+
+In particular, if $H$ is a \gls{hash function}, we can make two different
+\glspl{hash function} by specifying
+
+\begin{align}
+    H_{0}(x) &\mathDef{} H(\texttt{0}||x) \nonumber\\
+    H_{1}(x) &\mathDef{} H(\texttt{1}||x),
+\end{align}
+
+\noindent
+where $\texttt{0}$ and $\texttt{1}$ are bits.
+When viewed as \glspl{random oracle}, this is not a problem.
+Care must be required when this is used in practice, though;
+this is because we can run into issues when working with
+\glspl{hash function} in the real world.
+This is discussed more in Chapter~\ref{sec:hash_challenges}.
+
+
+
+\section{Known Challenges with Certain Hash Functions}
+\label{sec:hash_challenges}
+
+Here we briefly discuss some of the known difficulties which may arise when
+working with \glspl{hash function} in practice.
+
+\subsection{Length Extension Attacks}
+\label{ssec:hash_challenges_length_extension}
+
+The \MDFive{}, \ShaOne{}, and \ShaTwo{} \glspl{hash function} are based
+on the \MD{}
+construction~\cite{merkle1979secrecy,damgaard1989design};
+this is discussed in Appendix~\ref{app:crypto_md_construction}.
+In this case, given the length of $x$ and $H(x)$ (but not $x$ explicitly),
+there exists $y$ such that for any $z$
+it is easy to compute
+
+\begin{equation}
+    H(x||y||z).
+\end{equation}
+
+\noindent
+Here, $y$ is related to the internal padding of the underlying
+\gls{hash function}.
+Because this padding is publicly known,
+it is trivial to determine it based solely on the length of the input.
+This implies that one must be careful in order to use
+\glspl{hash function} in \glspl{mac};
+see Chapter~\ref{sec:hash_hmac} for more information.
+
+Not all \glspl{hash function} are susceptible to this attack.
+\Keccak{} and \ShaThree{} were designed to resist all known attacks;
+their resistance is based on the fact that they are built
+using a sponge construction
+(discussed in Appendix~\ref{app:crypto_sponge_construction})
+and not all their internal state is output.
+Similarly, \ShaTwo{}-512/256 is not affected because its internal state
+is truncated before output
+(512 bit internal state truncated to 256 bits for output).
+In these instances, a portion of the internal state is not output,
+so total internal state recovery would require guessing at least 256 bits
+thereby making this attack impractical.
+
+\subsection{Other Attacks}
+
+We note that the collision resistance of \MDFive{} and \ShaOne{}
+are \emph{significantly below} their original security level
+(respectively 64 bits and 80 bits).
+It is \emph{practical} to find \MDFive{} and \ShaOne{} hash
+collisions~\cite{cryptoeprint:2004:199,cryptoeprint:2005:067,
+cryptoeprint:2004:356,cryptoeprint:2020:014,rfc6151,rfc6194};
+preimage resistance has been attacked~\cite{MD5FastPreimage2009}.
+
+
+
+\section{Properties of a Secure Cryptographic Hash Function}
+
+We will wrap up with a discussion about what makes a secure
+\glsfirst{hash function}.
+
+Ideally, a \gls{hash function} will be as close to a
+\gls{random oracle} as possible.
+So, a good \gls{hash function} will have all of the properties
+from Chapters~\ref{sec:hash_properties} and
+\ref{sec:additional_hash_properties}.
+
+This is not always possible in practice.
+As discussed previously, \MDFive{} and \ShaOne{} do not satisfy
+all of the standard hash properties (particularly collision resistance).
+This makes them insecure.
+Because of this, \MDFive{} and \ShaOne{} should only by used
+when \emph{required} for legacy systems.
+
+Due to length extension attacks, \ShaTwo{} cannot satisfy
+all the properties of a \gls{random oracle}.
+With that said, the best attacks against its collision resistance
+are no where close to working on the entire \gls{hash function}
+(just weaker versions).
+In this way, \ShaTwo{} is secure provided that care is taken
+to ensure that it is not possible to exploit length extension attacks.
+By design, \ShaThree{} is not susceptible to length extension attacks.
+This makes it closer to a \gls{random oracle}.
+
+In conclusion, it would be acceptable to use either \ShaTwo{} or \ShaThree{}
+in situations where a \glsfirst{hash function} is required.
+If using \ShaTwo{}, ensure that it is not possible
+to exploit length extension attacks.

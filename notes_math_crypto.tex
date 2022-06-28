@@ -1,0 +1,70 @@
+\documentclass[12pt,letterpaper,oneside]{book}
+
+\input{tex/preamble.tex}
+
+\makeglossaries
+\input{tex/glossary.tex}
+
+\begin{document}
+
+%%% Begin Front Matter
+\frontmatter
+
+\include{tex/front_matter}
+
+\tableofcontents
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Algorithms}
+\addtocontents{loa}{\def\string\figurename{Algorithm}}
+\listofalgorithms
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Listings}
+\lstlistoflistings
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+%%% Begin Main Matter
+\mainmatter
+\include{tex/introduction}
+\include{tex/do_not}
+\include{tex/math_1}
+\include{tex/math_2}
+\include{tex/math_3}
+\include{tex/symmetric}
+\include{tex/hash}
+\include{tex/hash_applications}
+\include{tex/public}
+\include{tex/signatures}
+\include{tex/ecc}
+\include{tex/pairing}
+\include{tex/zkproofs}
+\include{tex/secret_sharing}
+\include{tex/hardness}
+\include{tex/conclusion}
+
+%%% Begin Appendices
+\appendix
+\renewcommand{\chaptername}{Appendix}
+\include{tex/app_crypto}
+\include{tex/app_math}
+
+%%% Begin Back Matter
+\backmatter
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Glossary}
+\printglossary
+
+\end{document}

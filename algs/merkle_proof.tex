@@ -1,0 +1,29 @@
+\begin{algorithm}[p]
+\caption{Validate Merkle Proof of Inclusion}
+\label{alg:merkle_proof}
+\begin{algorithmic}[1]
+\Require $n = 2^{k}$ for some $k\ge1$; $H$ is a \gls{hash function}; $\text{len}(\pi) = \log_{2}(n)$.
+\Procedure{ValidateMerkleProof}{$x, i, y_{2n-1}, \pi$}
+    \State $\hat{y}_{i} \algAssign{} H(x)$
+    \Comment{Compute leaf hash}
+    \State $\mu \algAssign{} i$
+    \For {$k=1; k \le \log_{2}(n); k{+}{+}$}
+        \If {$\mu$ odd}
+            \State $\ell \algAssign{} (\mu+1)/2$
+            \State $\nu \algAssign{} n + \ell$
+            \State $\hat{y}_{\nu} \algAssign{} H(\hat{y}_{\mu}||\pi_{k})$
+        \Else
+            \State $\ell \algAssign{} \mu/2$
+            \State $\nu \algAssign{} n + \ell$
+            \State $\hat{y}_{\nu} \algAssign{} H(\pi_{k}||\hat{y}_{\mu})$
+        \EndIf
+        \State $\mu \algAssign{} \nu$
+    \EndFor
+    \If {$\hat{y}_{2n-1} = y_{2n-1}$}
+        \State \Return \texttt{true}
+    \Else
+        \State \Return \texttt{false}
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

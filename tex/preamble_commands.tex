@@ -1,0 +1,167 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Preamble: New Commands
+
+\newcommand*{\norm}[1]{\left| \left| #1 \right| \right|}		
+\newcommand*{\angles}[1]{\left\langle #1 \right\rangle}
+\newcommand*{\abs}[1]{\left| #1 \right|}
+
+\newcommand*{\parens}[1]{\left( #1 \right)}
+\newcommand*{\brackets}[1]{\left[ #1 \right]}	
+\newcommand*{\braces}[1]{\left\{ #1 \right\}}
+
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\dlog}{dlog}
+
+\newcommand*{\del}[0]{\delta}
+\newcommand*{\eps}[0]{\varepsilon}
+\newcommand*{\vphi}[0]{\varphi}
+\newcommand*{\N}[0]{\mathbb{N}}
+\newcommand*{\R}[0]{\mathbb{R}}
+\newcommand*{\Q}[0]{\mathbb{Q}}
+\newcommand*{\Z}[0]{\mathbb{Z}}
+\newcommand*{\C}[0]{\mathbb{C}}
+\newcommand*{\F}[0]{\mathbb{F}}
+\renewcommand{\P}[0]{\mathbb{P}} % Overwrites Paragraph symbol
+
+\newcommand*{\equalQ}[0]{\stackrel{?}{=}}
+
+% Make Footnotes on Titlepage better
+\thanksmarkseries{fnsymbol}
+
+% Set DateTime2 information
+\DTMsavedate{PublicRelease}{2022-06-28}
+
+% Comment section
+\newcommand*{\chgcomment}[1]{\todo[author=CHG,color=green,inline]{#1}}
+
+% New commands
+\newcommand*{\MDFive}[0]{MD5}
+\newcommand*{\ShaOne}[0]{SHA\nobreakdash-1}
+\newcommand*{\ShaTwo}[0]{SHA\nobreakdash-2}
+\newcommand*{\ShaThree}[0]{SHA\nobreakdash-3}
+\newcommand*{\Keccak}[0]{\textsc{Keccak}}
+
+\newcommand*{\MD}[0]{Merkle-Damg\r{a}rd}
+
+\newcommand*{\exampleCodeReference}[1]{Code may be found at~\texttt{#1}.}
+
+\newcommand*{\chooseRandom}[0]{\stackrel{\$}{\leftarrow}}
+\newcommand*{\mathDef}[0]{\coloneqq}
+
+\newcommand*{\algAssign}[0]{\coloneqq}
+\newcommand*{\Break}[0]{\State \textbf{break}}
+\newcommand*{\Continue}[0]{\State \textbf{continue}}
+
+\newcommand*{\PairingCheck}[0]{\textsc{PairingCheck}}
+
+% DKG Phases and Commands
+\newcommand*{\sk}[0]{\textrm{sk}}
+\newcommand*{\pk}[0]{\textrm{pk}}
+\newcommand*{\mpk}[0]{\textrm{mpk}}
+\newcommand*{\msk}[0]{\textrm{msk}}
+\newcommand*{\gpk}[0]{\textrm{gpk}}
+\newcommand*{\gsk}[0]{\textrm{gsk}}
+
+\newcommand*{\Enc}[0]{\textsc{Encrypt}}
+\newcommand*{\Dec}[0]{\textsc{Decrypt}}
+
+\newcommand*{\Registration}[0]{Registration Phase}
+\newcommand*{\ShareSubmission}[0]{Share Submission Phase}
+\newcommand*{\ShareDispute}[0]{Share Dispute Phase}
+\newcommand*{\KeyShareSubmission}[0]{Key Share Submission Phase}
+\newcommand*{\MPKSubmission}[0]{MPK Submission Phase}
+\newcommand*{\GPKSubmission}[0]{GPK Submission Phase}
+\newcommand*{\GPKDispute}[0]{GPK Dispute Phase}
+\newcommand*{\Completion}[0]{Completion Phase}
+
+% Fancyhdr
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+%\fancyhead[L]{\nouppercase{\leftmark}}
+%\fancyhead[L]{\textsl{\MakeUppercase{\leftmark}}}
+\fancyhead[L]{\textsl{\nouppercase{\leftmark}}}
+\fancyhead[C]{}
+\fancyhead[R]{\thepage}
+\fancyfoot[L]{}
+\fancyfoot[C]{}
+\fancyfoot[R]{}
+\renewcommand{\headrulewidth}{0.4pt}
+%\renewcommand{\footrulewidth}{0pt}
+
+
+
+% New definition of square root:
+% it renames \sqrt as \oldsqrt
+\let\oldsqrt\sqrt
+% it defines the new \sqrt in terms of the old one
+\def\sqrt{\mathpalette\DHLhksqrt}
+\def\DHLhksqrt#1#2{%
+\setbox0=\hbox{$#1\oldsqrt{#2\,}$}\dimen0=\ht0
+\advance\dimen0-0.2\ht0
+\setbox2=\hbox{\vrule height\ht0 depth -\dimen0}%
+{\box0\lower0.4pt\box2}}
+
+
+
+%\newtheoremstyle{mythm}% name of the style to be used
+%  {parskip}% measure of space to leave above the theorem. E.g.: 3pt
+%  %{spaceabove}% measure of space to leave above the theorem. E.g.: 3pt
+%  {parskip}% measure of space to leave below the theorem. E.g.: 3pt
+%  %{spacebelow}% measure of space to leave below the theorem. E.g.: 3pt
+%  {}% name of font to use in the body of the theorem
+%  %{bodyfont}% name of font to use in the body of the theorem
+%  {\quad}% measure of space to indent
+%  %{indent}% measure of space to indent
+%  {}% name of head font
+%  %{headfont}% name of head font
+%  {}% punctuation between head and body
+%  %{headpunctuation}% punctuation between head and body
+%  {}% space after theorem head; " " = normal interword space
+%  %{headspace}% space after theorem head; " " = normal interword space
+%  {}
+%  %{\thmname{#1}\thmnumber{ #2}:\thmnote{ #3}}
+%  %{headspec}% Manually specify head
+
+\newtheoremstyle{mythm}% name
+  {12pt}%Space above
+  %{3pt}%Space above
+  {12pt}%Space below
+  {\normalfont}%Body font
+  {0pt}%Indent amount
+  {\bf}% Theorem head font
+  %{\itshape}% Theorem head font
+  {}%Punctuation after theorem head
+  %{.}%Punctuation after theorem head
+  {\newline}%Space after theorem head 2
+  {}%Theorem head spec (can be left empty, meaning ‘normal’)
+
+\theoremstyle{mythm}
+\newtheorem{thm}{Theorem}[chapter] % number by chapter; can replace with section
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{ax}{Axiom}
+\newtheorem{problem}[thm]{Problem}
+\newtheorem{example}[thm]{Example}
+%
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[chapter] % number by chapter
+%
+\theoremstyle{remark}
+\newtheorem{rem}{Remark}[chapter]
+\newtheorem*{notation}{Notation}
+%
+\newtheorem{hw}[thm]{Homework}
+
+% Allow equations to break over pages (?); from Kyle
+%\allowdisplaybreaks
+
+\lstset{language=Python,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\ttfamily\color{red!50!brown},
+    showstringspaces=false}
+
+% Replace "Listings" with "List of Listings"
+\renewcommand*{\lstlistlistingname}{List of Listings}

@@ -1,0 +1,172 @@
+\section{Computational Complexity}
+
+We review the basics of computational complexity in order
+to talk about the computational cost of solving certain problems.
+That is to say, we care about how long certain operations
+take when we look at asymptotically large values.
+
+\subsection{Big-O Notation}
+
+We begin by reviewing big-O notation.
+Let $f:\N\to\R$ and $g:\N\to\R$ with $f(n)\ge0$ and $g(n)\ge0$.
+We write $f(n) = O(g(n))$ when there is some $C>0$
+and $N\in\N$ such that
+
+\begin{equation}
+    f(n) \le Cg(n), \quad n\ge N.
+\end{equation}
+
+\noindent
+That is, $f$ is asymptotically bounded above by $g$.
+
+We write $f(n) = \Omega(g(n))$ when there is some $C>0$
+and $N\in\N$ such that
+
+\begin{equation}
+    f(n) \ge Cg(n), \quad n\ge N.
+\end{equation}
+
+\noindent
+That is, $f$ is asymptotically bounded below by $g$.
+
+Finally, we write $f(n) = \Theta(g(n))$ when $f(n) = O(g(n))$ and
+$f(n) = \Omega(g(n))$.
+That is, $f$ is asymptotically bounded above and below by $g$.
+In general, we are interested in \emph{tightly} bounding functions
+asymptotically; lose bounds are not very valuable.
+
+A further discussion of Big-O notation may be found
+in~\cite[Chapter 3]{IntroToAlgs} or
+\cite[Chapter 1.2.11.1]{TAOCP1}.
+
+\begin{example}[Example of Big-O Notation]
+We let $f(n) = n^{2} + 10n + 5$ and $g_{1}(n) = n^{3}$.
+Then we see
+
+\begin{equation}
+    f(n) \le 20\cdot g_{1}(n), \quad n\ge1.
+\end{equation}
+
+\noindent
+Thus, $f(n) = O(g_{1}(n))$.
+
+We now let $g_{2}(n) = n^{2}$.
+In this case, we have
+
+\begin{equation}
+    f(n) \le 16\cdot g_{2}(n), \quad n\ge1.
+\end{equation}
+
+\noindent
+Thus, $f(n) = O(g_{2}(n))$.
+We see that $g_{1}$ is a larger upper bound for $f$ while $g_{2}$ matches
+the growth of $f$ more closely.
+
+We now focus on making the statement ``$g_{2}$ matches the growth
+of $f$ more closely'' more precise;
+in particular, we will show that $g_{2}$ asymptotically bounds $f$
+above and below.
+We see that
+
+\begin{equation}
+    f(n) \ge g_{2}(n), \quad n\ge1.
+\end{equation}
+
+\noindent
+Thus, $f(n) = \Omega(g_{2}(n))$.
+Together, we have $f(n) = \Theta(g_{2}(n))$.
+\end{example}
+
+\begin{example}[Another Example of Big-O Notation]
+We consider the function $f(n) = 100\brackets{\ln n}^{2}$.
+
+We begin by comparing this function to $g_{1}(n) = n$.
+Looking at $N = e^{10}\simeq 2.2\cdot10^{4}$, we have
+
+\begin{equation}
+    f(N) = 10^{4} < 2.2\cdot10^{4} \simeq g_{1}(N).
+\end{equation}
+
+\noindent
+This holds for all $n\ge N$, so we have $f(n) = O(g_{1}(n))$.
+Because $g_{1}$ grows much more quickly than $f$,
+this bound is not very valuable.
+
+We set $g_{2} = \brackets{\ln n}^{2}$.
+Then we see that
+
+\begin{equation}
+    f(n) = 100\brackets{\ln n}^{2} \le 1000\brackets{\ln n}^{2}
+\end{equation}
+
+\noindent
+and
+
+\begin{equation}
+    f(n) = 100\brackets{\ln n}^{2} \ge \brackets{\ln n}^{2}.
+\end{equation}
+
+\noindent
+These inequalities hold for all $n$.
+Thus, we have $f(n) = \Theta(g_{2}(n))$.
+\end{example}
+
+\subsection{Standard Complexity Classes}
+
+We will now discuss some broad complexity classes.
+
+Generally, we think of two classes: polynomial algorithms
+and exponential algorithms.
+Polynomial algorithms have time and space requirements bounded above
+by a polynomial.
+Exponential algorithms have time and space requirements
+bounded above by an exponential function.
+
+When working in computational (or algorithmic) number theory,
+we seek algorithms which are polynomial in the \emph{bits} of $n$,
+not polynomial in $n$.
+Thus, we seek algorithms with total complexity cost
+
+\begin{equation}
+    C(n) = O\parens{\brackets{\log n}^{c}}
+\end{equation}
+
+\noindent
+for some constant $c>0$.
+This is called a \emph{polynomial algorithm};
+its run time is bounded above by a polynomial in the bits of $n$.
+
+If an algorithm has total complexity cost
+
+\begin{equation}
+    C(n) = O\parens{n^{c}}
+\end{equation}
+
+\noindent
+for some constant $c>0$,
+then the algorithm is \emph{exponential} in the bits of $n$.
+This is called an \emph{exponential algorithm};
+its run time is bounded above by a function exponential in the bits of $n$.
+Because all polynomial algorithms are trivially exponential algorithms,
+we generally assume the cost is bounded below by an exponential as well.
+In the case of probabilistic algorithms,
+the \emph{expected} run time is exponential.
+
+It is possible to talk about superpolynomial algorithms
+(algorithms which grow faster than any polynomial)
+and subexponential algorithms
+(algorithms which grow slower than any exponential)
+but we will not discuss them at this point.
+We do note that there are many open questions in computer science
+related to the asymptotic complexity of various algorithms.
+This is related to the computational complexity of
+certain mathematical problems which we will discuss
+in Chapter~\ref{chap:hardness}.
+
+\subsection{Complexity of Various Operations}
+
+There are polynomial algorithms for addition,
+multiplication, exponentiation, greatest common divisor, and many others.
+Currently, there are \emph{no known} polynomial algorithms
+for integer factorization.
+The fastest algorithms for factoring integers are subexponential algorithms.

@@ -1,0 +1,64 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Preamble: Additional Packages
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}    % \mathcal{} = Calligraphy
+\usepackage{amsfonts}           % \mathfrak{} = Fractur
+\usepackage{amsthm}             % \mathbb{} = Blackboard font
+\usepackage{mathtools}
+\usepackage{etoolbox}
+\usepackage{titling}
+\usepackage[USenglish]{babel}
+
+% Fix spacing in Lists;
+% this entails searching for the specific set of commands for book.cls
+% (<search>) and then replacing it appropriately (<replace>).
+% This was desired because the there was inconsistent spacing
+% along with the fact that LoF was just more than one page;
+% this fix changed it. If additional figures are added,
+% then this might be reverted or switched to 10.
+% Also, this is *extremely* fragile.
+\makeatletter
+\patchcmd{\@chapter}% <cmd>
+  {\chaptermark{#1}%
+   \addtocontents{lof}{\protect\addvspace{10\p@}}%
+   \addtocontents{lot}{\protect\addvspace{10\p@}}}% <search>
+  {\chaptermark{#1}%
+   \addtocontents{lof}{\protect\addvspace{8\p@}}%
+   \addtocontents{lot}{\protect\addvspace{8\p@}}%
+   \addtocontents{loa}{\protect\addvspace{8\p@}}%
+   \addtocontents{lol}{\protect\addvspace{8\p@}}}% <replace>
+  {}{}% <success><failure>
+\makeatother
+
+\usepackage[chapter]{algorithm}
+\usepackage{algorithmicx}       % \bm{} = bold anything (in math environment)
+\usepackage{algpseudocode}
+\usepackage{setspace}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{mathdots}
+\usepackage{scrextend}
+\usepackage[obeyFinal]{todonotes}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=blue,
+    urlcolor=magenta,
+    breaklinks=true
+}
+\usepackage[nopostdot]{glossaries}
+\usepackage[useregional]{datetime2}
+\usepackage{multirow}
+\usepackage{makecell}
+\renewcommand\theadfont{\bfseries} % Make headers bold
+\usepackage{rotating}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage[sortcites,backref,maxbibnames=99]{biblatex}
+\usepackage[shortcuts]{extdash} % Apparently this must be added *last*
+

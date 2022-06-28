@@ -1,0 +1,144 @@
+\chapter{Computational Hardness Assumptions}
+\label{chap:hardness}
+
+In this chapter we discuss some of the hardness assumptions inherent
+to \gls{publiccrypto}.
+We will focus on those related to \gls{discrete log} systems
+because they are important to \gls{ecc}.
+
+When talking about computational infeasibility, we assume that it is
+not possible to do $2^{128}$ operations.
+Table~\ref{table:key_lengths} describes key length requirements
+and has been included from~\cite[Page 381]{IntroModernCrypto};
+the notation has been slightly modified to match ours.
+
+\input{tables/key_lengths.tex}
+
+
+
+\section{Discrete Logarithm Problem}
+\label{sec:hardness_dlp}
+
+\subsection{Formal Definition}
+
+\begin{defn}[Discrete Logarithm Problem]
+Given a \gls{finite cyclic group} $G = \angles{g}$ and $h\chooseRandom{}G$,
+compute $x$ such that
+
+\begin{equation}
+    h = g^{x}.
+\end{equation}
+\end{defn}
+
+\subsection{General Methods for Solving DLP}
+
+We assume that $\abs{G} = n$ is a $k$-bit number.
+There are some well known general methods for solving the \gls{dlp}.
+These include
+
+\begin{itemize}
+\item Baby Step, Giant Step:
+    the total cost is $O(2^{k/2})$ space and $O(2^{k/2})$ time.
+\item Pollard's Rho:
+    the total cost is $O(1)$ space and expected $O(2^{k/2})$ time;
+    this is a probabilistic algorithm.
+\end{itemize}
+
+\noindent
+Both of these algorithms are \emph{exponential} algorithms;
+the constants hidden in the $O(\cdot)$ are small.
+They are also called \emph{square root} algorithms because
+the cost is approximately the square root of $\abs{G}$.
+This implies that if we want $k$-bit security,
+then $\abs{G}$ must be a $2k$-bit number.
+These methods are discussed in~\cite[Chapter 10]{IntroModernCrypto}.
+
+If $n$ is not prime, it is sometimes possible to speed up
+these attacks even further.
+Because of this, secure algorithms should use \glspl{cyclic group} whose size
+is prime or which contains a \emph{large} prime factor.
+
+\subsection{Discussion}
+
+When we are designing a cryptographic system which relies
+on the \gls{dlp} for security,
+we must ensure that it is impractical to solve using all known methods.
+Thus, the generic methods described ensure that $\abs{G}$ must be
+at least $2^{2k}$ for $k$-bit security.
+This estimate only holds when these generic algorithms are the best
+algorithms.
+
+When solving the \gls{dlp} in $\F_{p}$, though, better methods exist.
+One such method is the \emph{index calculus algorithm}
+and its complexity is
+\emph{subexponential} in $\log_{2}(p)$~\cite[Chapter 10]{IntroModernCrypto}.
+Because of this, key lengths in $\F_{p}$ must be \emph{significantly}
+larger.
+From Table~\ref{table:key_lengths}, we see that
+$p$ must be a 3072-bit prime for 128-bit security.
+
+We can contrast this with solving the \gls{dlp} on \glspl{subgroup}
+of \glspl{elliptic curve}.
+There are no known algorithms which beat the generic algorithms
+when solving DLP over \glspl{elliptic curve}
+(with some well-known exceptions).
+From Table~\ref{table:key_lengths}, we see that
+we need to choose a 256-bit prime $p$ when we want 128-bit security.
+This means that public keys will be much smaller in cryptosystems
+built using \glspl{elliptic curve} than $\F_{p}$.
+
+
+
+\section{Diffie-Hellman Problems}
+
+\subsection{Formal Definitions}
+
+\begin{defn}[Computational Diffie-Hellman Problem]
+Fix a \gls{finite cyclic group} $G = \angles{g}$ of order $q$
+and $a,b\chooseRandom{}\Z_{q}$.
+Let $A = g^{a}$ and $B = g^{b}$.
+Given $A$ and $B$, compute $g^{ab}$.
+\end{defn}
+
+\begin{defn}[Decisional Diffie-Hellman Problem]
+Fix a \gls{finite cyclic group} $G = \angles{g}$ of order $q$
+and $a,b,c\chooseRandom{}Z_{q}$.
+Let $A = g^{a}$, $B = g^{b}$, and $C = g^{c}$.
+Distinguish $g^{ab}$ and $C$.
+\end{defn}
+
+\subsection{General Methods for Solving CDH and DDH}
+
+It is clear that \emph{if} we can solve DLP, then we can solve CDH.
+This follows because if we can solve DLP, then we could solve for $a$ in
+
+\begin{equation}
+    A = g^{a}
+\end{equation}
+
+\noindent
+and then compute
+
+\begin{align}
+    g^{ab} &= \parens{g^{b}}^{a} \nonumber\\
+        &= B^{a}.
+\end{align}
+
+\noindent
+It is not clear that if we can solve CDH then we can solve DLP;
+this would imply that DLP and CDH are equivalent.
+Here is a paper which discusses a variant of
+CDH and its relationship to DLP~\cite{cryptoeprint:2004:306}
+
+Similarly, we can see that if we can solve CDH then we can solve DDH.
+The reverse is not thought
+to be true~\cite[Pages 340--1]{IntroModernCrypto}.
+Additionally, we note that DDH is easy when given a \gls{bilinear}.
+A survey paper of DDH may be found in~\cite{boneh1998decision}.
+
+\subsection{Additional Variations}
+
+We mention that these two \glspl{dhp} (CDH and DDH)
+are the primary DHPs.
+There are variations on these which also show up in the literature,
+but they are usually variations on these two problems.

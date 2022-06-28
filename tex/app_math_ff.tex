@@ -1,0 +1,609 @@
+\section{Finite Fields}
+\label{app:math_finite_fields}
+
+Throughout this section, we will be looking at the \gls{finite field} $\F_{p}$.
+We have the following theorems:
+
+\begin{thm}[Fermat's Little Theorem~{\cite[Lemma 2.1.16]{mullen2013handbook}}]
+\label{thm:app_math_Fermat_Little}
+For all $a\in\F_{p}^{*}$, we have
+
+\begin{equation}
+    a^{p-1} = 1 \mod p.
+\end{equation}
+\end{thm}
+
+\begin{thm}[$\F_{p}^{*}$ is cyclic~{\cite[Theorem 2.1.37]{mullen2013handbook}}]
+\label{thm:app_math_Fp_cyclic}
+Let $p$ be prime.
+Then $\parens{\F_{p}^{*},\cdot}$ is a \gls{cyclic group} of order $p-1$.
+\end{thm}
+
+\subsection{Generating Primitive Elements}
+\label{app:math_finite_fields_primitive}
+
+Given the fact that $\F_{p}^{*}$ is a \gls{cyclic group},
+we have the following definition:
+
+\begin{defn}[Primitive Element]
+We say $g\in\F_{p}^{*}$ is a \emph{primitive element}
+if $g$ is a generator of $\F_{p}^{*}$.
+\end{defn}
+
+Theorem~\ref{thm:app_math_Fp_cyclic} does not \emph{specify}
+a generator for $\F_{p}^{*}$;
+it merely states that one \emph{exists}.
+In Chapter~\ref{sec:zkproofs_group}, we stated without proof that
+elements of $\F_{p}$ were primitive elements.
+We will now give an algorithm to construct such generators;
+see Alg.~\ref{alg:finite_field_generator}.
+
+\input{algs/finite_field_generator.tex}
+
+Proving that Alg.~\ref{alg:finite_field_generator} produces
+a generator for $\F_{p}^{*}$ relies on this proposition:
+
+\begin{prop}[Generators of Finite Cyclic Groups]
+\label{prop:math_finite_cyclic_generator}
+Let $G$ a \gls{finite cyclic group} of order $q$ with
+
+\begin{equation}
+    q = p_{1}^{n_{1}}p_{2}^{n_{2}}\cdots p_{\ell}^{n_{\ell}}.
+\end{equation}
+
+\noindent
+Then $h\in G$ is a generator if and only if
+
+\begin{equation}
+    h^{q/p_{k}} \ne 1, \quad k\in\braces{1,\cdots,\ell}.
+\end{equation}
+\end{prop}
+
+To use Alg.~\ref{alg:finite_field_generator}, we must compute
+the prime factorization of $p-1$.
+From here, we choose random elements until one satisfies
+the necessary constraints.
+
+\begin{example}[Computing Finite Field Generators 1]
+\label{example:app_math_finite_generator_7919}
+\exampleCodeReference{examples/app\_math/finite\_field\_generator\_1.py}
+
+For the first example, we will compute some generators of $\F_{7919}^{*}$;
+we have used this \gls{group} with generator $7$ many times.
+
+We start with
+
+\begin{equation}
+    p = 7919.
+\end{equation}
+
+\noindent
+We also see that
+
+\begin{align}
+    p - 1 &= 7918 \nonumber\\
+        &= 2\cdot 37\cdot 107.
+\end{align}
+
+\noindent
+We set
+
+\begin{align}
+    p_{1} &= 2 \nonumber\\
+    p_{2} &= 37 \nonumber\\
+    p_{3} &= 107.
+\end{align}
+
+\noindent
+We know that $2$, $37$, and $107$ are prime numbers.
+
+Instead of randomly generating elements, we will start at $2$
+and proceed forward.
+For ease of notation, we set
+
+\begin{align}
+    q_{1} &= \frac{\parens{p-1}}{p_{1}} \nonumber\\
+        &= 3959 \nonumber\\
+    q_{2} &= \frac{\parens{p-1}}{p_{2}} \nonumber\\
+        &= 214 \nonumber\\
+    q_{3} &= \frac{\parens{p-1}}{p_{3}} \nonumber\\
+        &= 74.
+\end{align}
+
+\begin{itemize}
+\item $2$: We see
+
+\begin{align}
+    2^{q_{1}} \mod p &= 1
+        \nonumber\\
+    2^{q_{2}} \mod p &= 5823
+        \nonumber\\
+    2^{q_{3}} \mod p &= 6451.
+\end{align}
+
+\noindent
+Because $2^{q_{1}} = 1$, $2$ is not a generator of $\F_{p}^{*}$.
+
+\item $3$: We see
+
+\begin{align}
+    3^{q_{1}} \mod p &= 1
+        \nonumber\\
+    3^{q_{2}} \mod p &= 4930
+        \nonumber\\
+    3^{q_{3}} \mod p &= 4828.
+\end{align}
+
+\noindent
+Because $3^{q_{1}} = 1$, $3$ is not a generator of $\F_{p}^{*}$.
+
+\item $4$: We see
+
+\begin{align}
+    4^{q_{1}} \mod p &= 1
+        \nonumber\\
+    4^{q_{2}} \mod p &= 6090
+        \nonumber\\
+    4^{q_{3}} \mod p &= 1056.
+\end{align}
+
+\noindent
+Because $4^{q_{1}} = 1$, $4$ is not a generator of $\F_{p}^{*}$.
+
+\item $5$: We see
+
+\begin{align}
+    5^{q_{1}} \mod p &= 1
+        \nonumber\\
+    5^{q_{2}} \mod p &= 6
+        \nonumber\\
+    5^{q_{3}} \mod p &= 48.
+\end{align}
+
+\noindent
+Because $5^{q_{1}} = 1$, $5$ is not a generator of $\F_{p}^{*}$.
+
+\item $6$: We see
+
+\begin{align}
+    6^{q_{1}} \mod p &= 1
+        \nonumber\\
+    6^{q_{2}} \mod p &= 1015
+        \nonumber\\
+    6^{q_{3}} \mod p &= 1.
+\end{align}
+
+\noindent
+Because $6^{q_{1}} = 1$, $6$ is not a generator of $\F_{p}^{*}$.
+
+\item $7$: We see
+
+\begin{align}
+    7^{q_{1}} \mod p &= 7918
+        \nonumber\\
+    7^{q_{2}} \mod p &= 755
+        \nonumber\\
+    7^{q_{3}} \mod p &= 5549.
+\end{align}
+
+\noindent
+Because $7^{q_{i}} \ne 1$ for all $i$, $7$ is a generator of $\F_{p}^{*}$.
+\end{itemize}
+
+Thus, we were able to find 1 generator in the first 6 possibilities.
+We note that the next generator is 13.
+\end{example}
+
+
+\begin{example}[Computing Finite Field Generators 2]
+\label{example:app_math_finite_generator_zkproofs_group}
+\exampleCodeReference{examples/app\_math/finite\_field\_generator\_2.py}
+
+We now compute generators for the \gls{group}
+from Chapter~\ref{sec:zkproofs_group}:
+
+\begin{align}
+    p &= rq + 1 \nonumber\\
+    q &= 2^{32} + 15 \nonumber\\
+    r &= 12.
+\end{align}
+
+\noindent
+We see that we have the factorization
+
+\begin{align}
+    p-1 &= rq \nonumber\\
+        &= \parens{12}\parens{2^{32} + 15} \nonumber\\
+        &= 2^{2}\cdot 3 \cdot \parens{2^{32} + 15}.
+\end{align}
+
+\noindent
+We accept the assertion that $2^{32}+15$ is prime
+and set
+
+\begin{align}
+    p_{1} &= 2 \nonumber\\
+    p_{2} &= 3 \nonumber\\
+    p_{3} &= 2^{32} + 15.
+\end{align}
+
+Instead of randomly generating elements, we will start at $2$
+and proceed forward.
+For ease of notation, we set
+
+\begin{align}
+    q_{1} &= \frac{\parens{p-1}}{p_{1}} \nonumber\\
+        &= 25769803866
+            \nonumber\\
+    q_{2} &= \frac{\parens{p-1}}{p_{2}} \nonumber\\
+        &= 17179869244
+            \nonumber\\
+    q_{3} &= \frac{\parens{p-1}}{p_{3}} \nonumber\\
+        &= 12.
+\end{align}
+
+\begin{itemize}
+\item $2$: We see
+
+\begin{align}
+    2^{q_{1}} \mod p &= 51539607732
+        \nonumber\\
+    2^{q_{2}} \mod p &= 1
+        \nonumber\\
+    2^{q_{3}} \mod p &= 4096.
+\end{align}
+
+\noindent
+Because $2^{q_{2}} = 1$, $2$ is not a generator of $\F_{p}^{*}$.
+
+\item $3$: We see
+
+\begin{align}
+    3^{q_{1}} \mod p &= 1
+        \nonumber\\
+    3^{q_{2}} \mod p &= 5944319764
+        \nonumber\\
+    3^{q_{3}} \mod p &= 531441.
+\end{align}
+
+\noindent
+Because $3^{q_{1}} = 1$, $3$ is not a generator of $\F_{p}^{*}$.
+
+\item $4$: We see
+
+\begin{align}
+    4^{q_{1}} \mod p &= 1
+        \nonumber\\
+    4^{q_{2}} \mod p &= 1
+        \nonumber\\
+    4^{q_{3}} \mod p &= 16777216.
+\end{align}
+
+\noindent
+Because $4^{q_{1}} = 1$, $4$ is not a generator of $\F_{p}^{*}$.
+
+\item $5$: We see
+
+\begin{align}
+    5^{q_{1}} \mod p &= 51539607732
+        \nonumber\\
+    5^{q_{2}} \mod p &= 5944319764
+        \nonumber\\
+    5^{q_{3}} \mod p &= 244140625.
+\end{align}
+
+\noindent
+Because $5^{q_{i}} \ne 1$ for all $i$, $5$ is a generator of $\F_{p}^{*}$.
+
+\item $6$: We see
+
+\begin{align}
+    6^{q_{1}} \mod p &= 51539607732
+        \nonumber\\
+    6^{q_{2}} \mod p &= 5944319764
+        \nonumber\\
+    6^{q_{3}} \mod p &= 2176782336.
+\end{align}
+
+\noindent
+Because $6^{q_{i}} \ne 1$ for all $i$, $6$ is a generator of $\F_{p}^{*}$.
+
+\item $7$: We see
+
+\begin{align}
+    7^{q_{1}} \mod p &= 51539607732
+        \nonumber\\
+    7^{q_{2}} \mod p &= 45595287968
+        \nonumber\\
+    7^{q_{3}} \mod p &= 13841287201.
+\end{align}
+
+\noindent
+Because $7^{q_{i}} \ne 1$ for all $i$, $7$ is a generator of $\F_{p}^{*}$.
+\end{itemize}
+
+Thus, we were able to find 3 generators in the first 6 possibilities.
+\end{example}
+
+We note that Proposition~\ref{prop:math_finite_cyclic_generator}
+\emph{critically} relies on the factorization of the group order.
+It is an open problem to quickly determine a generator of a \gls{cyclic group};
+that is, it is an open problem to determine a polynomial time algorithm
+which computes a generator for a \gls{cyclic group} without knowing
+the factorization of the group order~\cite[Remark 11.1.25]{mullen2013handbook}
+
+
+\subsection{Quadratic Residues and the Legendre Symbol}
+\label{app:math_finite_fields_legendre}
+
+When working within $\F_{p}$, we want to know if $a\in\F_{p}$
+has a square root;
+that is, we want to know if there is an $x\in\F_{p}$ such that
+
+\begin{equation}
+    x^{2} = a \mod p.
+\end{equation}
+
+To this end, we have the following definitions:
+
+\begin{defn}[Quadratic Residues and Quadratic Nonresidues]
+Given $a\in\F_{p}^{*}$, we say that $a$ is a \emph{quadratic residue}
+if there is some $x\in\F_{p}^{*}$ such that
+
+\begin{equation}
+    x^{2} = a \mod p.
+\end{equation}
+
+\noindent
+If this equation has no solution, then we say that $a$
+is a \emph{quadratic nonresidue}.
+\end{defn}
+
+\noindent
+We will sometimes shorten \emph{quadratic residue} to \emph{residue}
+and \emph{quadratic nonresidue} to \emph{nonresidue}.
+
+We note the following interesting property:
+
+\begin{align}
+    R\cdot R &= R \nonumber\\
+    R\cdot N &= N \nonumber\\
+    N\cdot N &= R.
+\end{align}
+
+\noindent
+Here, $R$ denotes a residue and $N$ denotes a nonresidue.
+While this may seem strange at first, we recall the following
+fact about the multiplication of real numbers:
+
+\begin{align}
+    \parens{+}\cdot\parens{+} &= \parens{+} \nonumber\\
+    \parens{+}\cdot\parens{-} &= \parens{-} \nonumber\\
+    \parens{-}\cdot\parens{-} &= \parens{+}.
+\end{align}
+
+\noindent
+We also note this fact about adding integers:
+
+\begin{align}
+    E + E &= E \nonumber\\
+    E + O &= O \nonumber\\
+    O + O &= E.
+\end{align}
+
+\noindent
+Here, $E$ denotes an even integer and $O$ denotes an odd integer.
+In some ways, this property about quadratic residues and nonresidues
+may not be so strange.
+
+From this definition, we can define another:
+
+\begin{defn}[Legendre Symbol]
+Given $a\in\F_{p}$, we can define the \emph{Legendre symbol} as
+
+\begin{equation}
+    \parens{\frac{a}{p}} \mathDef{} \begin{cases}
+        1, &\quad \text{$a$ is a quadratic residue} \\
+        -1, &\quad \text{$a$ is a quadratic nonresidue} \\
+        0, &\quad \text{$a=0$} \\
+    \end{cases}.
+\end{equation}
+\end{defn}
+
+One of the important properties of the Legendre symbol
+is that is it multiplicative:
+for all $a,b\in\F_{p}$, we have
+
+\begin{equation}
+    \parens{\frac{ab}{p}} = 
+    \parens{\frac{a}{p}}
+    \parens{\frac{b}{p}}.
+\end{equation}
+
+\noindent
+Additionally, it is not too difficult to show that
+there are equal numbers of residues and nonresidues.
+
+\begin{example}[Computing Legendre Symbols by Squaring]
+\exampleCodeReference{examples/app\_math/legendre\_squaring.py}
+
+We will work with prime $p = 13$.
+We see the following:
+
+\begin{align}
+    1^{2} &= 1
+        \nonumber\\
+    2^{2} &= 4
+        \nonumber\\
+    3^{2} &= 9
+        \nonumber\\
+    4^{2} &= 3
+        \nonumber\\
+    5^{2} &= 12
+        \nonumber\\
+    6^{2} &= 10
+        \nonumber\\
+    7^{2} &= 10
+        \nonumber\\
+    8^{2} &= 12
+        \nonumber\\
+    9^{2} &= 3
+        \nonumber\\
+    10^{2} &= 9
+        \nonumber\\
+    11^{2} &= 4
+        \nonumber\\
+    12^{2} &= 1.
+\end{align}
+
+\noindent
+The numbers on the right-hand side are residues,
+while the numbers that do not show up are nonresidues.
+This implies the following:
+
+\begin{align}
+    \text{Residues of $p=13$:}
+        &\quad 1, 3, 4, 9, 10, 12 \nonumber\\
+    \text{Nonresidues of $p=13$:}
+        &\quad 2, 5, 6, 7, 8, 11.
+\end{align}
+\end{example}
+
+To determine the residues and nonresidues for the previous example,
+we explicitly squared each element in $\F_{p}^{*}$.
+A more efficient method is this:
+
+\begin{equation}
+    \parens{\frac{a}{p}} = a^{\frac{p-1}{2}}.
+    \label{eq:app_math_legendre_compute}
+\end{equation}
+
+\begin{example}[Computing Legendre Symbols by Exponentiation]
+\exampleCodeReference{examples/app\_math/legendre\_exponentiation.py}
+
+We will work with prime $p = 7919$.
+We see the following:
+
+\begin{align}
+    1^{\frac{p-1}{2}} &= 1
+        \nonumber\\
+    2^{\frac{p-1}{2}} &= 1
+        \nonumber\\
+    3^{\frac{p-1}{2}} &= 1
+        \nonumber\\
+    4^{\frac{p-1}{2}} &= 1
+        \nonumber\\
+    5^{\frac{p-1}{2}} &= 1
+        \nonumber\\
+    6^{\frac{p-1}{2}} &= 1
+        \nonumber\\
+    7^{\frac{p-1}{2}} &= -1.
+\end{align}
+
+\noindent
+Thus, we see that all of these numbers have modular square roots in $p$
+except for $7$.
+\end{example}
+
+
+\subsection{Square Roots}
+\label{app:math_finite_fields_sqrt}
+
+In Eq.~\eqref{eq:app_math_legendre_compute}, we were given an efficient
+method for computing the Legendre symbol;
+however, knowing a square root \emph{exists} is different from knowing
+its \emph{value}.
+
+Suppose that $a\in\F_{p}^{*}$ is a residue and $p = 3 \mod 4$.
+In this case, we know
+
+\begin{equation}
+    a^{\frac{p-1}{2}} = 1.
+    \label{eq:app_math_qr_p3m4}
+\end{equation}
+
+\noindent
+We note the following:
+
+\begin{align}
+    \parens{a^{\frac{p+1}{4}}}^{2} &= a^{\frac{p+1}{2}}
+        \nonumber\\
+    &= a\cdot a^{\frac{p-1}{2}}
+        \nonumber\\
+    &= a.
+\end{align}
+
+\noindent
+We used Eq.~\eqref{eq:app_math_qr_p3m4} going from line 2 to line 3.
+
+This is a simple method for computing square roots
+in $\F_{p}^{*}$ when $p = 3 \mod 4$:
+Given $a\in\F_{p}^{*}$, we have
+
+\begin{equation}
+    \sqrt{a} \mathDef{} a^{\frac{p+1}{4}}.
+\end{equation}
+
+\noindent
+We note that no deterministic algorithm
+is known when $p = 1 \mod 4$;
+even so, square roots may still be computed using the
+\href{https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm}{Tonelli--Shanks algorithm}.
+
+\begin{example}[Computing Square Roots by Exponentiation]
+\exampleCodeReference{examples/app\_math/square\_root.py}
+
+We will work with prime $p = 7919$;
+we note that $p = 3 \mod 4$.
+We see the following:
+
+\begin{align}
+    1^{\frac{p+1}{4}} \mod p &= 1
+        \nonumber\\
+    2^{\frac{p+1}{4}} \mod p &= 89
+        \nonumber\\
+    3^{\frac{p+1}{4}} \mod p &= 3023
+        \nonumber\\
+    4^{\frac{p+1}{4}} \mod p &= 2
+        \nonumber\\
+    5^{\frac{p+1}{4}} \mod p &= 1782
+        \nonumber\\
+    6^{\frac{p+1}{4}} \mod p &= 7720.
+\end{align}
+
+\noindent
+We now verify the square roots:
+
+\begin{align}
+    1^{2} \mod p &= 1
+        \nonumber\\
+    89^{2} \mod p &= 2
+        \nonumber\\
+    3023^{2} \mod p &= 3
+        \nonumber\\
+    2^{2} \mod p &= 4
+        \nonumber\\
+    1782^{2} \mod p &= 5
+        \nonumber\\
+    7720^{2} \mod p &= 6.
+\end{align}
+
+We know that $7$ does not have a square root.
+If we ignore this and compute
+
+\begin{equation}
+    7^{\frac{p+1}{4}} \mod p = 4769,
+\end{equation}
+
+\noindent
+then we find
+
+\begin{align}
+    4769^{2} \mod p &= 7912 \mod p \nonumber\\
+        &= -7 \mod p.
+\end{align}
+
+\noindent
+Thus, we \emph{do} need to first compute the Legendre Symbol
+before attempting to compute its square root.
+\end{example}

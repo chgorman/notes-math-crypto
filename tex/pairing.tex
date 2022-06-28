@@ -1,0 +1,407 @@
+\chapter{Pairing-Based Cryptography}
+\label{chap:pairing}
+
+\Gls{ethereum}~\cite{EthereumYellowpaper} has a \gls{bilinear}
+included in its precompiled contracts
+with the ability to perform a pairing check, elliptic curve addition,
+and elliptic curve point multiplication.
+This makes it possible to compute BLS signatures~\cite{BLSSignatures}.
+We talk about BLS signatures and what else can be accomplished
+with a \gls{bilinear}.
+All of these operations may be performed within Solidity
+\glspl{smart contract}.
+On the \gls{ethereum} blockchain, \glspl{smart contract} are programs
+which may automatically perform actions in response
+to changes in state.
+As a brief aside, we begin by discussing cryptography in \gls{ethereum} in 
+Chapter~\ref{sec:pairing_ethereum}.
+
+Throughout this chapter, we are assuming the \gls{bilinear}
+is over \glspl{elliptic curve}.
+
+
+
+\section{Cryptography in Ethereum}
+\label{sec:pairing_ethereum}
+
+We take a brief digression to spend some time talking about
+\gls{ethereum}~\cite{EthereumYellowpaper}.
+The main focus here will be on the cryptographic protocols
+available within \gls{ethereum}.
+
+\Gls{ethereum} is a blockchain that allows for \glspl{smart contract}.
+A \emph{\gls{smart contract}} is a program which is able to perform
+operations in response to inputs.
+These operations include the ability to perform signature verification
+and other cryptographic operations such as hashing.
+Other arithmetical operations are available as well.
+
+In particular, \gls{ethereum} has the ability to cheaply perform
+certain operations involving \gls{pairingcrypto}.
+One available type of \gls{bilinear} is based on a
+Barreto--Naehrig Curve~\cite{BNCurves2005}.
+In particular, let $e:G_{1}\times G_{2}\to G_{T}$ be the \gls{bilinear}.
+We can cheaply perform addition and scalar multiplication in $G_{1}$.
+We also have the ability to perform a pairing check.
+Given $a_{i}\in G_{1}$ and $b_{i}\in G_{2}$ for $i\in\braces{1,\cdots,\ell}$,
+we define
+
+\begin{equation}
+    \PairingCheck{}\parens{a_{1}, b_{1}, a_{2}, b_{2}, \cdots,
+            a_{\ell},b_{\ell}}
+        \mathDef{} \begin{cases}
+            \texttt{true} \quad &\text{if }1 =\prod_{k=1}^{\ell}e(a_{k},b_{k})\\
+            \texttt{false} \quad &\text{otherwise}
+        \end{cases}.
+\end{equation}
+
+\noindent
+When we restrict ourselves to the case when $\ell=2$, we see that
+
+\begin{equation}
+    \PairingCheck{}\parens{a_{1}, b_{1}, a_{2}, b_{2}} = \texttt{true}
+\end{equation}
+
+\noindent
+when
+
+\begin{equation}
+    e(a_{1},b_{1}) \cdot e(a_{2},b_{2}) = 1
+\end{equation}
+
+\noindent
+or
+
+\begin{equation}
+    e(a_{1},b_{1}^{-1}) = e(a_{2},b_{2}).
+\end{equation}
+
+\noindent
+This is the form that will be used when performing
+BLS signature validation;
+we discuss BLS signatures in Chapter~\ref{sec:pairing_bls}.
+
+At this time, no inexpensive operations in $G_{2}$ are available
+in \gls{ethereum}~\cite{EthereumYellowpaper}.
+Thus, in order to ensure valid information in $G_{2}$,
+we will need to submit the corresponding information
+in $G_{1}$ and then validate it using a \PairingCheck{}.
+
+
+
+\section{BLS Signatures}
+\label{sec:pairing_bls}
+
+We previously talked about \glspl{signature} in Chapters~\ref{chap:signatures}
+and \ref{chap:elliptic}.
+We now talk about \glspl{signature} which arise from \glspl{bilinear}
+and discuss their importance.
+This builds on our discussion of \glspl{bilinear}
+from Chapter~\ref{sec:math_pairings}.
+
+Let us suppose $e:G_{1}\times G_{2}\to G_{T}$ is our \gls{bilinear}
+with $\abs{G_{1}} = \abs{G_{2}} = \abs{G_{T}} = q$ for $q$ prime.
+Let $g_{2}\in G_{2}$ be a generator.
+Let $x \stackrel{\$}{\leftarrow} \Z_{q}$ be the private key
+and $g_{2}^{x}$ be the public key.
+Let us suppose that $H:\braces{0,1}^{*}\to G_{1}$ is a \gls{hash function}.
+In this setting, $H$ is a hash-to-curve function,
+as we map arbitrary bit strings to elements of $G_{1}$.
+Given a message $m\in\braces{0,1}^{*}$, we have the BLS signature
+
+\begin{equation}
+    \sigma \mathDef{} \brackets{H(m)}^{x}.
+\end{equation}
+
+\noindent
+To verify this signature, we check that
+
+\begin{equation}
+    e\parens{\sigma, g_{2}} \stackrel{?}{=} e\parens{H(m), g_{2}^{x}}.
+\end{equation}
+
+\noindent
+This is equivalent to
+
+\begin{equation}
+    e\parens{\sigma, g_{2}^{-1}} \cdot e\parens{H(m), g_{2}^{x}}
+        \stackrel{?}{=} 1.
+\end{equation}
+
+\noindent
+This can be computed by performing a \PairingCheck{}:
+
+\begin{equation}
+    \PairingCheck{}(\sigma, g_{2}^{-1}, H(m), g_{2}^{x})
+        \stackrel{?}{=} \texttt{true}.
+\end{equation}
+
+\noindent
+As mentioned previously, this operation may be performed
+cheaply on \gls{ethereum}~\cite{EthereumYellowpaper}.
+
+This signature scheme was originally referred to as a \emph{short signature}
+due to the size of $\sigma$; see the original publication~\cite{BLSSignatures}.
+When using the \gls{bilinear} on \gls{ethereum},
+BLS signatures are 64 bytes uncompressed and 33 bytes compressed;
+this is smaller than any of the other signatures mentioned in
+Chapter~\ref{sec:signatures_comparison}.
+The public keys are also 128 bytes uncompressed.
+
+
+
+\section{Hash-to-Curve Functions}
+
+For BLS signatures, we require a method of hashing arbitrary messages
+into \glspl{cyclic group}.
+In the previous section, we \emph{assumed} such functions exist.
+Now we describe how they are formed.
+We want to map into an \gls{elliptic curve} $E/\F_{p}$.
+Furthermore, we will assume throughout that we have access to a standard
+\gls{hash function} $H:\braces{0,1}^{*}\to\braces{0,1}^{b}$.
+In practice, $H$ will likely be \ShaTwo{}, \ShaThree{},
+or \Keccak{}.
+
+In this section, we switch from multiplicative notation
+to additive notation for \glspl{group}.
+
+\subsection{One Insecure Hash-to-Curve Function}
+
+Constructing a hash-to-curve function is nontrivial;
+we now present a method that should \emph{never} be used because
+it breaks security assumptions.
+
+Suppose we have a public key $x\cdot P$
+and standard \gls{hash function} $H:\braces{0,1}^{*}\to\braces{0,1}^{b}$.
+There are some who may want to use the hash-to-curve function
+
+\begin{equation}
+    H_{2C}(m) \mathDef{} H(m)\cdot P.
+\end{equation}
+
+\noindent
+In this way, for Alice with public key $a\cdot P$, a signature would be
+
+\begin{align}
+    \sigma &\mathDef{} a\cdot\parens{H(m)\cdot P} \nonumber\\
+        &= \parens{a\cdot H(m)}\cdot P.
+\end{align}
+
+\noindent
+This is \emph{horrible} and completely breaks all security,
+because we do not even need to know the private key to construct this signature:
+all that is needed is the public key $x\cdot P$:
+
+\begin{align}
+    H(m)\cdot\parens{x\cdot P} &= \parens{H(m)\cdot x}\cdot P
+            \nonumber\\
+        &= \parens{x\cdot H(m)}\cdot P.
+\end{align}
+
+\noindent
+\emph{This} is a clear example of why care is required when designing
+cryptographic protocols.
+Using this method, it is possible for forge arbitrary signatures
+for any public key.
+
+\subsection{Nondeterministic Hash-to-Curve Algorithm}
+
+The first hash-to-curve algorithms used a nondeterministic method;
+it was called \textsc{MapToGroup} in~\cite{BLSSignatures}.
+The method is simple in practice, but deterministic methods are preferred
+because the number of computational operations may be bounded.
+We will not discuss nondeterministic methods any further.
+
+\subsection{Initial Hash-to-Curve Discussion}
+
+There does not appear to be a good way to map an arbitrary bit string
+into a \gls{group}.
+To simplify the matter, we use a two-step process:
+first, we hash arbitrary bit strings to a \gls{finite field};
+next, map from the \gls{finite field} into the \gls{elliptic curve}.
+This two-step process is now standard;
+see~\cite{brier2010efficient,fouque2012indifferentiable,BonehWahby2019}.
+In the end, we have a \gls{hash function} $H:\braces{0,1}^{*}\to G$
+with
+
+\begin{equation}
+    H(m) = f(H_{1}(m)) + f(H_{2}(m)).
+    \label{eq:pairing_full_hash}
+\end{equation}
+
+\noindent
+In this case, $H_{i}:\braces{0,1}^{*}\to\F$ is a \gls{hash function}
+to a \gls{finite field} while $f:\F\to G$ is a deterministic mapping
+from a \gls{finite field} $\F$ to the \gls{elliptic curve} $G$.
+Furthermore, $H_{1}$ and $H_{2}$ are independent \glspl{hash function}.
+
+\subsection{Hashing to Finite Fields}
+
+We first focus on mapping deterministically into $\F_{p}$.
+This is an easy task.
+The main challenge will be to control the nonuniformity.
+
+Suppose we have a \gls{random oracle} $\widetilde{H}:\braces{0,1}^{*}\to\Z_{N}$.
+We are interested in knowing how much $H(m) \mod p$
+deviates from the uniform distribution.
+It turns out that the deviations are small provided $N$ is large enough.
+In particular, if $p$ is an $n$-bit prime number
+and we want $k$ bits of security,
+then we need $N\ge2^{n+k}$.
+By choosing $N = 2^{m}$ for some $m$,
+we can instantiate the \gls{random oracle} $\widetilde{H}$
+using a standard \gls{hash function}.
+The details are worked out in Appendix~\ref{app:crypto_hash-to-finite-field}.
+
+Overall, it is relatively easy ensure the nonuniformity is negligible.
+This describes the \glspl{hash function} $H_{1}$ and $H_{2}$
+in Eq.~\eqref{eq:pairing_full_hash}.
+
+\subsection{Deterministic Mapping from Finite Field to Elliptic Curve}
+
+Deterministically mapping from a \gls{finite field} to an \gls{elliptic curve}
+is much more challenging.
+The exact method strongly depends on the specific type of \gls{elliptic curve}.
+The good news is that there are generic mappings for a wide class
+of \glspl{elliptic curve};
+see~\cite{brier2010efficient,fouque2012indifferentiable,BonehWahby2019}.
+This deterministic mapping is $f$
+in Eq.~\eqref{eq:pairing_full_hash}.
+
+\subsection{Ensuring Hash-to-Curve Uniformity}
+
+At this point, we can deterministically map arbitrary data
+into an \gls{elliptic curve}.
+Hash function values should be uniformly distributed across
+the entire range, though.
+
+The previous work does not ensure this property.
+It may be the case that the deterministic mapping only maps into
+a portion of the \gls{elliptic curve};
+in this way, not every point on the \gls{elliptic curve} may be reached.
+This results in a nonuniform \gls{hash function}.
+Thus, ensuring uniformity requires additional care.
+The details are worked on in
+in~\cite{brier2010efficient,fouque2012indifferentiable,BonehWahby2019}.
+In the cases from the papers previously cited,
+it turns out that all that is required are 2 independent
+realizations of different \gls{finite field} points mapping
+to the \gls{elliptic curve}.
+This is why we require $H_{1}$ and $H_{2}$ to be independent
+\glspl{hash function}
+and then add their deterministic outputs in Eq.~\eqref{eq:pairing_full_hash}.
+
+
+
+\section{Multi-Signatures}
+
+As previously discussed in Chapter~\ref{sec:pairing_bls},
+BLS signatures allow for efficient signature generation and validation.
+We will now focus on $n$-out-of-$n$ multi-signature schemes.
+That is, $n$ participants want to sign the same message,
+and we want to prove that all of them signed it.
+Threshold signature schemes
+are more involved and will be discussed in Chapter~\ref{sec:ss_threshold}
+after working through secret sharing and \gls{distributed key generation}
+protocols.
+In a threshold signature scheme,
+only a \emph{subset} of participants are required to sign
+a message for it to be valid for the entire group.
+
+Let us suppose that Alice and Bob wish to sign a message together.
+As in Chapter~\ref{sec:pairing_bls}, we are assuming that we are working
+with BLS signatures with a \gls{bilinear} $e$
+and hash-to-curve function $H$.
+We suppose that Alice has private key $x_{A}$ and
+public key $A = g_{2}^{x_{A}}$;
+Bob has private and public keys $x_{B}$ and $B = g_{2}^{x_{B}}$.
+
+Let us suppose that Alice and Bob both sign message $m\in\braces{0,1}^{*}$
+with signatures $\sigma_{A}$ and $\sigma_{B}$.
+In this case, we know that
+
+\begin{align}
+    e\parens{\sigma_{A}, g_{2}} &= e\parens{H(m), g_{2}^{x_{A}}}
+        \nonumber\\
+    e\parens{\sigma_{B}, g_{2}} &= e\parens{H(m), g_{2}^{x_{B}}}.
+\end{align}
+
+Suppose we set
+
+\begin{equation}
+    \sigma = \sigma_{A}\sigma_{B}.
+\end{equation}
+
+\noindent
+In this case, we know
+
+\begin{align}
+    e\parens{\sigma, g_{2}} &= e\parens{\sigma_{A}\sigma_{B}, g_{2}}
+            \nonumber\\
+        &= e\parens{\sigma_{A}, g_{2}}\cdot e\parens{\sigma_{B}, g_{2}}
+            \nonumber\\
+        &= e\parens{H(m), g_{2}^{x_{A}}}\cdot e\parens{H(m), g_{2}^{x_{B}}}
+            \nonumber\\
+        &= e\parens{H(m), g_{2}}^{x_{A}}\cdot e\parens{H(m), g_{2}}^{x_{B}}
+            \nonumber\\
+        &= e\parens{H(m), g_{2}}^{x_{A}+x_{B}}
+            \nonumber\\
+        &= e\parens{H(m), g_{2}^{x_{A}+x_{B}}}
+            \nonumber\\
+        &= e\parens{H(m), A\cdot B}.
+\end{align}
+
+\noindent
+Thus, in order to prove that both Alice and Bob signed the message $m$,
+we only need to combine the signatures and the public keys.
+This reduces the cost from 2 signature verifications
+to 1 signature verification.
+
+The same property holds in general.
+In particular, suppose we have private keys $\braces{x_{k}}_{k=1}^{n}$
+and public keys $\braces{g_{2}^{x_{k}}}_{k=1}^{n}$.
+If each participant signs the same message $m$ producing
+signatures $\braces{\sigma_{k}}_{k=1}^{n}$,
+we set
+
+\begin{align}
+    \sigma &= \prod_{k=1}^{n} \sigma_{k}
+        \nonumber\\
+    X &= \prod_{k=1}^{n} g_{2}^{x_{k}}.
+\end{align}
+
+\noindent
+We then see
+
+\begin{align}
+    e\parens{\sigma, g_{2}} &= e\parens{\prod_{k=1}^{n}\sigma_{k}, g_{2}}
+            \nonumber\\
+        &= \prod_{k=1}^{n} e\parens{\sigma_{k}, g_{2}}
+            \nonumber\\
+        &= \prod_{k=1}^{n} e\parens{H(m), g_{2}^{x_{k}}}
+            \nonumber\\
+        &= \prod_{k=1}^{n} e\parens{H(m), g_{2}}^{x_{k}}
+            \nonumber\\
+        &= e\parens{H(m), g_{2}}^{\sum_{k=1}^{n}x_{k}}
+            \nonumber\\
+        &= e\parens{H(m), g_{2}^{\sum_{k=1}^{n}x_{k}}}
+            \nonumber\\
+        &= e\parens{H(m), X}.
+\end{align}
+
+\noindent
+As we can see, the $n$-out-of-$n$ case is the same as the 2-out-of-2
+case with Alice and Bob.
+In the $n$-out-of-$n$ case, we reduce the computation from $n$
+signature verifications
+to 1 signature verification at the cost of aggregating $n$ signatures
+and public keys.
+Because signature verification is expensive,
+this is generally worthwhile.
+
+
+
+\section{Concluding Discussion}
+
+We have only scratched the surface of \gls{pairingcrypto}.
+Additional material may be found in~\cite{PairingBasedCrypto}.

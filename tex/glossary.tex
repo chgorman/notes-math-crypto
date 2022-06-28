@@ -1,0 +1,471 @@
+% Glossary
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Cryptography
+
+\newglossaryentry{salt}
+{
+    name={salt},
+    description={A random value used as additional data when working
+        with \glsfirstplural{hash function}.
+        When used within a \gls{hash function}, a salt ensures
+        domain separation.
+        Compare with \glspl{nonce} and \glspl{initialization vector}.},
+}
+
+\newglossaryentry{nonce}
+{
+    name={nonce},
+    description={A \textbf{n}umber used only \textbf{once}.
+        Compare with \glspl{salt} and \glspl{initialization vector}.},
+}
+
+\newglossaryentry{initialization vector}
+{
+    name={initialization vector},
+    description={A bit string used to initialize an
+        \glspl{encryption scheme}.
+        Compare with \glspl{nonce} and \glspl{salt}.},
+}
+
+\newglossaryentry{perfect security}
+{
+    name={perfect security},
+    description={An \gls{encryption scheme} has \emph{perfect security}
+        if it is not possible
+        to break even with \emph{unbounded} computation.
+        The \gls{otp} is the only perfectly secure \gls{encryption scheme}.
+        Also called \emph{information-theoretic security}.},
+}
+
+\newglossaryentry{encryption scheme}
+{
+    name={encryption scheme},
+    description={A general method for converting a message (\emph{plaintext})
+        into random-looking data (\emph{ciphertext}).
+        Alice and Bob use an encryption scheme to communicate
+        over an \gls{insecure channel}.},
+}
+
+\newglossaryentry{public key encryption}
+{
+    name={public key encryption},
+    description={An \gls{encryption scheme} which uses public keys
+        and private keys for secure communication; part of \gls{publiccrypto}.},
+}
+
+\newglossaryentry{symmetric key encryption}
+{
+    name={symmetric key encryption},
+    description={An \gls{encryption scheme} which uses one secret key
+        for secure communication; part of \gls{symmetriccrypto}.
+        Examples include the \gls{otp}, \glspl{stream cipher},
+        and \glspl{block cipher}.},
+}
+
+\newglossaryentry{shared secret}
+{
+    name={shared secret},
+    description={A secret that is shared between individuals.},
+}
+
+\newglossaryentry{distributed key generation}
+{
+    name={distributed key generation},
+    description={A method for constructing a secret key between multiple
+        participants and have it distributed between them.
+        After the secret key is constructed, it is possible construct
+        valid \glspl{signature} for the entire group
+        (called \emph{group signatures}).},
+}
+
+\newglossaryentry{signature}
+{
+    name={digital signature},
+    description={A method for authenticating data in \gls{publiccrypto}.
+        Standard examples include DSA, ECDSA, and EdDSA.
+        Digital signatures allow for nonrepudiation.},
+}
+
+\newglossaryentry{secure channel}
+{
+    name={secure channel},
+    description={A method for communication without concern for adversaries.
+        For instance, when Alice and Bob communicate over a secure channel,
+        Eve will not learn what they discuss.
+        There is assurance of privacy.},
+}
+
+\newglossaryentry{insecure channel}
+{
+    name={insecure channel},
+    description={A method for communication where no secrecy is assured.
+        For instance, when Alice and Bob communicate over an insecure channel,
+        they assume that Eve will learn everything they discuss.
+        Because of this, there is no privacy on insecure channels.},
+}
+
+\newglossaryentry{hash function}
+{
+    name={hash function},
+    description={A method for producing a constant-length digital identifier
+        for data.
+        The full name is \textbf{cryptographic hash function}.},
+    first={cryptographic hash function},
+}
+
+\newglossaryentry{random oracle}
+{
+    name={random oracle},
+    description={The ideal \glsfirst{hash function}
+        with all of its desired properties.
+        It is a useful theoretical construct;
+        in practice, it would be instantiated with a
+        \glsfirst{hash function}.},
+}
+
+\newglossaryentry{kdf}
+{
+    name={key derivation function},
+    description={A method for converting nonuniform randomness into
+        uniform randomness.
+        Also used to store passwords.},
+}
+
+\newglossaryentry{hkdf}
+{
+    name={HMAC-based Key Derivation Function},
+    description={A general method for constructing
+        a \gls{kdf} from a \gls{hash function}.},
+}
+
+\newglossaryentry{csprng}
+{
+    name={pseudorandom number generator},
+    description={A method for producing cryptographically-secure
+        random numbers derived from a seed.
+        The full name is
+        \textbf{cryptographically-secure pseudorandom number generator}.
+        One example is Fortuna.},
+    first={cryptographically-secure pseudorandom number generator},
+}
+
+\newglossaryentry{otp}
+{
+    name={one-time pad},
+    description={The only \gls{encryption scheme} with \gls{perfect security}.
+        The challenge is that the key must be truly random
+        and as long as the message.},
+}
+
+\newglossaryentry{stream cipher}
+{
+    name={stream cipher},
+    description={An \gls{encryption scheme} which takes a secret key
+        and stretches it into a stream of randomness.}
+}
+
+\newglossaryentry{block cipher}
+{
+    name={block cipher},
+    description={An \gls{encryption scheme} which takes a secret key
+        and encrypts messages based on a keyed-\gls{permutation}.}
+}
+
+\newglossaryentry{mac}
+{
+    name={message authentication code},
+    description={A method in \gls{symmetriccrypto} for ensuring
+        message integrity.
+        MACs do not allow for nonrepudiation;
+        for nonrepudiation, see \gls{signature}.},
+}
+
+\newglossaryentry{hmac}
+{
+    name={Hash-based Message Authentication Code},
+    description={A general method for constructing
+        a \gls{mac} from a \gls{hash function}.},
+}
+
+\newglossaryentry{ae}
+{
+    name={authenticated encryption},
+    description={A method for combining an \gls{encryption scheme} with
+        message integrity.},
+}
+
+\newglossaryentry{smart contract}
+{
+    name={smart contract},
+    description={A smart contract is a program which may automatically
+        perform actions in response to changes in state.
+        Smart contracts may be implemented on blockchains such as
+        \gls{ethereum}.}
+}
+
+\newglossaryentry{ethereum}
+{
+    name={Ethereum},
+    description={A blockchain with a built-in computational engine.
+        It is possible to write \glspl{smart contract} within Ethereum.}
+}
+
+\newglossaryentry{ecc}
+{
+    name={Elliptic Curve Cryptography},
+    description={The area of cryptography which uses \glspl{elliptic curve}
+        as the basis for security.
+        Security is based on the assumption that certain
+        mathematical operations involving \glspl{elliptic curve}
+        are impractical to solve.}
+}
+
+\newglossaryentry{symmetriccrypto}
+{
+    name={Symmetric Key Cryptography},
+    description={The area of cryptography which uses one secret key.}
+}
+
+\newglossaryentry{publiccrypto}
+{
+    name={Public Key Cryptography},
+    description={The area of cryptography which uses a two keys:
+        a public key and a private key.}
+}
+
+\newglossaryentry{pairingcrypto}
+{
+    name={Pairing-Based Cryptography},
+    description={The area of cryptography which uses \glspl{bilinear}.}
+}
+
+\newglossaryentry{bilinear}
+{
+    name={bilinear pairing},
+    description={A type of \gls{function} which is linear
+        in both of its arguments;
+        used extensively in \gls{pairingcrypto}.}
+}
+
+\newglossaryentry{zkproof}
+{
+    name={zero-knowledge proof},
+    description={A proof in which no additional information
+        is gained other than the fact that the statement is true.
+        \Glspl{signature} are a standard example of zero-knowledge
+        proofs.},
+}
+
+\newglossaryentry{recursion}
+{
+    name={recursion},
+    description={See \gls{recursion}.}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Mathematics
+
+\newglossaryentry{number theory}
+{
+    name={number theory},
+    description={The division of mathematics devoted to studying
+        the integers.
+        This includes the study of prime numbers and related topics.}
+}
+
+\newglossaryentry{elliptic curve}
+{
+    name={elliptic curve},
+    description={Defined over a \gls{field}, an elliptic curve is a \gls{group}
+        defined by a collection of points which satisfy a certain polynomial
+        equation as well as a group operation.
+        Elliptic curves are used in \gls{ecc}.}
+}
+
+\newglossaryentry{group}
+{
+    name={group},
+    description={A group is a \gls{set} together with a binary operation
+        which satisfies additional properties.
+        Standard examples of groups include the integers under addition
+        as well as the positive rationals under multiplication.}
+}
+
+\newglossaryentry{subgroup}
+{
+    name={subgroup},
+    description={A \gls{group} which is a subset of a larger group
+        when using the inherited group operation.},
+}
+
+\newglossaryentry{cyclic group}
+{
+    name={cyclic group},
+    description={A \gls{group} which is generated by one element;
+        that is, $\parens{G,\cdot}$ is a cyclic group if
+        $\parens{G,\cdot}$ is a \gls{group} and there is a $g\in G$
+        such that for all $h\in G$ there is an $x\in\Z$ such that
+        $h=g^{x}$.},
+}
+
+\newglossaryentry{abelian group}
+{
+    name={abelian group},
+    description={A \gls{group} in which the underlying group operation
+        is \gls{commutative}.},
+}
+
+\newglossaryentry{finite group}
+{
+    name={finite group},
+    description={A \gls{group} which has a finite number of elements.},
+}
+
+\newglossaryentry{finite cyclic group}
+{
+    name={finite cyclic group},
+    description={A \gls{group} which is both finite and cyclic.},
+}
+
+\newglossaryentry{ring}
+{
+    name={ring},
+    description={A ring is a \gls{set} together with two binary operations
+        (addition and multiplication) which satisfies additional properties.
+        A standard example of rings include the integers under addition
+        and multiplication.},
+}
+
+\newglossaryentry{commutative ring}
+{
+    name={commutative ring},
+    description={A \gls{ring} in which multiplication is \gls{commutative}.},
+}
+
+\newglossaryentry{field}
+{
+    name={field},
+    description={A field is a \gls{set} together with two binary operations
+        (addition and multiplication) with additional properties;
+        importantly, every nonzero element has a multiplicative inverse.
+        A standard example of a field is the rational numbers
+        under addition and multiplication.}
+}
+
+\newglossaryentry{finite field}
+{
+    name={finite field},
+    description={A \gls{field} which has a finite number of elements.},
+}
+
+\newglossaryentry{commutative}
+{
+    name={commutative},
+    description={The binary operation $\boxplus$ is commutative if
+        $a\boxplus b = b\boxplus a$ for all $a$ and $b$.
+        Standard examples of commutative operations include addition
+        and multiplication;
+        standard nonexamples include subtraction and division.
+        Informally, an operation is commutative if
+        ``the order of evaluation does not matter''.}
+}
+
+\newglossaryentry{associative}
+{
+    name={associative},
+    description={The binary operation $\boxplus$ is associative if
+        $\parens{a\boxplus b}\boxplus c = a\boxplus \parens{b\boxplus c}$
+        for all $a$, $b$, and $c$.
+        Standard examples include addition and multiplication;
+        standard nonexamples include subtraction and division.
+        Informally, an operation is associative if parentheses may be
+        arbitrarily rearranged.}
+}
+
+\newglossaryentry{set}
+{
+    name={set},
+    description={A set is a collection of objects.},
+}
+
+\newglossaryentry{function}
+{
+    name={function},
+    description={A mapping which assigns an input from the domain
+        to an output from the codomain.}
+}
+
+\newglossaryentry{injective}
+{
+    name={injective},
+    description={A function $f$ is injective if $f(x) = f(y)$
+        implies $x=y$; also called \emph{one-to-one}.}
+}
+
+\newglossaryentry{surjective}
+{
+    name={surjective},
+    description={A function $f:A\to B$ is surjective if for $b\in B$
+        there is an $a\in A$ such that $f(a)=b$; also called \emph{onto}.}
+}
+
+\newglossaryentry{bijective}
+{
+    name={bijective},
+    description={A function $f$ is bijective (or is a bijection) if it is
+        both \gls{injective} and \gls{surjective}.
+        In this case, $f$ has an inverse function.}
+}
+
+\newglossaryentry{permutation}
+{
+    name={permutation},
+    description={A function $f:A\to A$ is a permutation if $f$
+        is \gls{bijective}.}
+}
+
+\newglossaryentry{discrete log}
+{
+    name={discrete logarithm},
+    description={For a \gls{cyclic group} $G = \angles{g}$
+        and $h\in G$, if $h = g^{x}$, then $x$ is the discrete logarithm
+        of $h$ with respect to $g$.},
+}
+
+\newglossaryentry{dlp}
+{
+    name={Discrete Logarithm Problem},
+    description={Given a \gls{finite cyclic group} $G = \angles{g}$
+        and $h\in G$, compute $x$ such that $h = g^{x}$.},
+}
+
+\newglossaryentry{dhke}
+{
+    name={Diffie-Hellman Key Exchange},
+    description={A key exchange in \gls{publiccrypto}
+        based on deriving a \gls{shared secret} from public information.
+        This comes from deriving a \gls{shared secret} within a
+        \gls{cyclic group}.},
+}
+
+\newglossaryentry{dhp}
+{
+    name={Diffie-Hellman Problem},
+    description={Given a \gls{finite cyclic group} $G = \angles{g}$
+        of order $q$ with $a,b\chooseRandom{}\Z_{q}^{*}$,
+        $A=g^{a}$, and $B=g^{b}$,
+        solve for $g^{ab}$ given $A$ and $B$.},
+}
+
+\newglossaryentry{lagrange interpolation}
+{
+    name={Lagrange Interpolation},
+    description={A method of interpolation using Lagrange polynomials.
+        Interpolation methods are used throughout mathematics, science,
+        and engineering.
+        Given distinct nodes with associated values,
+        the resulting polynomial is the polynomial of minimal degree
+        which interpolates the result (agrees with the data).
+        Within Cryptography, \emph{Lagrange Interpolation} is used
+        within secret sharing protocols and \gls{distributed key generation}.}
+}

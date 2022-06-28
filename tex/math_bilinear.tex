@@ -1,0 +1,48 @@
+\section{Bilinear Pairings}
+\label{sec:math_pairings}
+
+\subsection{Why do we care about Bilinear Pairings?}
+
+We care about \glspl{bilinear} because they give us a lot of nice
+mathematical features that we can use.
+In particular, \glspl{bilinear} give us
+\emph{short digital signatures}.
+These started with BLS signatures based on the Weil
+pairing~\cite{BLSSignatures},
+a particular type of \gls{bilinear}.
+
+\Glspl{bilinear} also allow for threshold group signatures.
+These can be formed as part of a \gls{distributed key generation}
+protocol and are discussed in Chapter~\ref{chap:secret_sharing}.
+
+\subsection{Formal Definition}
+
+A \gls{bilinear} is a special type of \gls{function}:
+
+\begin{defn}[Bilinear Pairing]
+We let $G_{1}$, $G_{2}$, and $G_{T}$ be \glspl{finite group} with
+$\abs{G_{1}} = \abs{G_{2}} = \abs{G_{T}}$.
+We say $e:G_{1}\times G_{2}\to G_{T}$ is a \emph{\gls{bilinear}}
+if for all $h_{1}\in G_{1}$, $h_{2}\in G_{2}$, and $a,b\in\Z$
+we have
+
+\begin{equation}
+    e\parens{h_{1}^{a},h_{2}^{b}} = \brackets{e\parens{h_{1},h_{2}}}^{ab}.
+\end{equation}
+\end{defn}
+
+\subsection{Discussion}
+
+It is straightforward to \emph{use} the previous definition.
+The challenge is \emph{finding} \glspl{group} with which to build such a
+\gls{bilinear}.
+This is nontrivial.
+
+At this point, all \glspl{bilinear} arise from \glspl{elliptic curve}.
+The exact construction is complex and we do not discuss it here.
+We will use \glspl{bilinear} in Chapter~\ref{chap:pairing}
+when we discuss \gls{pairingcrypto}.
+Having a solid understanding of the mathematics behind pairings
+and how they are constructed from \glspl{elliptic curve}
+requires advanced knowledge of \glspl{elliptic curve} as discussed
+in~\cite{AEC}.

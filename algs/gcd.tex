@@ -1,0 +1,34 @@
+\begin{algorithm}[t]
+\caption[Euclidean Division]{Perform Euclidean division}
+\label{alg:euclidean_div}
+\begin{algorithmic}[1]
+\Require $a\ge 0$, $b\ge 1$
+\Procedure{EuclideanDivision}{$a$, $b$}
+    \State $q \algAssign{} \lfloor a/b\rfloor$
+    \State $r \algAssign{} a - qb$
+    \State \Return $q$, $r$
+\EndProcedure
+\end{algorithmic}
+
+\end{algorithm}
+\begin{algorithm}[t]
+\caption[Euclidean Algorithm]{Compute the greatest common divisor}
+\label{alg:euclidean_alg}
+\begin{algorithmic}[1]
+\Require $a\ge b\ge 1$
+\Procedure{EuclideanAlgorithm}{$a$, $b$}
+    \State $r_{0} \algAssign{} a$
+    \State $r_{1} \algAssign{} b$
+    \State $q_{1}$, $r_{2} \algAssign{} \textsc{EuclideanDivision}(r_{0},r_{1})$
+    \State $k \algAssign{} 2$
+    \While {$r_{k}\ne0$}
+        \State $q_{k}$, $r_{k+1} \algAssign{}
+            \textsc{EuclideanDivision}(r_{k-1},r_{k})$
+        \State $k \algAssign{} k+1$
+    \EndWhile
+    \State $d \algAssign{} r_{k-1}$
+    \Comment{Greatest Common Divisor}
+    \State \Return $d$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

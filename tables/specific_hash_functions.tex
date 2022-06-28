@@ -1,0 +1,38 @@
+\begin{table}[t]
+\centering
+\begin{tabular}{c|c|c|c|c}
+\hline
+\multicolumn{2}{c|}{\thead{Algorithm and \\ Variant}} &
+\thead{Internal State \\ (bits)} &
+\thead{Output Size \\ (bits)} &
+\thead{Block Size \\ (bits)} \\
+\hline
+\multicolumn{2}{c|}{\MDFive{}} & 128 & 128 & 512 \\
+\hline
+\multicolumn{2}{c|}{\ShaOne{}} & 160 & 160 & 512 \\
+\hline
+\multirow{2}{*}{\ShaTwo{}} & \ShaTwo{}-256 & 256 & 256 & 512 \\
+& \ShaTwo{}-512 & 512 & 512 & 1024 \\
+\hline
+\multirow{2}{*}{\ShaThree{}} & \ShaThree{}-256 & 1600 & 256 & 1088 \\
+& \ShaThree{}-512 & 1600 & 512 & 576 \\
+\hline
+\end{tabular}
+\caption[Comparison of Cryptographic Hash Functions]{Comparison
+    of various \glsfirstplural{hash function}.
+    We know that \MDFive{}, \ShaOne{}, and \ShaTwo{}
+    are all based on the \MD{} construction;
+    thus, their internal state and output size are the same.
+    \ShaThree{} is based on sponge functions;
+    its internal state is 1600 bits;
+    the block size (rate) depends on the output.
+    In the case of \ShaThree{}-256, the capacity is $512=2\cdot256$
+    while the rate is $1088 = 1600-512$;
+    for \ShaThree{}-512, the capacity is $1024=2\cdot512$
+    while the rate is $576 = 1600-1024$.
+    This table is based on the table from
+    information from~\cite{rfc1321}, \cite[Figure 1]{FIPS-180-4-2015},
+    and \cite[Section 6.1]{FIPS-202}.
+}
+\label{table:hash_functions}
+\end{table}

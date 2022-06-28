@@ -1,0 +1,252 @@
+\section{Set Theory}
+\label{app:math_set_theory}
+
+We now spend a bit more time discussing set theory and set operations.
+We will need the following result to prove two \glspl{set} are equal:
+
+\begin{thm}[Set Equality]
+\label{thm:set_equality}
+For \glspl{set} $A$ and $B$, we have $A=B$ if and only if
+$A\subseteq B$ and $B\subseteq A$.
+\end{thm}
+
+\begin{proof}
+Let us suppose that $A=B$, then for $x\in A$ we have $x\in B$
+so $A\subseteq B$.
+Similarly, for $x\in B$ we have $x\in A$ so $B\subseteq A$.
+
+If $A\ne B$, then they do not contain the same elements.
+Thus, there is either some $x\in A$ such that $x \notin B$
+(implying that $A\not\subseteq B$)
+or some $x\in B$ such that $x\notin A$
+(implying that $B\not\subseteq A$).
+In either case, we either have $A\not\subseteq B$ or $B\not\subseteq A$.
+\end{proof}
+
+\subsection{Additional Set Operations}
+
+From Eq.~\eqref{eq:math_set_theory_basic_set_ops}, we recall
+
+\begin{align}
+    A \cup B &\mathDef{} \braces{x \mid x\in A \text{ or } x\in B}
+        \nonumber\\
+    A \cap B &\mathDef{} \braces{x \mid x\in A \text{ and } x\in B}
+        \nonumber\\
+    A \setminus B &\mathDef{} \braces{a\in A \mid a\notin B}.
+\end{align}
+
+\noindent
+These are not the only set operations, though.
+
+First, we say that $X$ is a \emph{universal set} if all of the sets
+we will work with will be subsets of $X$.
+When working with a universal set $X$ and a set $A\subseteq X$,
+we have the \emph{set complement} or \emph{complement}:
+
+\begin{equation}
+    A^{c} \mathDef{} \braces{x\in X \mid x\notin A}.
+\end{equation}
+
+\noindent
+This may also be written in terms of the set minus operation:
+
+\begin{equation}
+    X\setminus A = \braces{x\in X \mid x\notin A}.
+\end{equation}
+
+\noindent
+The complement notation $A^{c}$ may be preferred to the set minus notation
+$X\setminus A$ when there are many set operations in the same expression.
+
+For $A\subseteq X$, we always have
+
+\begin{align}
+    A \cup A^{c} &= X \nonumber\\
+    A \cap A^{c} &= \emptyset.
+\end{align}
+
+\begin{example}[Set Complements]
+We let our universal set be the set of natural numbers $\N$.
+In this case, we define the sets
+
+\begin{align}
+    A &= \braces{0,1,2,3,4} \nonumber\\
+    B &= \braces{1,2,3,\cdots}.
+\end{align}
+
+\noindent
+In this case, we see
+
+\begin{align}
+    A^{c} &= \braces{5,6,7,\cdots} \nonumber\\
+    B^{c} &= \braces{0}.
+\end{align}
+\end{example}
+
+We can also take unions and intersections in a more general way.
+Specifically, let $\mathcal{A}$ be a nonempty indexing set;
+that is, $\mathcal{A}$ is a set which will be used to index other sets.
+Given a collection of sets $\braces{A_{\alpha}}_{\alpha\in\mathcal{A}}$,
+we define
+
+\begin{align}
+    \bigcup_{\alpha\in\mathcal{A}} A_{\alpha} &\mathDef{} 
+        \braces{x\mid x\in \mathcal{A}_{\alpha} \text{ for some }
+        \alpha\in\mathcal{A}} \nonumber\\
+    \bigcap_{\alpha\in\mathcal{A}} A_{\alpha} &\mathDef{} 
+        \braces{x\mid x\in \mathcal{A}_{\alpha} \text{ for all }
+        \alpha\in\mathcal{A}}.
+\end{align}
+
+\noindent
+These are generalizations of the standard union and intersection operations.
+
+\begin{example}[Set Unions and Intersections]
+We now look at some set unions and intersections.
+First, we will let $\N$ be our indexing set.
+We see
+
+\begin{equation}
+    \bigcup_{k\in\N} \braces{k} = \N.
+\end{equation}
+
+\noindent
+In this case, we are just taking the union of the set which contains
+each natural number;
+naturally, this is then just the natural numbers $\N$.
+
+We also see
+
+\begin{equation}
+    \bigcap_{k\in\N} \braces{k} = \emptyset.
+\end{equation}
+
+\noindent
+This example shows that, instead of taking the union,
+we take the intersection of all the sets which contain each natural number,
+the result is the empty set.
+
+A more involved example is this:
+
+\begin{equation}
+    \bigcap_{k\in\N} \braces{k,k+1,k+2,\cdots} = \emptyset.
+\end{equation}
+
+\noindent
+This shows that if you take the of natural numbers starting at
+$k$ for each $k\in\N$ and then intersect them all,
+the resulting set contains no natural numbers.
+This follows from the fact that there is no largest natural number.
+
+Intersections need not always be empty, as this next example shows:
+
+\begin{equation}
+    \bigcap_{k\in\N} \braces{-k,-k+1,-k+2,\cdots,k-2,k-1,k} = \braces{0}.
+\end{equation}
+\end{example}
+
+
+\subsection{Relationships Between Set Operations}
+
+We now discuss a very useful result: De Morgan's Laws.
+
+\begin{thm}[De Morgan's Laws]
+Given a nonempty index set $\mathcal{A}$, we have the following:
+
+\begin{align}
+    \brackets{\bigcup_{\alpha\in\mathcal{A}} A_{\alpha}}^{c}
+        &= \bigcap_{\alpha\in\mathcal{A}} A_{\alpha}^{c} \nonumber\\
+    \brackets{\bigcap_{\alpha\in\mathcal{A}} A_{\alpha}}^{c}
+        &= \bigcup_{\alpha\in\mathcal{A}} A_{\alpha}^{c}.
+\end{align}
+\end{thm}
+
+\noindent
+This result is useful because it helps us rearrange set operations
+into forms which are more amenable.
+
+In the case where we just have one intersection and union,
+De Morgan's Laws reduce to the following:
+
+\begin{align}
+    \brackets{A\cup B}^{c} &= A^{c} \cap B^{c} \nonumber\\
+    \brackets{A\cap B}^{c} &= A^{c} \cup B^{c}.
+\end{align}
+
+\begin{proof}
+We will use Theorem~\ref{thm:set_equality} in our proof.
+
+Let
+
+\begin{equation}
+    x\in \brackets{\bigcup_{\alpha\in\mathcal{A}} A_{\alpha}}^{c}.
+\end{equation}
+
+\noindent
+This implies that 
+
+\begin{equation}
+    x\notin \bigcup_{\alpha\in\mathcal{A}} A_{\alpha},
+\end{equation}
+
+\noindent
+from which it follows that $x\notin A_{\alpha}$ for all $\alpha\in\mathcal{A}$.
+Therefore we have
+
+\begin{equation}
+    x\in \bigcap_{\alpha\in\mathcal{A}} A_{\alpha}^{c}.
+\end{equation}
+
+\noindent
+Because $x$ was arbitrary, we have
+
+\begin{equation}
+    \brackets{\bigcup_{\alpha\in\mathcal{A}} A_{\alpha}}^{c}
+        \subseteq \bigcap_{\alpha\in\mathcal{A}} A_{\alpha}^{c}.
+    \label{eq:app_math_set_inequality_dml_1}
+\end{equation}
+
+We now suppose
+
+\begin{equation}
+    x\in\bigcap_{\alpha\in\mathcal{A}} A_{\alpha}^{c}.
+\end{equation}
+
+\noindent
+This means that $x\in A_{\alpha}^{c}$ for all $\alpha\in\mathcal{A}$.
+It follows that $x\notin A_{\alpha}$ for all $\alpha\in\mathcal{A}$.
+Thus, we have
+
+\begin{equation}
+    x\notin\bigcup_{\alpha\in\mathcal{A}} A_{\alpha}.
+\end{equation}
+
+\noindent
+This is equivalent to
+
+\begin{equation}
+    x\in\brackets{\bigcup_{\alpha\in\mathcal{A}} A_{\alpha}}^{c}.
+\end{equation}
+
+\noindent
+Because $x$ was arbitrary, we have
+
+\begin{equation}
+    \bigcap_{\alpha\in\mathcal{A}} A_{\alpha}^{c} \subseteq
+        \brackets{\bigcup_{\alpha\in\mathcal{A}} A_{\alpha}}^{c}.
+    \label{eq:app_math_set_inequality_dml_2}
+\end{equation}
+
+Taking Eqs.~\eqref{eq:app_math_set_inequality_dml_1}
+and \eqref{eq:app_math_set_inequality_dml_2}
+along with Theorem~\ref{thm:set_equality} shows us that
+
+\begin{equation}
+    \brackets{\bigcup_{\alpha\in\mathcal{A}} A_{\alpha}}^{c}
+        = \bigcap_{\alpha\in\mathcal{A}} A_{\alpha}^{c}.
+\end{equation}
+
+\noindent
+This completes the proof of the first equality.
+The second is left as an exercise to the reader.
+\end{proof}

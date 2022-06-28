@@ -1,0 +1,414 @@
+\section{Groups}
+\label{sec:math_groups}
+
+\subsection{Why do we care about Groups?}
+\Glspl{group} arise in many different areas.
+In cryptography, we will encounter them in the \gls{dhke}
+and \glspl{signature}.
+For \glspl{group} to be used in practice, we will need to encode them;
+that is, we will need to know how to represent them on a computer.
+
+\subsection{Intuition and Examples}
+\emph{\Glspl{group}} are mathematical objects which we will
+frequently encounter.
+Informally, a \gls{group} is a generalization of the integers under addition,
+so we start by looking at them first.
+
+\begin{example}[Integers under addition]
+The standard example of a \gls{group} is to consider the
+integers $\Z$ under addition.
+
+Given $a,b\in\Z$, we know that $a+b\in\Z$.
+This means that the integers are \emph{closed} under addition:
+adding two integers will always give us another integer.
+
+Addition is also \emph{\gls{associative}}.
+That is, for $a,b,c\in\Z$, we have
+
+\begin{equation}
+    \parens{a + b} + c = a + \parens{b + c}.
+\end{equation}
+
+\noindent
+In this way, we do not have to worry about which way we add integers;
+we will always get the same result regardless of order.
+
+There is also a special integer $0\in\Z$.
+It is special in that adding $0$ to $a$ gives us $a$:
+
+\begin{equation}
+    0 + a = a + 0 = a.
+\end{equation}
+
+\noindent
+No other integer has this property.
+
+We also know the (additive) inverse of $a$: $-a$.
+This is because
+
+\begin{equation}
+    a + (-a) = 0.
+\end{equation}
+
+\noindent
+It also turns out that the (additive) inverse is \emph{unique}.
+
+We note that every integer can be written as
+repeated additions of $1$.
+If $a\ge0$, then we have
+
+\begin{equation}
+    a = \underbrace{1 + 1 + \cdots + 1}_{\text{$a$ times}} \quad a\ge 0.
+    \label{eq:math_groups_integers_1_gen_pos}
+\end{equation}
+
+\noindent
+For this to apply to negative numbers, we allow for adding $1$'s
+additive inverse $-1$.
+If $a<0$, then
+
+\begin{equation}
+    a = \underbrace{(-1) + (-1) + \cdots + (-1)}_{\text{$\abs{a}$ times}}
+        \quad a < 0.
+    \label{eq:math_groups_integers_1_gen_neg}
+\end{equation}
+
+\noindent
+In this way, $1$ \emph{generates} the \gls{group} of integers under addition.
+
+We also notice that addition is \emph{\gls{commutative}}:
+given $a,b\in\Z$, we have
+
+\begin{equation}
+    a + b = b + a.
+\end{equation}
+
+\noindent
+Although not all \glspl{group} have this property, the ones we care about do.
+\end{example}
+
+\begin{example}[Rationals under addition]
+Similar to the integers under addition, the rational numbers $\Q$
+under addition also form a \gls{group}.
+
+Given $a,b\in\Q$ with $a = p/q$ and $b = r/s$,
+we know
+
+\begin{align}
+    a + b &= \frac{p}{q} + \frac{r}{s} \nonumber\\
+        &= \frac{ps + qr}{qs}\in\Q.
+\end{align}
+
+\noindent
+This shows us that the rationals are closed under addition.
+
+We know that addition of rationals is \gls{associative} and \gls{commutative}.
+Furthermore, $0\in\Q$ is the identity element.
+If $a = \frac{p}{q}$ as above, then the inverse is
+
+\begin{equation}
+    -a = \frac{-p}{q}
+\end{equation}
+
+\noindent
+because
+
+\begin{align}
+    a + \parens{-a} &= \frac{p}{q} + \frac{-p}{q} \nonumber\\
+        &= \frac{pq - pq}{q^{2}} \nonumber\\
+        &= 0.
+\end{align}
+
+\noindent
+This shows that the rationals under addition form a \gls{group}.
+\end{example}
+
+\begin{example}[Integers under modular addition]
+We now look at another standard example: integers under modular arithmetic.
+Let $n > 1$.
+Then
+
+\begin{equation}
+    \Z_{n} = \braces{0, 1, \cdots, n-1}.
+\end{equation}
+
+\noindent
+For $a,b\in\Z_{n}$, we know there is some $c\in\Z_{n}$ such that
+
+\begin{equation}
+    a + b = c \mod n.
+\end{equation}
+
+\noindent
+This shows us that $\Z_{n}$ is closed under addition.
+
+We know $0\in\Z_{n}$ and we always have
+
+\begin{equation}
+    0 + a = a + 0 = a
+\end{equation}
+
+\noindent
+for $a\in\Z_{n}$.
+Thus, $0$ is the additive identity.
+
+Given $a\in\Z_{n}\setminus\braces{0}$, we know
+
+\begin{equation}
+    a + \parens{n-a} = 0 \mod n,
+\end{equation}
+
+\noindent
+Thus, the additive inverse of $a$ is $n-a$;
+$0$ is its own additive inverse.
+Therefore, we see that $\parens{\Z_{n},+}$ is a \gls{group}.
+\end{example}
+
+\begin{example}[Positive Rationals under multiplication]
+Similar to the integers under addition, the positive rational
+numbers $\Q^{+}$ under multiplication form a \gls{group}.
+In this case, the multiplicative identity is $1$.
+\end{example}
+
+\begin{example}[Nonexample: Natural numbers under addition]
+We know that the natural numbers under addition are
+very similar to the integers under addition.
+We know that we can always add two natural numbers,
+so that $a,b\in\N$ implies $a+b\in\N$;
+thus, the naturals are closed under addition.
+Addition is also \gls{associative} and \gls{commutative}.
+
+We also have the identity $0\in\N$, so
+
+\begin{equation}
+    a + 0 = a
+\end{equation}
+
+\noindent
+for all $a\in\N$.
+
+Unfortunately, we do not have additive inverses;
+this is because the natural numbers do not include the negative integers.
+That is, for $a\in\N\setminus\braces{0}$, there is no $b\in\N$ such that
+
+\begin{equation}
+    a + b = 0.
+\end{equation}
+
+\noindent
+Thus, $\parens{\N,+}$ is \emph{not} a \gls{group}.
+\end{example}
+
+\subsection{Formal Definition}
+
+\begin{defn}[Group]
+A \gls{group} is a \gls{set} $G$ together with a binary operation $\cdot$
+such that, given $a,b\in G$, $a\cdot b\in G$;
+that is, $G$ is closed under the binary operation $\cdot$.
+
+The binary operation also satisfies the following properties:
+
+\begin{itemize}
+\item Associativity: for all $a,b,c\in G$, we have
+
+\begin{equation}
+    \parens{a\cdot b}\cdot c = a\cdot \parens{b\cdot c}.
+\end{equation}
+
+\item Identity element: there is an element $e\in G$ such that
+    for all $a\in G$,
+
+\begin{equation}
+    a\cdot e = e\cdot a = a.
+\end{equation}
+
+\item Inverses: for every $a\in G$ there is a $b\in G$ such that
+    
+\begin{equation}
+    a\cdot b = b\cdot a = e.
+\end{equation}
+
+\noindent
+We henceforth denote the inverse of $a$ as $a^{-1}$.
+\end{itemize}
+\end{defn}
+
+Formally, we write that $\parens{G,\cdot}$ is a \gls{group}.
+Informally, we write that $G$ is a \gls{group} when the operation is understood.
+Additionally, we frequently write $ab$ for $a\cdot b$.
+
+\subsection{Continued Discussion}
+Although the generic group operation was listed as ``multiplication'',
+we could very well have used addition.
+We will sometimes refer to some \glspl{group} as ``multiplicative groups''
+while others as ``additive groups'';
+this just means we use the multiplication sign $\cdot$
+or the addition sign $+$ to denote the group operation.
+Nothing changes, as we can use both symbols,
+but there are conventions.
+In additive groups, the identity element is usually denoted $0$;
+in multiplicative groups, the identity element is usually denoted $1$.
+
+Because $\parens{\Z,+}$ is a \gls{group}, we know that \glspl{group} can have
+an infinite number of elements.
+In what follows, we will be particularly interested
+in \emph{\glspl{finite group}}:
+\glspl{group} that have a finite number of elements.
+We let $\abs{G}$ denote the order of the \gls{group}
+(the number of elements in $G$).
+
+At times, we may drop explicit reference to the operation if it is understood.
+For instance, we may refer to $\Z$ as a \gls{group},
+when more formally we should say $\parens{\Z,+}$ is a \gls{group}
+in order to reference both the \emph{\gls{set}} (the integers $\Z$)
+and the \emph{operation} (integer addition).
+Even so, this is long, tedious, and painful, so we will,
+at times, forego the formalities when the operation is clear
+from the context.
+
+\subsection{More Definitions}
+Let $G$ be a \gls{group} and $H \subseteq G$;
+more explicitly, $\parens{G,\cdot}$ is a \gls{group} and $H$ is a subset of $G$.
+We say that $H$ is a \emph{\gls{subgroup}} of $G$, written as $H \le G$,
+if $H$ with the group operation inherited from $G$ is also a \gls{group}.
+Every \gls{group} $G$ has at least two \glspl{subgroup}:
+$G$ (the entire group) and $\braces{e}$
+(the group that is just the identity element $e$).
+A \gls{subgroup} is called a \emph{proper subgroup} when
+$H\le G$ and $H\ne G$.
+If $H$ is a proper subgroup, then we may write $H < G$.
+The \gls{group} $\braces{e}$ is called the \emph{trivial} subgroup.
+
+\begin{example}[Subgroup Example: $2\Z \le \Z$]
+We let
+
+\begin{equation}
+    2\Z \mathDef{} \braces{\ldots, -4, -2, 0, 2, 4, \ldots};
+\end{equation}
+
+\noindent
+that is, $2\Z$ is the set of even integers.
+Naturally, we have $2\Z\subseteq\Z$.
+For every $a\in2\Z$ there is some $b\in\Z$ so that $a = 2b$.
+
+Given $x,y\in2\Z$, we set $x = 2m$ and $y = 2n$ for $m,n\in\Z$.
+We then see
+
+\begin{align}
+    x + y &= 2m + 2n \nonumber\\
+        &= 2\parens{m+n}\in2\Z.
+\end{align}
+
+\noindent
+Thus, $2\Z$ is closed under addition.
+Because addition on $\Z$ is \gls{associative},
+addition on $2\Z$ is also \gls{associative}.
+
+Because $0\in\Z$ and
+
+\begin{equation}
+    0 + x = x\in2\Z,
+\end{equation}
+
+\noindent
+we still have the same identity element $0\in2\Z$.
+
+We let $x\in2\Z$ with $x = 2m$ for $m\in\Z$.
+If $y = -2m$, then $y\in\Z$ and
+
+\begin{align}
+    x + y &= 2m + \parens{-2m} \nonumber\\
+        &= 0\in2\Z.
+\end{align}
+
+\noindent
+Thus, we see that every element in $2\Z$ has an additive inverse
+within $2\Z$.
+We have just shown that $\parens{2\Z,+}$ is a \gls{group};
+because $2\Z\subseteq\Z$, $2\Z$ is a \gls{subgroup} of $\Z$.
+
+In general, for $n\in\N\setminus\braces{0}$ we let
+
+\begin{equation}
+    n\Z \mathDef{} \braces{\ldots, -2n, -n, 0, n, 2n, \ldots}.
+\end{equation}
+
+\noindent
+Then $n\Z\le\Z$.
+This is a \emph{proper} subgroup when $n\ge2$.
+\end{example}
+
+For a multiplicative group $\parens{G,\cdot}$ and $g\in G$, we define
+
+\begin{equation}
+    \angles{g} \mathDef{} \braces{g^{n} \mid n\in\Z}.
+\end{equation}
+
+\noindent
+In this case, we see that $\angles{g}$ contains all group elements
+of the form $g^{n}$ for $n\in\Z$.
+This is similar to Eqs.~\eqref{eq:math_groups_integers_1_gen_pos}
+and \eqref{eq:math_groups_integers_1_gen_neg}.
+Here, we have
+
+\begin{equation}
+    g^{n} = \underbrace{g \cdot g \cdots g}_{\text{$n$ times}} \quad n\ge 0
+\end{equation}
+
+\noindent
+and
+
+\begin{equation}
+    g^{n} = \underbrace{g^{-1} \cdot g^{-1} \cdots g^{-1}}_{\text{$\abs{n}$
+        times}} \quad n < 0.
+\end{equation}
+
+\noindent
+In this case, $\angles{g}$ is the \gls{subgroup} of $G$ which consists
+of products of $g$ or $g^{-1}$;
+this allows us to write $\angles{g}\le G$.
+We say $G$ is a \emph{\gls{cyclic group}} if there is a $g\in G$ such that
+for all $h\in G$ there is an $n\in\Z$ such that $h = g^{n}$.
+In this case, we have $G = \angles{g}$ and 
+say that $g$ is a \emph{generator} of $G$.
+\Glspl{cyclic group} are important in cryptography because
+these \glspl{group} are used in the \gls{dhke};
+they are also used to construct \glspl{signature}.
+
+\begin{example}[Cyclic Group: $\Z$]
+As we saw previously, $1$ is a generator of the integers $\Z$ under addition.
+Thus, we can write $\angles{1} = \Z$.
+We note that $-1$ is also a generator, so $\angles{-1} = \Z$.
+\end{example}
+
+\begin{example}[Non-cyclic Group: $\Q$]
+We can consider the rational numbers $\Q$ under addition.
+For any $a \in \Q\setminus\braces{0}$, we know that
+and $\frac{a}{2}\in\Q\setminus\braces{0}$.
+Even so, we see that $\frac{a}{2} \not\in \angles{a}$.
+Thus, $\Q$ is not a \gls{cyclic group}.
+\end{example}
+
+In all of the groups we have looked up to this point,
+all of our group operations satisfy $a\cdot b = b\cdot a$;
+that is, the group operation is \emph{\gls{commutative}}.
+We say that $G$ is an \emph{\gls{abelian group}} if for all $a,b\in G$
+we have $a\cdot b = b\cdot a$.
+This need not always be the case, but we will only consider
+\glspl{abelian group} here because the \glspl{group} which normally arise
+in cryptography are abelian.
+
+We note that addition and multiplication are familiar
+\gls{commutative} operations;
+we always have $a+b = b+a$ and $a\cdot b = b\cdot a$ for real numbers.
+We know that subtraction and division are \emph{not} \gls{commutative};
+in general, we have $a-b \ne b-a$ and $\frac{a}{b} \ne \frac{b}{a}$.
+
+We will usually denote $a\cdot b$ as $ab$ from now on
+when there is no cause for confusion.
+
+\subsection{Encoding Groups}
+
+When working with the group $\Z_{n}$,
+we can encode $k\in\Z_{n}$ by its binary representation.
+Other groups may have different representations.

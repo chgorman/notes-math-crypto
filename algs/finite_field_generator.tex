@@ -1,0 +1,30 @@
+\begin{algorithm}[t]
+\caption{Compute a primitive element of a \glsentrytext{finite field}}
+\label{alg:finite_field_generator}
+\begin{algorithmic}[1]
+\Require $p$ prime
+\Procedure{ComputeFiniteFieldGenerator}{$p$}
+    \State $q \algAssign{} p-1$
+    \State $p_{1}^{n_{1}}p_{2}^{n_{2}}\cdots p_{\ell}^{n_{\ell}}
+        \algAssign{} \textsc{Factor}(q)$
+    \Comment{Compute the prime factorization of $q=p-1$}
+    \While{}
+        \State $\alpha \chooseRandom{} \F_{p}^{*}$
+        \Comment{Choose a random element in $\F_{p}^{*}$}
+        \State $\texttt{IsGenerator} \algAssign{} \texttt{true}$
+        \For {$k\algAssign{}1; k\le \ell; k{+}{+}$}
+            \State $q_{k} \algAssign{} q/p_{k}$
+            \State $\beta \algAssign{} \alpha^{q_{k}}$
+            \If{$\beta = 1$}
+                \State $\texttt{IsGenerator} \algAssign{} \texttt{false}$
+                \Break
+            \EndIf
+        \EndFor
+        \If{$\texttt{IsGenerator}$}
+            \Break
+        \EndIf
+    \EndWhile
+    \State \Return $\alpha$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

@@ -1,0 +1,139 @@
+\section{Bit Operations}
+
+Here we include a brief discussion of bit operations
+for the sake of completeness.
+
+\subsection{Definitions}
+
+Each bit is either $\texttt{0}$ or $\texttt{1}$.
+
+\paragraph{NOT}
+\emph{NOT} reverses a bit:
+
+\begin{align}
+    \lnot\texttt{0} &= \texttt{1} \nonumber\\
+    \lnot\texttt{1} &= \texttt{0}.
+\end{align}
+
+\paragraph{AND}
+\emph{AND} operates on two bits and returns $\texttt{1}$ if both bits are
+$\texttt{1}$ and returns $\texttt{0}$ otherwise:
+
+\begin{align}
+    \texttt{0}\land\texttt{0} &= \texttt{0} \nonumber\\
+    \texttt{1}\land\texttt{0} &= \texttt{0} \nonumber\\
+    \texttt{0}\land\texttt{1} &= \texttt{0} \nonumber\\
+    \texttt{1}\land\texttt{1} &= \texttt{1}.
+\end{align}
+
+\paragraph{OR}
+\emph{OR} operates on two bits and returns $\texttt{1}$ if at least one bit
+is $\texttt{1}$ and returns $\texttt{0}$ otherwise:
+
+\begin{align}
+    \texttt{0}\lor\texttt{0} &= \texttt{0} \nonumber\\
+    \texttt{1}\lor\texttt{0} &= \texttt{1} \nonumber\\
+    \texttt{0}\lor\texttt{1} &= \texttt{1} \nonumber\\
+    \texttt{1}\lor\texttt{1} &= \texttt{1}.
+\end{align}
+
+\paragraph{XOR}
+\emph{XOR} operates on two bits and returns $\texttt{1}$
+if the two bits are different and returns $\texttt{0}$ otherwise:
+
+\begin{align}
+    \texttt{0}\oplus\texttt{0} &= \texttt{0} \nonumber\\
+    \texttt{1}\oplus\texttt{0} &= \texttt{1} \nonumber\\
+    \texttt{0}\oplus\texttt{1} &= \texttt{1} \nonumber\\
+    \texttt{1}\oplus\texttt{1} &= \texttt{0}.
+\end{align}
+
+\noindent
+The XOR operation is important because of the following property:
+
+\begin{equation}
+    \parens{\texttt{x} \oplus \texttt{y}} \oplus \texttt{y} = \texttt{x}.
+\end{equation}
+
+\noindent
+for all bits $\texttt{x}$ and $\texttt{y}$.
+We also have
+
+\begin{equation}
+    \texttt{x} \oplus \texttt{0} = \texttt{x}.
+\end{equation}
+
+\subsection{Bit Operations on Integers}
+
+Using an unsigned integer's binary representation,
+these bit operations can be extended to unsigned integers;
+the extension is straightforward and we only give examples.
+
+
+\begin{example}[Bitwise Operations]
+We show some examples of bit operations using 8-bit unsigned integers:
+
+\begin{itemize}
+\item Bitwise NOT:
+
+\begin{align}
+    \lnot\texttt{11110010} &=
+         \texttt{00001101} \nonumber\\
+    \lnot\texttt{11010011} &=
+         \texttt{00101100} \nonumber\\
+    \lnot\texttt{00010110} &=
+         \texttt{11101001} \nonumber\\
+    \lnot\texttt{10111011} &=
+         \texttt{01000100}.
+\end{align}
+
+\item Bitwise AND:
+
+\begin{align}
+    \texttt{11110010} \land
+    \texttt{11010011} &=
+    \texttt{11010010} \nonumber\\
+    \texttt{00010110} \land
+    \texttt{10111011} &=
+    \texttt{00010010}.
+\end{align}
+
+\item Bitwise OR:
+
+\begin{align}
+    \texttt{11110010} \lor
+    \texttt{11010011} &=
+    \texttt{11110011} \nonumber\\
+    \texttt{00010110} \lor
+    \texttt{10111011} &=
+    \texttt{10111111}.
+\end{align}
+
+\item Bitwise XOR:
+
+\begin{align}
+    \texttt{11110010} \oplus
+    \texttt{11010011} &=
+    \texttt{00100001} \nonumber\\
+    \texttt{00010110} \oplus
+    \texttt{10111011} &=
+    \texttt{10101101}.
+\end{align}
+
+In general, we also have
+
+\begin{equation}
+    \parens{x \oplus y} \oplus y = x
+\end{equation}
+
+\noindent
+and
+
+\begin{equation}
+    x \oplus 0 = x
+\end{equation}
+
+\noindent
+for all unsigned integers $x$ and $y$.
+\end{itemize}
+\end{example}

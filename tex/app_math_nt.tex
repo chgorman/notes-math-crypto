@@ -1,0 +1,674 @@
+\section{Number Theory}
+\label{app:math_nt}
+
+We now have a longer discussion related to greatest common divisors
+and how to compute them using the Euclidean Algorithm.
+We also talk about the Extended Euclidean Algorithm.
+
+\subsection{Euclidean Division}
+
+We will need the following properties of the natural numbers and integers:
+
+\begin{prop}[Well-Ordering Principle]
+\label{prop:math_well_ordering_naturals}
+Every nonempty set of natural numbers contains a minimal element.
+\end{prop}
+
+\begin{prop}[No Zero Divisors]
+\label{prop:math_no_zero_divisors}
+If $a,b\in\Z$ and $ab=0$, then $a=0$ or $b=0$.
+\end{prop}
+
+In our discussion about \gls{number theory},
+we have repeatedly used the following result:
+
+\begin{prop}[Euclidean Division]
+\label{prop:math_euclid_division}
+Given $a,b\in\N$ with $b\ge1$, there are \emph{unique} values
+$q,r\in\N$ such that
+
+\begin{equation}
+    a = qb + r.
+\end{equation}
+
+\noindent
+Here, $q$ is called the \emph{quotient} and $r$ is called the \emph{remainder}.
+\end{prop}
+
+We give a formal proof now.
+We will use Propositions~\ref{prop:math_well_ordering_naturals}
+and \ref{prop:math_no_zero_divisors}.
+
+\begin{proof}[Proof of Proposition~\ref{prop:math_euclid_division}]
+If $a=0$, then we see that we must have $q=0$ and $r=0$.
+
+Thus, we assume that $a\ge1$.
+Define
+
+\begin{equation}
+    S \mathDef{} \braces{a - qb \mid q\in\N \text{ and } (a-qb\ge0)}.
+\end{equation}
+
+\noindent
+That is, $S$ contains all values of the form $a-qb$ which are nonnegative
+for $q\in\N$.
+Because $a\ge1$, $0\in\N$, and
+
+\begin{equation}
+    a = a - 0\cdot b,
+\end{equation}
+
+\noindent
+we have that $a\in S$.
+Thus, $S$ is nonempty.
+
+As defined, $S$ is a nonempty collection of natural numbers.
+We set $r \mathDef{} \min S$;
+such a minimum exists by Proposition~\ref{prop:math_well_ordering_naturals}.
+Now, $r\in S$, so we see that we have
+
+\begin{equation}
+    a = qb + r
+\end{equation}
+
+\noindent
+for some $q\in\N$.
+
+If $r\ge b$, then it would follow that
+
+\begin{align}
+    a &= qb + r \nonumber\\
+        &= \parens{qb + b} + \parens{r-b} \nonumber\\
+        &= \parens{q+1}b + \bar{r}.
+\end{align}
+
+\noindent
+Here, we have $\bar{r} = r-b\ge0$.
+Thus, we see that if this were possible, then $\bar{r}\in S$ and
+$\bar{r} < r$.
+By the minimality of $r$, this is not possible.
+Thus, we have $0\le r < b$.
+This finishes the proof of existence.
+
+We now prove uniqueness.
+First, we suppose that
+
+\begin{align}
+    a &= qb + r \nonumber\\
+    a &= q'b + r' \nonumber\\
+\end{align}
+
+\noindent
+for $q,q'\in\N$, $0\le r < b$, and $0\le r' < b$.
+This implies that
+
+\begin{equation}
+    \parens{q-q'}b = r-r'.
+\end{equation}
+
+\noindent
+Thus, we see that $b\mid r-r'$.
+Now, $0\le r' < b$ implies that $0\ge -r' > -b$, so it follows
+that
+
+\begin{equation}
+    b > r \ge r - r' > r - b\ge -b.
+\end{equation}
+
+\noindent
+By combining these inequalities, we find
+
+\begin{equation}
+    \abs{r-r'} < b.
+\end{equation}
+
+\noindent
+However, we also know that $b \mid r-r'$, so this implies that $r-r' = 0$.
+Thus, we have
+
+\begin{equation}
+    \parens{q-q'}b = 0.
+\end{equation}
+
+\noindent
+Because $b\ne0$, we have $q - q'=0$;
+this follows from Proposition~\ref{prop:math_no_zero_divisors}.
+This finishes the proof of uniqueness.
+\end{proof}
+
+We note that while we stated Proposition~\ref{prop:math_euclid_division}
+as applying for $a\ge0$ and $b\ge1$, we could have modified it to the more
+general situation when $a\in\Z$, $b\ne0$, and $0 \le r < \abs{b}$.
+Even so, it is not of much additional value,
+and the proof is essentially the same.
+
+
+\subsection{Euclidean Algorithm}
+
+To compute the greatest common divisor (gcd),
+we use the Euclidean Algorithm;
+see Alg.~\ref{alg:euclidean_alg}.
+This is an efficient algorithm.
+
+\input{algs/gcd.tex}
+
+We will prove that it terminates, bound the number of iterations,
+and prove that it converges to the gcd.
+
+\begin{proof}[Proof that Alg.~\ref{alg:euclidean_alg} produces the
+    Greatest Common Divisor]
+
+We will start by proving convergence before we bound the number
+of iterations.
+
+\subsubsection*{Proof of Convergence}
+First, we see that
+
+\begin{equation}
+    r_{0} \ge r_{1} > r_{2} > \cdots
+\end{equation}
+
+\noindent
+with $r_{k}\ge0$.
+This shows that $\braces{r_{k}}$ is a strictly decreasing sequence of natural
+numbers (after $r_{0}$) bounded below by $0$;
+thus, $r_{k}$ will reach $0$ in at most $b$ steps.
+This shows the algorithm will eventually terminate.
+
+At each step, we have
+
+\begin{equation}
+    r_{k-1} = q_{k}r_{k} + r_{k+1}.
+\end{equation}
+
+\noindent
+At the end, we have
+
+\begin{equation}
+    r_{N-1} = q_{N}r_{N}.
+\end{equation}
+
+\noindent
+We set
+
+\begin{equation}
+    d \mathDef{} r_{N},
+\end{equation}
+
+\noindent
+and we will prove that $d$ is the gcd.
+
+We notice that $d \mid r_{N-1}$.
+We also see
+
+\begin{align}
+    r_{N-2} &= q_{N-1}r_{N-1} + r_{N} \nonumber\\
+        &= \parens{q_{N-1}q_{N} + 1}d;
+\end{align}
+
+\noindent
+thus, we also have $d \mid r_{N-2}$.
+By continuing the same logic, we find that $d \mid r_{k}$ for all
+$k\in\braces{0, 1, \cdots, N}$.
+In particular, we have $d \mid r_{0}$ and $d \mid r_{1}$.
+Written another way, we have $d \mid a$ and $d \mid b$.
+It follows that $d$ is a \emph{common divisor} of $a$ and $b$.
+
+Let $\ell\ge0$ be any other divisor of $a$ and $b$;
+in particular, suppose
+
+\begin{align}
+    a &= \alpha \ell \nonumber\\
+    b &= \beta \ell.
+\end{align}
+
+\noindent
+Because $r_{0}=a$ and $r_{1}=b$, we have that $\ell\mid r_{0}$
+and $\ell\mid r_{1}$.
+We know
+
+\begin{equation}
+    a = q_{1}b + r_{2}.
+\end{equation}
+
+\noindent
+Rearranging this, we see
+
+\begin{align}
+    r_{2} &= a - q_{1}b \nonumber\\
+        &= \ell\parens{\alpha - q_{1}\beta}.
+\end{align}
+
+\noindent
+This implies that we also have $\ell \mid r_{2}$.
+Continuing this logic, we see that
+$\ell \mid r_{k}$ for all $k\in\braces{0, 1, 2, \cdots, N}$.
+It follows that $\ell \mid d$ because $d = r_{N}$.
+Because $\ell \mid d$, we know that $\ell\le d$.
+Thus, we see that $d$ is greater than or equal to \emph{all} divisors
+of $a$ and $b$;
+it is thus the \emph{greatest common divisor}.
+
+\subsubsection*{Bounding the number of iterations}
+We already showed that we will converge in at most $b$ steps.
+We now produce a much better bound.
+
+To do this, we need to look at the general recurrence relation more closely:
+
+\begin{equation}
+    r_{k} = q_{k+1}r_{k+1} + r_{k+2}.
+\end{equation}
+
+\noindent
+We assume that $r_{k}\ge r_{k+1}$.
+We always have $0\le r_{k+2} < r_{k+1}$,
+but we can say more:
+we always have
+
+\begin{equation}
+    r_{k+2} < \frac{r_{k}}{2}.
+\end{equation}
+
+We consider two cases:
+
+\begin{itemize}
+\item Case 1: $r_{k+1} > \frac{r_{k}}{2}$
+
+In this case, we see
+
+\begin{equation}
+    0 \le r_{k} - r_{k+1} < \frac{r_{k}}{2}.
+\end{equation}
+
+\noindent
+This equation combined with $r_{k+1} > \frac{r_{k}}{2}$
+shows us that we have
+
+\begin{equation}
+    0 \le r_{k} - r_{k+1} < r_{k+1}.
+\end{equation}
+
+\noindent
+This means that $q_{k+1} = 1$.
+Thus, we have
+
+\begin{align}
+    r_{k} &= r_{k+1} + \parens{r_{k}-r_{k+1}} \nonumber\\
+        &= r_{k+1} + r_{k+2}
+\end{align}
+
+\noindent
+with
+
+\begin{equation}
+    r_{k+2} < \frac{r_{k}}{2}.
+\end{equation}
+
+\item Case 2: $r_{k+1} \le \frac{r_{k}}{2}$
+
+Because we always have
+
+\begin{equation}
+    r_{k+2} < r_{k+1}
+\end{equation}
+
+\noindent
+and we are assuming $r_{k+1} \le \frac{r_{k}}{2}$,
+we see that
+
+\begin{equation}
+    r_{k+2} < \frac{r_{k}}{2}.
+\end{equation}
+\end{itemize}
+
+By repeatedly applying this fact, we arrive at the bound
+
+\begin{equation}
+    r_{2k} < \frac{r_{0}}{2^{k}}.
+\end{equation}
+
+\noindent
+We recall that we always have $r_{N}\ge 1$ and $r_{N+1}=0$.
+If $N = 2k$, then we see
+
+\begin{equation}
+    r_{N} < \frac{r_{0}}{2^{k}}.
+\end{equation}
+
+\noindent
+The fact that $r_{N}\ge 1$ allows us to write
+
+\begin{equation}
+    1 < \frac{r_{0}}{2^{k}}.
+\end{equation}
+
+\noindent
+Because $N = 2k$, it follows that
+
+\begin{equation}
+    N < 2\log_{2}r_{0}.
+\end{equation}
+
+\noindent
+If $N = 2k+1$, then we have
+
+\begin{equation}
+    r_{N} < r_{2k} < \frac{r_{0}}{2^{k}}.
+\end{equation}
+
+\noindent
+We then see
+
+\begin{equation}
+    N < 2\log_{2}r_{0} + 1.
+\end{equation}
+
+\noindent
+Thus, we always have
+
+\begin{equation}
+    N \le 1 + 2\log_{2}r_{0}.
+\end{equation}
+
+\noindent
+This shows that we need $N$ steps for $N \le 1 + 2\log_{2}a$
+when $a\ge b\ge 0$.
+\end{proof}
+
+From our discussion of computational complexity,
+we have just shown that Alg.~\ref{alg:euclidean_alg}
+is a polynomial time algorithm to compute the gcd.
+
+\begin{example}[Using the Euclidean Algorithm]
+\label{example:app_math_euclidean_alg}
+\exampleCodeReference{examples/app\_math/euclidean\_alg.py}
+
+We now use Alg.~\ref{alg:euclidean_alg}
+to work through Example~\ref{example:bnt_gcd}:
+Compute $\gcd\parens{1080,1872}$.
+We have
+
+\begin{align}
+    r_{0} &= 1872 \nonumber\\
+    r_{1} &= 1080.
+\end{align}
+
+\noindent
+We see
+
+\begin{align}
+    1872 &= 1\cdot1080 + 792
+        \nonumber\\
+    q_{1} &= 1
+        \nonumber\\
+    r_{2} &= 792.
+\end{align}
+
+\noindent
+In the next step, we have
+
+\begin{align}
+    1080 &= 1\cdot792 + 288
+        \nonumber\\
+    q_{2} &= 1
+        \nonumber\\
+    r_{3} &= 288.
+\end{align}
+
+\noindent
+The following step gives
+
+\begin{align}
+    792 &= 2\cdot288 + 216.
+        \nonumber\\
+    q_{3} &= 2
+        \nonumber\\
+    r_{4} &= 216.
+\end{align}
+
+\noindent
+Continuing on, we find
+
+\begin{align}
+    288 &= 1\cdot216 + 72
+        \nonumber\\
+    q_{4} &= 1
+        \nonumber\\
+    r_{5} &= 72.
+\end{align}
+
+\noindent
+At last we have
+
+\begin{align}
+    216 &= 3\cdot 72
+        \nonumber\\
+    q_{5} &= 3
+        \nonumber\\
+    r_{6} &= 0.
+\end{align}
+
+\noindent
+The process has terminated and we have determined that
+
+\begin{equation}
+    \gcd(1080,1872) = 72.
+\end{equation}
+\end{example}
+
+
+\subsection{Extended Euclidean Algorithm}
+
+We also include the Extended Euclidean Algorithm;
+see Alg.~\ref{alg:extended_euclidean_alg}.
+This algorithm produces the gcd $d$ as well as $x$ and $y$ such that
+
+\begin{equation}
+    ax + by = d.
+    \label{eq:bezout_identity}
+\end{equation}
+
+\input{algs/extended_gcd.tex}
+
+\noindent
+In this case, $x$ and $y$ are called \emph{B\'{e}zout coefficients},
+and Eq.~\eqref{eq:bezout_identity} is called the \emph{B\'{e}zout identity}.
+
+\begin{proof}[Proof that Alg.~\ref{alg:extended_euclidean_alg} produces
+    $ax + by = \gcd(a,b)$]
+
+We see that this is an extension of Alg.~\ref{alg:euclidean_alg};
+thus, we know that $d = \gcd(a,b)$.
+
+We begin by showing
+
+\begin{equation}
+    as_{k} + bt_{k} = r_{k}
+\end{equation}
+
+\noindent
+for all $k$.
+First, we see that it holds for $k=0$ and $k=1$:
+
+\begin{align}
+    a\cdot1 + b\cdot0 &= a \nonumber\\
+    a\cdot0 + b\cdot1 &= b.
+\end{align}
+
+\noindent
+We suppose that the equation is valid for $r_{k}$ and $r_{k-1}$.
+Then, we see
+
+\begin{align}
+    r_{k+1} &= r_{k-1} - q_{k}r_{k} \nonumber\\
+        &= \parens{as_{k-1} + bt_{k-1}} - q_{k}\parens{as_{k} + bt_{k}}
+            \nonumber\\
+        &= a\parens{s_{k-1} - q_{k}s_{k}} + b\parens{t_{k-1} - q_{k}t_{k}}
+            \nonumber\\
+        &= as_{k+1} + bt_{k+1}.
+\end{align}
+
+\noindent
+Thus, it also holds for $r_{k+1}$.
+Continuing this argument, we have
+
+\begin{equation}
+    as_{k} + bt_{k} = r_{k}
+\end{equation}
+
+\noindent
+for all $k\in\braces{0,1,\cdots,N}$.
+
+We now focus on the final case:
+
+\begin{equation}
+    as_{N} + bt_{N} = r_{N}.
+\end{equation}
+
+\noindent
+We already know that $d = r_{N} = \gcd(a,b)$.
+With $x = s_{N}$ and $y = t_{N}$, we have
+
+\begin{equation}
+    ax + by = d,
+\end{equation}
+
+\noindent
+as desired.
+\end{proof}
+
+\begin{example}[Using the Extended Euclidean Algorithm]
+\label{example:app_math_extended_euclidean_alg}
+\exampleCodeReference{examples/app\_math/extended\_euclidean\_alg.py}
+
+We now use Alg.~\ref{alg:extended_euclidean_alg}.
+to work through Example~\ref{example:bnt_extended_gcd}:
+Compute $x$ and $y$ such that
+
+\begin{equation}
+    1080x + 1872y = \gcd\parens{1080,1872}.
+\end{equation}
+
+\noindent
+We will reuse information we already computed in
+Example~\ref{example:app_math_euclidean_alg}.
+
+We start by listing the initial values:
+
+\begin{align}
+    r_{0} &= 1872
+        \nonumber\\
+    s_{0} &= 1
+        \nonumber\\
+    t_{0} &= 0
+        \nonumber\\
+    r_{1} &= 1080
+        \nonumber\\
+    s_{1} &= 0
+        \nonumber\\
+    t_{1} &= 1.
+\end{align}
+
+\noindent
+We see
+
+\begin{align}
+    1872 &= 1\cdot1080 + 792
+        \nonumber\\
+    q_{1} &= 1
+        \nonumber\\
+    r_{2} &= 792
+        \nonumber\\
+    s_{2} &= s_{0} - q_{1}s_{1}
+            \nonumber\\
+        &= 1
+            \nonumber\\
+    t_{2} &= t_{0} - q_{1}t_{1}
+            \nonumber\\
+        &= -1.
+\end{align}
+
+\noindent
+In the next step, we have
+
+\begin{align}
+    1080 &= 1\cdot792 + 288
+        \nonumber\\
+    q_{2} &= 1
+        \nonumber\\
+    r_{3} &= 288
+        \nonumber\\
+    s_{3} &= s_{1} - q_{2}s_{2}
+            \nonumber\\
+        &= -1
+            \nonumber\\
+    t_{3} &= t_{1} - q_{2}t_{2}
+            \nonumber\\
+        &= 2.
+\end{align}
+
+\noindent
+The following step gives
+
+\begin{align}
+    792 &= 2\cdot288 + 216.
+        \nonumber\\
+    q_{3} &= 2
+        \nonumber\\
+    r_{4} &= 216
+        \nonumber\\
+    s_{4} &= s_{2} - q_{3}s_{3}
+            \nonumber\\
+        &= 3
+            \nonumber\\
+    t_{4} &= t_{2} - q_{3}t_{3}
+            \nonumber\\
+        &= -5.
+\end{align}
+
+\noindent
+Continuing on, we find
+
+\begin{align}
+    288 &= 1\cdot216 + 72
+        \nonumber\\
+    q_{4} &= 1
+        \nonumber\\
+    r_{5} &= 72
+        \nonumber\\
+    s_{5} &= s_{3} - q_{4}s_{4}
+            \nonumber\\
+        &= -4
+            \nonumber\\
+    t_{5} &= t_{3} - q_{4}t_{4}
+            \nonumber\\
+        &= 7.
+\end{align}
+
+\noindent
+At last we have
+
+\begin{align}
+    216 &= 3\cdot 72
+        \nonumber\\
+    q_{5} &= 3
+        \nonumber\\
+    r_{6} &= 0.
+\end{align}
+
+\noindent
+This concludes Alg.~\ref{alg:extended_euclidean_alg}.
+
+The process has terminated and we have determined that
+
+\begin{equation}
+    \gcd(1872,1080) = 72
+\end{equation}
+
+\noindent
+and
+
+\begin{equation}
+    1872\cdot\parens{-4} + 1080\cdot 7 = \gcd(1872,1080).
+\end{equation}
+\end{example}

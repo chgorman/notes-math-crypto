@@ -1,0 +1,335 @@
+\section{Applications of Cryptographic Hash Functions}
+
+\subsection{Hash-based Message Authentication Code (HMAC)}
+\label{app:crypto_hmac}
+
+We now spend time discussing \glspl{hmac} (HMAC)~\cite{HMAC1996,rfc2104}.
+
+As mentioned in Chapter~\ref{sec:symmetric_mac},
+a \emph{\gls{mac}} ensures message integrity.
+This results from using a secret key $k$ together with a message $m$
+to produce a tag $t$.
+For \glspl{mac} to be useful, it should be impractical for adversary Eve
+to produce a valid tag even if she has seen multiple valid
+message-tag pairs.
+
+Throughout this section we will work with a \gls{hash function}
+$H:\braces{0,1}^{*}\to\braces{0,1}^{b}$.
+This specific construction is designed for \glspl{hash function}
+based the \MD{} construction
+discussed in Appendix~\ref{app:crypto_md_construction}.
+A \gls{mac} based on the sponge construction in
+Appendix~\ref{app:crypto_sponge_construction}
+will be discussed in Appendix~\ref{app:crypto_kmac}.
+
+\subsubsection{Initial (Incorrect) Guess for Hash-based MAC}
+
+We let $k\in\braces{0,1}^{\ell}$ be our secret key;
+in practice, we frequently have $\text{len}(k) = b$.
+
+One potential method for constructing a \gls{mac} based on a
+\gls{hash function} would be the following:
+Given a message $m$ and secret key $k$, compute
+
+\begin{equation}
+    t \mathDef{} H(k||m).
+\end{equation}
+
+\noindent
+While this could be used, the challenge with this method is that,
+if $H$ is based on the \MD{} construction,
+this is susceptible to length extension attacks.
+Given a valid $\parens{m,t}$, Eve would be able to construct
+valid MAC tags for all messages of the form $\textsf{pad}(m)||y$.
+\emph{This should not be possible.}
+
+\subsubsection{HMAC Definition}
+
+The \gls{hmac} (HMAC)~\cite{HMAC1996,rfc2104}
+was constructed so that length extension attacks are not possible.
+Given a key $k$ and message $m$,
+we compute the following:
+
+\begin{align}
+    k_{1} &\mathDef{} k\oplus\textsf{ipad} \nonumber\\
+    k_{2} &\mathDef{} k\oplus\textsf{opad} \nonumber\\
+    t' &\mathDef{} H(k_{1}||m) \nonumber\\
+    t &\mathDef{} H(k_{2}||t').
+\end{align}
+
+\noindent
+Here, \textsf{ipad} and \textsf{opad} are two different public
+byte constants which ensure that $k$ produces to different
+keys for each application of the \gls{hash function}:
+one key for the inner application of the \gls{hash function},
+and a second key for the outer application.
+The two applications of the \gls{hash function} ensure that
+it is not possible to perform length extension attacks on the protocol.
+The HMAC definition can be combined to
+
+\begin{align}
+    t &\mathDef{} \textsf{HMAC}(k, m) \nonumber\\
+    \textsf{HMAC}(k, m) &\mathDef{}
+    H\parens{\brackets{k\oplus\textsf{opad}}||
+        H\parens{\brackets{k\oplus\textsf{ipad}}||m}}.
+\end{align}
+
+This scheme has been proven secure~\cite{cryptoeprint:2014:578}.
+Because the \MDFive{} and \ShaOne{} \glspl{hash function} are compromised,
+HMAC-\MDFive{} and HMAC-\ShaOne{}
+\emph{should not be used}~\cite{cryptoeprint:2006:187,rfc6151};
+they should \emph{only} be used when \emph{required} for legacy systems.
+Although it may be the case that HMAC-\ShaOne{}
+is still secure~\cite[Section 3.3]{rfc6194},
+the fact remains that \ShaOne{} is a \emph{compromised} \gls{hash function}.
+
+
+\subsection{Keccak Message Authentication Code (KMAC)}
+\label{app:crypto_kmac}
+
+\Keccak{}-MAC is a \gls{mac} based on the \Keccak{} sponge function.
+While it would be possible to also use the HMAC construction
+from Appendix~\ref{app:crypto_hmac}, the KMAC construction is more efficient
+because it requires only one hash operation instead of two.
+
+We now define KMAC.
+As before, we let $k$ be the secret key and $m$ be the message;
+we let $H$ be a \gls{hash function} based on the \Keccak{} sponge function
+with rate $r$.
+The tag is then
+
+\begin{align}
+    t &\mathDef{} \textsf{KMAC}(k,m) \nonumber\\
+        &= H\parens{\textsf{pad}(k,r)||m}.
+\end{align}
+
+\noindent
+Here, $\textsf{pad}(k,r)$ means that we pad $k$ to a multiple of $r$ bits.
+KMAC is formally specified as a derived \ShaThree{}
+function~\cite{NIST-SP-800-185}.
+In~\cite{NIST-SP-800-185},
+additional padding is used for domain separation.
+By padding to a multiple of the rate, it is possible to precompute
+the internal state so that the first iteration has already been processed.
+This would allow for faster computation
+if many tags need to be calculated for the same key.
+
+
+\subsection{HMAC-based Key Derivation Function (HKDF)}
+\label{app:crypto_hkdf}
+
+Here we will discuss the \gls{hkdf} (HKDF) protocol,
+attempting to condense the main ideas from
+the primary sources~\cite{HKDF2010,rfc5869}.
+
+The purpose of \emph{\glspl{kdf}}
+is to convert \emph{nonuniform} randomness into \emph{uniform} randomness.
+Nonuniform randomness could come from the \gls{shared secret}
+of a \gls{dhke};
+in this case, the \gls{shared secret} is a random group element
+but not a \emph{uniformly} random bit string.
+Most \gls{symmetric key encryption} protocols assume a
+\emph{uniform} random key,
+so merely using the \gls{shared secret} would violate the assumptions
+of the protocol;
+violating cryptographic protocol security assumptions is
+\emph{always} a bad idea.
+
+The \gls{hkdf} protocol is based on an
+\emph{extract-then-expand} principle:
+nonuniform randomness is first compressed into a uniformly random key;
+this uniformly random key is then used to derive additional
+uniformly random bits.
+From~\cite{HKDF2010}, we have
+
+\begin{equation}
+    \textsf{HKDF}\parens{\textsf{salt}, \textsf{skm}, \textsf{ctx}, L}
+        \mathDef{} \textsf{trunc}\parens{T(1) || T(2) || \cdots || T(t), L},
+\end{equation}
+
+\noindent
+where \textsf{salt} is a \gls{salt},
+\textsf{skm} is the source key material,
+\textsf{ctx} is the context information, and $L$ is the output in bits.
+We recall that a \glsfirst{salt} is used to ensure
+that different source key materials produce different pseudorandom keys.
+\Glspl{salt} are closely related to \glspl{nonce}.
+From here, we define $T(i)$ by
+
+\begin{align}
+    \textsf{prk} &\mathDef{} \textsf{HMAC}\parens{\textsf{salt},\textsf{skm}}
+            \nonumber\\
+    T(1) &\mathDef{} \textsf{HMAC}\parens{\textsf{prk}, \textsf{ctx}||1}
+            \nonumber\\
+    T(i) &\mathDef{} \textsf{HMAC}\parens{\textsf{prk},T(i-1)||
+        \textsf{ctx}||i} \quad i\in\braces{2,\cdots,t}.
+\end{align}
+
+\noindent
+The source key material (possibly with a \gls{salt}) is concentrated
+into a pseudorandom key \textsf{prk}.
+From there, this pseudorandom key is not output directly
+but rather is used to derive additional pseudorandom bits.
+In order to help resist any correlation affects between repeated
+\textsf{HMAC} calls,
+the pseudorandom bits from one iteration are fed into
+the message for the next iteration;
+this helps ensure that the \textsf{HMAC} instantiations
+are independent.
+The context information enables the same source key material
+to be reused in different settings while ensuring
+independent keys.
+
+We note that all of the operations here which use \textsf{HMAC}
+could also be replaced with calls to \textsf{KMAC}.
+
+
+\subsection{PBKDF2}
+\label{app:crypto_pbkdf2}
+
+Although we have mentioned that
+Password-Based Key Derivation Function 2~\cite{rfc8018}
+should not be used~\cite{blocki2018economics},
+we \emph{will} describe it here in order to help the reader understand
+how it works and how it attempts to increase the difficulty
+over standard \glsfirstplural{hash function}.
+Even so, \emph{do not use this method to store passwords!}
+It was originally designed in 2000~\cite{rfc2898}.
+
+One of the difficulties of protecting passwords with standard
+\glsfirstplural{hash function} is that specialized hardware
+can be designed to quickly compute them.
+To slow down specialized hardware like
+\href{https://en.wikipedia.org/wiki/Application-specific_integrated_circuit}{application-specific
+integrated circuits} (ASICs),
+it is necessary to add computations
+which \emph{must} be performed sequentially.
+
+We now give the specification from~\cite{rfc8018};
+we use \textsf{HMAC} as the required pseudorandom function:
+
+\begin{equation}
+    \textsf{PBKDF2}\parens{\textsf{pw}, \textsf{salt}, c, L}
+        \mathDef{} T_{1} || T_{2} || \cdots || T_{k}.
+\end{equation}
+
+\noindent
+Here, $\textsf{pw}$ is the password,
+$\textsf{salt}$ is the \gls{salt},
+$c$ is the number of iterations,
+and $L$ is the derived key output length.
+
+We have
+
+\begin{equation}
+    T_{i} \mathDef{} U_{1,i} \oplus U_{2,i} \oplus \cdots \oplus U_{c,i}
+\end{equation}
+
+\noindent
+where
+
+\begin{align}
+    U_{1,i} &\mathDef{} \textsf{HMAC}\parens{\textsf{pw}, \textsf{salt} || i}
+        \nonumber\\
+    U_{2,i} &\mathDef{} \textsf{HMAC}\parens{\textsf{pw}, U_{1,i}}
+        \nonumber\\
+    U_{3,i} &\mathDef{} \textsf{HMAC}\parens{\textsf{pw}, U_{2,i}}
+        \nonumber\\
+        &\quad \vdots \nonumber\\
+    U_{c,i} &\mathDef{} \textsf{HMAC}\parens{\textsf{pw}, U_{c-1,i}}.
+\end{align}
+
+\noindent
+This feed-forward scheme is similar to what we saw in the \gls{hkdf}
+scheme in Appendix~\ref{app:crypto_hkdf}.
+Greater computation can be required by having a large $c$ value,
+as these require many \emph{sequential} \textsf{HMAC} iterations.
+This causes a slowdown in the total operation.
+
+We note that although this is a good starting place,
+recent work has shown that the protection PBKDF2 offers
+is insufficient against dedicated attackers~\cite{blocki2018economics}.
+This is because it is possible to build dedicated hardware
+to efficiently compute PBKDF2.
+In particular, we note that the $T_{i}$ values could be built up
+iteratively, so all the $U_{j,i}$ values do not need to be stored.
+As such, the algorithm does not have large memory requirements.
+\emph{Do not use this algorithm to store passwords!}
+
+
+\subsection{Hash to Finite Field}
+\label{app:crypto_hash-to-finite-field}
+
+Here we will work out the details proving the bounds for hashing
+to \gls{finite field}.
+
+Suppose we have a \gls{random oracle} $\widetilde{H}:\braces{0,1}^{*}\to\Z_{N}$.
+We are interested in knowing how much $\widetilde{H}(m) \mod p$
+deviates from the uniform distribution.
+
+We suppose that $N>p$ and $p\nmid N$;
+that is, $p$ is not a divisor of $N$.
+In this case, find $q$ and $r$ such that
+
+\begin{equation}
+    N = qp + r.
+\end{equation}
+
+\noindent
+Here, we have $q\ge1$ and $0\le r < p$.
+We have $r\ge1$ because $p\nmid N$.
+
+We let $X$ be a random variable uniformly distributed on $\Z_{N}$
+and $X_{p} \mathDef{} X \mod p$.
+Then we have the following:
+
+\begin{align}
+    \mathcal{P}\parens{X_{p} = k} &= \frac{q+1}{N},
+        \quad k\in \braces{0,\cdots,r-1} \nonumber\\
+    \mathcal{P}\parens{X_{p} = k} &= \frac{q}{N},
+        \quad k \in \braces{r,\cdots,N-1}.
+\end{align}
+
+\noindent
+Here, $\mathcal{P}$ is the probability of an event occurring.
+Thus, $\mathcal{P}(X_{p} = k)$ denotes the probability
+that the random variable $X_{p}$ equals the value $k$.
+
+We now determine how far $X_{p}$ deviates from the uniform
+distribution $U_{p}$:
+
+\begin{align}
+    \Delta(X_{p},U_{p}) &\mathDef{}
+    \sum_{k=0}^{p-1} \abs{\mathcal{P}(X_{p}=k) - \mathcal{P}(U_{p}=k)}
+        \nonumber\\
+    &= \sum_{k=0}^{r-1} \abs{\frac{q+1}{N} - \frac{1}{p}} +
+        \sum_{k=r}^{p-1} \abs{\frac{q}{N} - \frac{1}{p}} \nonumber\\
+    &= r\frac{qp + p - N}{pN} + \parens{p-r}\frac{N-qp}{pN}
+        \nonumber\\
+    &\le \frac{p}{N}.
+\end{align}
+
+\noindent
+Thus, the relative size of $p$ and $N$ controls the deviation from uniformity.
+In this way, if the $p$ is $n$-bit prime number and we desire
+$k$ bits of security,
+then we need $N\ge 2^{n+k}$.
+After hashing into $\Z_{N}$, performing a reduction modulo $p$
+will result in a sufficiently uniform hash distribution.
+
+In some sense, we are free in how we choose $N$ provided it is
+sufficiently large.
+Because we have \glspl{hash function} which output bits,
+it would be easy to hash to some power of 2.
+In practice, our prime $p$ will be somewhat large;
+generally, at least 200 bits, and usually 256 bits or more.
+If we want at least 128 bits of security, then a standard 256-bit
+\gls{hash function} will not be sufficient.
+
+Because of this, using the \gls{hkdf} previously discussed in
+Appendix~\ref{app:crypto_hkdf} appears to be a reasonable decision.
+Although we are not interested in keys \emph{per se},
+we are looking to map random inputs
+to random outputs.
+These outputs will then be deterministically mapped to points
+on an \gls{elliptic curve}.

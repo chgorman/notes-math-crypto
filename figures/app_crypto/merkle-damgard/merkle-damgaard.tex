@@ -1,0 +1,59 @@
+\documentclass{standalone}
+\usepackage{rotating}	%% introduce sideways env
+\usepackage{tikz}
+
+%% Public TikZ libraries
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+
+%% Custom TikZ addons
+\usetikzlibrary{crypto.symbols}
+\tikzset{shadows=no}        % Option: add shadows to XOR, ADD, etc.
+
+%% Document
+\begin{document}
+\begin{tikzpicture}[scale=0.4]
+    \path[anchor=east] (-1,0.5) node {$\textsf{pad}(m)=$};
+	\draw[fill=blue!15,thick,inner sep=2ex] (0,0) rectangle (16,1);
+
+	%% Separations in the message
+    \draw[thick] ++( 4,0) -- ++(0,1); \path (   2,0.5) node {$m_{0}$};
+    \draw[thick] ++( 8,0) -- ++(0,1); \path ( 4+2,0.5) node {$m_{1}$};
+    \draw[thick] ++(12,0) -- ++(0,1); \path ( 8+2,0.5) node {$m_{2}$};
+    \draw[thick] ++(16,0) -- ++(0,1); \path (12+2,0.5) node {$m_{3}$};
+
+	%% Compressions functions 
+	\begin{scope}[shift={(0.5,-4)}]
+		\node [draw,fill=orange!15,trapezium,trapezium left angle=70,trapezium right angle=90,minimum height=0.7cm,thick,shift={(1.15,0.4)},rotate=-90] 
+		{\begin{sideways}$h$\end{sideways}};
+		\draw[->,thick] ++(1.5,+4) -- ++(0,-2.5) -- ++(0.5,0);
+        \draw[->,thick] ++(0,0.5) node[left] {$\textsf{IV}$}-- ++(2,0);
+	\end{scope}
+
+	\begin{scope}[shift={(4.5,-4)}]
+		\node [draw,fill=orange!15,trapezium,trapezium left angle=70,trapezium right angle=90,minimum height=0.7cm,thick,shift={(1.15,0.4)},rotate=-90] 
+		{\begin{sideways}$h$\end{sideways}};
+		\draw[->,thick] ++(1.5,+4) -- ++(0,-2.5) -- ++(0.5,0);
+		\draw[->,thick] ++(-0.2,0.5) -- node[below] {$h_{0}$} ++(2.2,0);
+	\end{scope}
+
+	\begin{scope}[shift={(8.5,-4)}]
+		\node [draw,fill=orange!15,trapezium,trapezium left angle=70,trapezium right angle=90,minimum height=0.7cm,thick,shift={(1.15,0.4)},rotate=-90] 
+		{\begin{sideways}$h$\end{sideways}};
+		\draw[->,thick] ++(1.5,+4) -- ++(0,-2.5) -- ++(0.5,0);
+		\draw[->,thick] ++(-0.2,0.5) -- node[below] {$h_{1}$} ++(2.2,0);
+	\end{scope}
+
+	\begin{scope}[shift={(12.5,-4)}]
+		\node [draw,fill=orange!15,trapezium,trapezium left angle=70,trapezium right angle=90,minimum height=0.7cm,thick,shift={(1.15,0.4)},rotate=-90] 
+		{\begin{sideways}$h$\end{sideways}};
+		\draw[->,thick] ++(1.5,+4) -- ++(0,-2.5) -- ++(0.5,0);
+		\draw[->,thick] ++(-0.2,0.5) -- node[below] {$h_{2}$} ++(2.2,0);
+	\end{scope}
+
+	\begin{scope}[shift={(16.5,-4)}]
+        \draw[->,thick] ++(-0.2,0.5) -- ++(0.75,0) node[right] {$h_{3}$} ;
+	\end{scope}
+	
+\end{tikzpicture}
+\end{document}

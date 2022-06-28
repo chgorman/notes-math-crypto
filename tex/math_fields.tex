@@ -1,0 +1,285 @@
+\section{Fields}
+\label{sec:math_fields}
+
+\subsection{Why do we care about Fields?}
+\Glspl{field} arise in many different areas.
+In cryptography, we use \glspl{field} in \gls{dhke} and \glspl{signature}.
+Additionally, \glspl{field} are used when working with \glspl{elliptic curve}.
+
+\subsection{Intuition and Examples}
+\emph{\Gls{field}} are common mathematical objects.
+All \glspl{field} are \glspl{ring} but have additional properties.
+Informally, a \gls{field} is a generalization of the rational numbers
+with addition and multiplication.
+In particular, every nonzero element has a multiplicative inverse.
+We begin with some examples.
+
+\begin{example}[The Rational Numbers]
+The rational numbers are a standard example of a \gls{field}.
+For $a\in\Q\setminus\braces{0}$, we can write
+
+\begin{equation}
+    a = \frac{m}{n}
+\end{equation}
+
+\noindent
+for $m,n\in\Z\setminus\braces{0}$.
+Then $\frac{n}{m}\in\Q$ and
+
+\begin{equation}
+    \frac{m}{n} \cdot \frac{n}{m} = 1.
+\end{equation}
+
+\noindent
+Thus, $a$ has multiplicative inverse.
+The rational numbers $\Q$ have an infinite number of elements.
+\end{example}
+
+\begin{example}[The Field $(\Z_{11},+,\cdot)$]
+\exampleCodeReference{examples/math\_review/finite\_field\_inverses.py}
+
+Let us look at $\Z_{11}$.
+We have the following multiplication facts:
+
+\begin{align}
+    1\cdot 1 &= 1 \mod 11
+        &
+    6\cdot 2 &= 1 \mod 11 \nonumber\\
+    2\cdot 6 &= 1 \mod 11
+        &
+    7\cdot 8 &= 1 \mod 11 \nonumber\\
+    3\cdot 4 &= 1 \mod 11
+        &
+    8\cdot 7 &= 1 \mod 11 \nonumber\\
+    4\cdot 3 &= 1 \mod 11
+        &
+    9\cdot 5 &= 1 \mod 11 \nonumber\\
+    5\cdot 9 &= 1 \mod 11
+        &
+    10\cdot 10 &= 1 \mod 11.
+\end{align}
+
+\noindent
+This shows that every nonzero element in $\Z_{11}$ has a multiplicative
+inverse.
+This, along with the other \gls{ring} properties, makes $\Z_{11}$ a \gls{field}.
+In this case, we write it as $\F_{11}$ to emphasize the \gls{field} nature.
+The \gls{field} $\F_{11}$ has a finite number of elements.
+\end{example}
+
+\subsection{Formal Definition}
+\begin{defn}[Field]
+A \gls{field} is a \gls{set} $F$ together with two binary operations
+addition $+$ and multiplication $\cdot$ which have the following properties:
+
+\begin{itemize}
+\item $\parens{F,+}$ is an \gls{abelian group} with additive identity $0$.
+
+\item $\parens{F^{*},\cdot}$ is an \gls{abelian group} with multiplicative
+    identity $1$.
+    Here, $F^{*} \mathDef{} F\setminus\braces{0}$.
+
+\item We have $0\ne 1$.
+
+\item We have the following distribution law between multiplication
+    and addition.
+    For all $a,b,c\in F$, we have
+
+\begin{equation}
+    a\cdot\parens{b + c} = \parens{a\cdot b} + \parens{a\cdot c}.
+\end{equation}
+\end{itemize}
+
+\noindent
+We formally say that $\parens{F,+,\cdot}$ is a \gls{field}.
+\end{defn}
+
+\subsection{Continued Discussion}
+
+\subsubsection{Difference Between Rings and Fields}
+
+We note that a \gls{field} is a \gls{commutative ring} with no zero divisors
+and where every nonzero element has a multiplicative inverse.
+
+\subsubsection{Finite Fields}
+
+While the \glspl{field} of the rationals $\Q$, the reals $\R$,
+and complex numbers $\C$ are more familiar,
+in cryptography we will be particularly interested
+in \emph{\glspl{finite field}}.
+As one may guess, a \gls{field} $\F$ is \emph{finite} if the number of
+elements is finite; that is, $\abs{\F}<\infty$.
+
+The \glspl{finite field} we will focus on are $\F_{p}$;
+here $p$ is a prime number.
+We will look at more examples of these \glspl{field} below.
+There are additional types of \glspl{finite field},
+but the \glspl{finite field} $\F_{p}$ are our primary focus.
+Additional material on \glspl{field} may be found in
+Appendix~\ref{app:math_finite_fields}.
+
+\subsection{More Examples}
+
+\begin{example}[Integers modulo a prime]
+We now show that $\parens{\F_{p},+,\cdot}$ is a \gls{field},
+where
+
+\begin{equation}
+    \F_{p} \mathDef{} \braces{0, 1, 2, \ldots, p-1}
+\end{equation}
+
+\noindent
+and $p$ is prime.
+We let
+
+\begin{equation}
+    \F_{p}^{*} \mathDef{} \F_{p}\setminus\braces{0},
+\end{equation}
+
+\noindent
+so $\F_{p}^{*}$ are the nonzero elements of $\F_{p}$.
+
+Let $a\in\F_{p}^{*}$ for prime $p>2$.
+Because $p$ is prime and $1\le a\le p-1$,
+$\gcd(a,p) = 1$.
+Thus, there exists $x$ and $y$ such that
+
+\begin{equation}
+    ax + py = 1.
+\end{equation}
+
+\noindent
+If we look at the above modulo $p$, we see
+
+\begin{equation}
+    ax = 1 \mod p.
+\end{equation}
+
+\noindent
+Therefore, $a$ has a multiplicative inverse $x\mod p$.
+This holds for all $a\in\F_{p}^{*}$, so $\parens{\F_{p},+,\cdot}$
+is a \gls{field}.
+\end{example}
+
+\begin{example}[More examples with $\F_{p}$]
+There are some unusual properties that we will discuss about $\F_{p}$.
+Throughout this example, all arithmetic will be performed modulo $p$.
+
+For all $x\in\F_{p}$, we have
+
+\begin{equation}
+    p\cdot x = 0.
+\end{equation}
+
+\noindent
+By this, we mean
+
+\begin{equation}
+    \underbrace{x + x + \cdots + x}_{\text{$p$ times}} = 0.
+\end{equation}
+
+\noindent
+In particular, we have
+
+\begin{equation}
+    p\cdot 1 = 0;
+\end{equation}
+
+\noindent
+that is,
+
+\begin{equation}
+    \underbrace{1 + 1 + \cdots + 1}_{\text{$p$ times}} = 0.
+\end{equation}
+
+\noindent
+This is not the case in the more familiar \glspl{field}
+of $\Q$, $\R$, and $\C$.
+In particular,
+
+\begin{equation}
+    \underbrace{1 + 1 + \cdots + 1}_{\text{$n$ times}} = n
+\end{equation}
+
+\noindent
+for every $n\in\N$.
+It is not possible to add $1$ to itself and arrive at $0$.
+
+Additionally, for $x,y\in\F_{p}$, we have
+
+\begin{equation}
+    \parens{x+y}^{p} = x^{p} + y^{p}.
+\end{equation}
+
+\noindent
+This follows from the previous property and the
+\href{https://en.wikipedia.org/wiki/Binomial_theorem}{Binomial Theorem}.
+Although this is fascinating, we will not discuss it further.
+\end{example}
+
+\begin{example}[Even more examples with $\F_{p}$]
+\label{example:math_field_p_more}
+\exampleCodeReference{examples/math\_review/finite\_field\_powers.py}
+
+We now fix a value of $p$ in order to work on some examples.
+We let
+
+\begin{align}
+    p &= 65537 \nonumber\\
+        &= 2^{16} + 1.
+\end{align}
+
+Addition modulo $p$ is well understood.
+We will take some time to look at examples of multiplication.
+In particular, we will look at exponentiation.
+
+We see
+
+\begin{align}
+    3^{0}  &= 1
+        &
+    3^{32}  &= 61869 \nonumber\\
+    3^{1}  &= 3
+        &
+    3^{64}  &= 19139 \nonumber\\
+    3^{2}  &= 9
+        &
+    3^{128}  &= 15028 \nonumber\\
+    3^{4}  &= 81
+        &
+    3^{256}  &= 282 \nonumber\\
+    3^{8}  &= 6561
+        &
+    3^{512}  &= 13987 \nonumber\\
+    3^{16} &= 54449
+        &
+    3^{1024}  &= 8224.
+\end{align}
+
+\noindent
+Once we reach a large enough exponent, say 16,
+there does not appear to be any relationship between the exponent
+$x$ and the resulting number $3^{x}\mod p$.
+
+To get a \gls{group} from the \gls{field} $\F_{p}$,
+we can look at the \gls{subgroup}
+generated by 3 under multiplication;
+that is, we can look at
+
+\begin{equation}
+    H \mathDef{} \braces{3^{x} \mod p \mid x\in\Z}.
+\end{equation}
+
+\noindent
+Then $H\le \F_{p}^{*}$; that is, $H$ is a \gls{subgroup} of the \gls{group}
+$\parens{\F_{p}^{*},\cdot}$.
+In general, if we choose prime $p$ large enough,
+we can use $H$ as a \gls{group} for the \gls{dhke};
+this will be discussed in Chapter~\ref{sec:public_diffie_hellman}.
+\end{example}
+
+\subsection{Encoding Fields}
+
+When working with the \gls{field} $\F_{p}$, we can encode $k\in\F_{p}$
+by its binary representation.
+Other \glspl{field} have different representations.

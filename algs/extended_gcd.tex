@@ -1,0 +1,31 @@
+\begin{algorithm}[t]
+\caption[Extended Euclidean Algorithm]{Solve $ax + by = \gcd(a,b)$ for $x$ and $y$}
+\label{alg:extended_euclidean_alg}
+\begin{algorithmic}[1]
+\Require $a\ge b\ge 0$
+\Procedure{ExtendedEuclideanAlgorithm}{$a$, $b$}
+    \State $r_{0} \algAssign{} a$
+    \State $s_{0} \algAssign{} 1$
+    \State $t_{0} \algAssign{} 0$
+    \State $r_{1} \algAssign{} b$
+    \State $s_{1} \algAssign{} 0$
+    \State $t_{1} \algAssign{} 1$
+    \State $q_{1}$, $r_{2} \algAssign{} \textsc{EuclideanDivision}(r_{0},r_{1})$
+    \State $s_{2} \algAssign{} s_{0} - q_{1}s_{1}$
+    \State $t_{2} \algAssign{} t_{0} - q_{1}t_{1}$
+    \State $k \algAssign{} 2$
+    \While {$r_{k}\ne0$}
+        \State $q_{k}$, $r_{k+1} \algAssign{}
+            \textsc{EuclideanDivision}(r_{k-1},r_{k})$
+        \State $s_{k+1} \algAssign{} s_{k-1} - q_{k}s_{k}$
+        \State $t_{k+1} \algAssign{} t_{k-1} - q_{k}t_{k}$
+        \State $k \algAssign{} k+1$
+    \EndWhile
+    \State $d \algAssign{} r_{k-1}$
+    \Comment{Greatest Common Divisor}
+    \State $x \algAssign{} s_{k-1}$
+    \State $y \algAssign{} t_{k-1}$
+    \State \Return $d$, $x$, $y$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

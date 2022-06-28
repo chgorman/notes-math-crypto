@@ -1,0 +1,770 @@
+\chapter{Digital Signatures}
+\label{chap:signatures}
+
+This chapter is devoted to \glspl{signature}.
+We will describe what they are as well as go through examples.
+
+
+
+\section{The Need for Digital Signatures}
+
+\Glspl{signature} allow for \emph{nonrepudiation};
+that is, if Alice sends Bob a message $m$ with a valid \gls{signature}
+$\sigma$ of $m$, Bob can be certain that Alice did indeed
+send him that message.
+Only if Eve stole Alice's signing (private) key would Eve be able
+to forge a signature.
+Thus, if Alice's signing key remains secure, it is not possible
+for Alice to later claim that she did not sign the message $m$.
+In particular, we want to ensure that Bob can present $\parens{m,\sigma}$
+to Charlie as proof that Alice sent message $m$ to Bob.
+
+We note that \glspl{signature} are different from \glspl{mac};
+see Chapter~\ref{sec:symmetric_mac}.
+A \gls{mac} \emph{does not} allow for nonrepudiation.
+Because of this, Bob is not able to use a MAC to prove to Charlie
+that Alice sent him a message because both Bob and Alice
+have the private key used in a MAC.
+Even though MACs do not allow for nonrepudiation,
+the fact remains that they require \emph{orders of magnitude}
+less computation.
+
+
+
+\section{Clearing Up Potential Confusion about Digital Signatures}
+
+\Glspl{signature} are sometimes explained as
+``performing \gls{public key encryption} backwards.''
+Although from a historical perspective this is understandable,
+this is \emph{completely incorrect}.
+\Glspl{signature} \emph{should not} be thought of as the ``reverse''
+of encryption.
+The \emph{purpose} of a \gls{signature} is enable Bob to prove to Charlie
+that Alice sent him a message;
+encryption \emph{does not} play any role.
+
+Now, it is understandable how this confusion arose.
+In the original RSA paper~\cite{RSApaper},
+\gls{public key encryption} and \glspl{signature} are both discussed.
+The authors describe a digital signature scheme which is merely
+their \gls{public key encryption} scheme backwards.
+Of course, the original method described in~\cite{RSApaper}
+\emph{should not be used} because it is \emph{not secure}.
+Additionally, it should be noted that Ralph Merkle in his
+dissertation~\cite[Chapter~1.4]{merkle1979secrecy}
+makes a similar statement.
+As modern cryptography developed, it became clear that it was best
+to separate the notions of an \gls{encryption scheme}
+and \gls{signature} scheme due to the different security objectives.
+
+This history explains why some may incorrectly describe \glspl{signature}
+as ``reverse encryption.''
+
+
+
+\section{Elgamal Signatures}
+\label{sec:signatures_elgamal}
+
+Elgamal signatures~\cite{elgamal1985public} are related to
+Elgamal encryption previously discussed
+in Chapter~\ref{sec:public_elgamal_encryption}.
+
+\subsection{Formal Definition}
+
+\begin{defn}
+We fix a prime $p$ and let $g\in\F_{p}^{*}$ generate $\F_{p}^{*}$.
+Also, let $H:\braces{0,1}^{*}\to\Z_{p-1}$ be a \gls{hash function}.
+
+\paragraph{Key Generation}
+Choose $x\chooseRandom{}\Z_{p-1}^{*}$.
+Set $y = g^{x} \mod p$.
+Then $x$ is the private key and $y$ is the public key.
+
+\paragraph{Signature Generation}
+Choose a \gls{nonce} $k\chooseRandom{}\Z_{p-1}^{*}$
+such that $\gcd(k,p-1) = 1$.
+Set
+
+\begin{align}
+    r &= g^{k} \mod p \nonumber\\
+    s &= \brackets{H(m) - xr}k^{-1} \mod p-1.
+\end{align}
+
+\noindent
+If $s=0$, choose another $k$ and repeat the process.
+The signature is $\parens{r,s}$.
+
+\paragraph{Signature Verification}
+The signature $\parens{r,s}$ is valid if $r,s\in\F_{p}^{*}$ and
+
+\begin{equation}
+    g^{H(m)} = y^{r}r^{s} \mod p.
+\end{equation}
+\end{defn}
+
+\subsection{Verification}
+
+Suppose we receive $\parens{r,s}$ as previously defined.
+In this case, we see
+
+\begin{equation}
+    H(m) = ks + xr \mod (p-1).
+\end{equation}
+
+\noindent
+This allows the following equalities:
+
+\begin{align}
+    g^{H(m)} &= g^{ks + xr} \nonumber\\
+        &= \parens{g^{k}}^{s}\parens{g^{x}}^{r} \nonumber\\
+        &= r^{s}y^{r}.
+\end{align}
+
+\noindent
+Thus, we have the desired equality.
+
+\subsubsection{The Necessary Requirement of $s\ne0$}.
+
+We briefly describe why we must have $s\ne0$.
+Suppose $s = 0$.
+Then we have
+
+\begin{equation}
+    H(m) = xr \mod (p-1).
+\end{equation}
+
+\noindent
+This implies that
+
+\begin{equation}
+    x = H(m)r^{-1} \mod (p-1).
+\end{equation}
+
+\noindent
+Thus, if $s=0$, then Alice leaks her private key.
+\emph{This should never happen.}
+
+\subsection{Security Considerations}
+
+If the \gls{nonce} $k$ is reused, the security of the scheme breaks
+because the private key can be computed;
+the reader should work out the details.
+A similar derivation can be found in Chapter~\ref{sig:schnorr_security}.
+
+\subsection{Example}
+
+\begin{example}[Elgamal Signature]
+\exampleCodeReference{examples/signatures/elgamal\_signature.py}
+
+We will again work within $\F_{p}$ with $p = 7919$
+and base point $g = 7$.
+Alice chooses her private key $x=5654$;
+her public key is
+
+\begin{align}
+    y &= g^{x} \mod p \nonumber\\
+        &= 5581.
+\end{align}
+
+\noindent
+Alice has a message $m$ she wishes to sign.
+We have $H(m) = 2689$.
+
+\paragraph{Signature Generation}
+Alice chooses her \gls{nonce} $k=3331$;
+we note $\gcd(7918, 3331) = 1$.
+Additionally, we see
+In this case, we have
+
+\begin{align}
+    r &= g^{k} \mod p \nonumber\\
+        &= 3521.
+\end{align}
+
+\noindent
+We then have
+
+\begin{align}
+    s &= \brackets{H(m) - xr}k^{-1} \mod \parens{p-1} \nonumber\\
+        &= 585.
+\end{align}
+
+\noindent
+The signature is $\parens{3521, 585}$.
+
+\paragraph{Signature Verification}
+We now want to verify the signature $\parens{3521, 585}$
+from Alice with public key $y = 5581$.
+The message $m$ has the hash $H(m) = 2689$.
+
+We look at the left-hand side:
+
+\begin{equation}
+    g^{H(m)} \mod p = 367.
+\end{equation}
+
+\noindent
+We look at the right-hand side:
+
+\begin{equation}
+    y^{r}r^{s} \mod p = 367.
+\end{equation}
+
+\noindent
+Thus, our signature is valid.
+\end{example}
+
+
+
+\section{Schnorr Signatures}
+\label{sec:signatures_schnorr}
+
+One difficulty with Elgamal signatures is that they are large.
+Schnorr signatures produce smaller signatures.
+
+\subsection{Formal Definition}
+
+\begin{defn}
+We let $G = \angles{g}$ be a \gls{cyclic group} with prime order $q$.
+We fix a \gls{hash function} $H:\braces{0,1}^{*}\to\Z_{q}$.
+Here, $m\in\braces{0,1}^{*}$ is the message to be signed.
+
+\paragraph{Key Generation}
+Let $x\chooseRandom{}\Z_{q}^{*}$ be the signing key.
+Then $y = g^{x}$ is the public key.
+
+\paragraph{Signature Generation}
+Choose a \gls{nonce} $k\chooseRandom{}\Z_{q}^{*}$.
+Set $r = g^{k}$.
+Let
+
+\begin{equation}
+    e = H(r||m);
+\end{equation}
+
+\noindent
+here, we have a deterministic binary representation for $r$.
+Set
+
+\begin{equation}
+    s = k - xe \mod q.
+\end{equation}
+
+\noindent
+The signature is $\parens{s,e}$.
+
+\paragraph{Signature Verification}
+We receive the message $m$ along with $\parens{s,e}$.
+Let
+
+\begin{align}
+    r_{v} &= g^{s}y^{e}
+        \nonumber\\
+    e_{v} &= H(r_{v}||m).
+\end{align}
+
+\noindent
+The signature is valid if $e_{v} = e$.
+\end{defn}
+
+\subsection{Verification}
+
+We now verify the result.
+In this case, if we use the values as defined, we see
+
+\begin{align}
+    r_{v} &= g^{s}y^{e} \nonumber\\
+        &= g^{k-xe}g^{xe} \nonumber\\
+        &= g^{k}.
+\end{align}
+
+\noindent
+Therefore, $r_{v} = r$ and
+
+\begin{align}
+    e_{v} &= H(r_{v}||m) \nonumber\\
+        &= H(r||m) \nonumber\\
+        &= e.
+\end{align}
+
+\noindent
+Thus, the signature is valid.
+
+\subsection{Group Realization}
+
+Here, we presented the Schnorr signature in a general \gls{cyclic group}.
+In practice, this was originally designed to be implemented
+in a \gls{subgroup} of order $q$ in $\F_{p}$ for large prime $p$.
+This is similar to the situation in DSA
+in Chapter~\ref{sec:signatures_dsa}.
+More explicitly, let $p$ be a large prime with
+
+\begin{equation}
+    p = rq + 1.
+\end{equation}
+
+\noindent
+Furthermore, let $h\in\F_{p}^{*}$ be a primitive element;
+that is, let $h$ be a generator so that $\angles{h} = \F_{p}^{*}$.
+Then set
+
+\begin{equation}
+    g = h^{r} \mod p.
+\end{equation}
+
+\noindent
+In this case, $\abs{\angles{g}} = q$ and so $\angles{g}$
+is the desired \gls{cyclic group} of prime order $q$.
+
+\subsection{Security Considerations}
+\label{sig:schnorr_security}
+
+Care must be taken to ensure the \gls{nonce} is not reused.
+\Gls{nonce} reuse easily leads to recovery of the private key.
+In fact, mere \emph{bias} in the \gls{nonce} distribution
+can lead to private key recovery;
+see~\cite{cryptoeprint:2019:023}.
+The use of deterministic \glspl{nonce} have been recommended
+for some time~\cite{rfc6979}.
+
+\subsubsection{Private Key Recovery from Nonce Reuse}
+
+We show what happens when the \gls{nonce} is reused.
+
+Suppose Alice signs distinct messages $m$ and $m'$
+but reuses the \gls{nonce} $k$ to save computation.
+That is, we have $r = g^{k}$ with
+
+\begin{align}
+    e &= H(r||m) \nonumber\\
+    s &= k - xe \nonumber\\
+    e' &= H(r||m') \nonumber\\
+    s' &= k - xe'.
+\end{align}
+
+\noindent
+Somehow, the adversary Eve knows that $k$ is reused;
+this could be determined by verifying the signatures
+and then noticing the computed $r$ values are the same.
+Using this information, we see
+
+\begin{align}
+    s - s' &= \parens{k - xe} - \parens{k - xe'} \nonumber\\
+        &= x\parens{e'-e},
+\end{align}
+
+\noindent
+so it follows that
+
+\begin{equation}
+    x = \frac{s-s'}{e'-e} \mod q.
+\end{equation}
+
+\noindent
+Therefore, Eve has now learned Alice's private key.
+
+\subsection{Example}
+
+\begin{example}[Schnorr Signature]
+\label{example:schnorr_signature}
+\exampleCodeReference{examples/signatures/schnorr\_signature.py}
+
+We have the following:
+
+\begin{align}
+    p &= cq + 1 \nonumber\\
+    q &= 2^{32} + 15 \nonumber\\
+    c &= 12.
+\end{align}
+
+\noindent
+It can be shown that $p$ and $q$ are prime numbers
+and that
+
+\begin{equation}
+    h = 7
+\end{equation}
+
+\noindent
+is a generator for $\F_{p}^{*}$.
+Our $q$-order \gls{subgroup} is generated by
+
+\begin{align}
+    g &= h^{c} \mod p \nonumber\\
+        &= 13841287201.
+\end{align}
+
+\noindent
+See Chapter~\ref{sec:zkproofs_group} for more information.
+
+Alice chooses her private key and public key so that
+
+\begin{align}
+    x &= 2981464014 \nonumber\\
+    y &= g^{x} \mod p \nonumber\\
+        &= 2966837275.
+\end{align}
+
+\noindent
+Alice wants to sign the message
+
+\begin{equation}
+    m = \texttt{00010203}.
+\end{equation}
+
+\paragraph{Signature Generation}
+Alice chooses
+
+\begin{align}
+    k &= 458074281 \nonumber\\
+    r &= g^{k} \mod p \nonumber\\
+        &= 2699985659.
+\end{align}
+
+\noindent
+She then computes
+
+\begin{align}
+    e &= \text{\MDFive{}}\parens{r||m} \mod q \nonumber\\
+        &= 1756904634.
+\end{align}
+
+\noindent
+We then have
+
+\begin{align}
+    s &= \parens{k - xe} \mod q \nonumber\\
+        &= 1743605188.
+\end{align}
+
+\noindent
+The signature is $\parens{1743605188, 1756904634}$.
+
+\paragraph{Signature Verification}
+Bob receives $\parens{1743605188, 1756904634}$
+along with the message $m = \texttt{00010203}$.
+Alice has the public key
+
+\begin{equation}
+    y = 2966837275.
+\end{equation}
+
+\noindent
+Bob computes
+
+\begin{align}
+    r_{v} &= g^{s}y^{e} \mod p \nonumber\\
+        &= 2699985659.
+\end{align}
+
+\noindent
+He then sees
+
+\begin{align}
+    e_{v} &= \text{\MDFive{}}\parens{r_{v}||m} \mod q \nonumber\\
+        &= 1756904634.
+\end{align}
+
+\noindent
+Bob determines the signature is valid because $e = e_{v}$.
+\end{example}
+
+\subsection{Schnorr Signature Patent}
+
+Claus Schnorr held the patent on Schnorr signatures until it expired in 2008.
+This led to the development of the Digital Signature Algorithm
+(discussed in Chapter~\ref{sec:signatures_dsa}).
+
+
+
+\section{Digital Signature Algorithm (DSA)}
+\label{sec:signatures_dsa}
+
+The Digital Signature Algorithm (DSA) is another signature
+algorithm.
+It is more complicated than a Schnorr signature and based
+on the Elgamal signature scheme in Chapter~\ref{sec:signatures_elgamal}.
+
+\subsection{Formal Definition}
+
+\begin{defn}
+\label{def:dsa}
+Let $p$ be a prime.
+Choose $g\in\F_{p}$ such that $\abs{\angles{g}} = q$, a prime.
+Fix a \gls{hash function} $H:\braces{0,1}^{*}\to\Z_{q}$.
+Here, $m\in\braces{0,1}^{*}$ is the message to be signed.
+
+\paragraph{Key Generation}
+Choose $x\chooseRandom{}\Z_{q}^{*}$ and let $y = g^{x}\mod p$.
+We have public key $y$ and private key $x$.
+
+\paragraph{Signature Generation}
+Choose a \gls{nonce} $k\chooseRandom{}\Z_{q}^{*}$.
+Set
+
+\begin{equation}
+    r = \brackets{g^{k}\mod p} \mod q.
+\end{equation}
+
+\noindent
+If $r = 0$, restart and choose another $k$.
+Set
+
+\begin{equation}
+    s = k^{-1}\brackets{H(m) + xr} \mod q.
+\end{equation}
+
+\noindent
+If $s = 0$, restart and choose another $k$.
+The signature is $\parens{r,s}$.
+
+\paragraph{Signature Verification}
+Let $m$ be a message with signature $\parens{r,s}$.
+First, verify $0<r<q$ and $0<s<q$.
+Set
+
+\begin{align}
+    w &= s^{-1} \mod q \nonumber\\
+    u_{1} &= H(m)\cdot w \mod q \nonumber\\
+    u_{2} &= r\cdot w \mod q \nonumber\\
+    v &= \brackets{g^{u_{1}}y^{u_{2}} \mod p} \mod q.
+\end{align}
+
+\noindent
+The signature is valid if $v = r$.
+\end{defn}
+
+\subsection{Verification}
+
+Suppose we have message $m$ and signature $\parens{r,s}$ as defined above.
+Then we have
+
+\begin{align}
+    u_{1} &= H(m)\cdot s^{-1} \mod q \nonumber\\
+    u_{2} &= r\cdot s^{-1} \mod q.
+\end{align}
+
+\noindent
+It follows that
+
+\begin{align}
+    g^{u_{1}}y^{u_{2}} &= g^{H(m)s^{-1}} y^{rs^{-1}} \nonumber\\
+        &= g^{H(m)s^{-1}} g^{xrs^{-1}} \nonumber\\
+        &= g^{\brackets{H(m) + xr}s^{-1}} \nonumber\\
+        &= g^{k}.
+\end{align}
+
+\noindent
+Therefore, we see
+
+\begin{align}
+    v &= \brackets{g^{u_{1}}y^{u_{2}} \mod p} \mod q \nonumber\\
+        &= \brackets{g^{k} \mod p} \mod q \nonumber\\
+        &= r,
+\end{align}
+
+\noindent
+as desired.
+
+\subsubsection{The Necessary Requirement of $r\ne0$}
+If $r=0$, then we also have $u_{2}=0$.
+This implies that we have a valid signature for \emph{any}
+public key; additionally, $k$ can also be recovered.
+Thus, we cannot let $r=0$.
+
+\subsubsection{The Necessary Requirement of $s\ne0$}
+If $s=0$, then we cannot compute the modular inverse in verification.
+Thus, we cannot verify the signature.
+
+\subsection{Security Considerations}
+
+Reusing the \gls{nonce} $k$ can lead to recovery of the private key.
+The reader should work out the details.
+
+\subsection{Example}
+
+\begin{example}[DSA Signature]
+\exampleCodeReference{examples/signatures/dsa\_signature.py}
+
+We use the same \gls{group} from Example~\ref{example:schnorr_signature};
+namely, we have
+
+\begin{align}
+    p &= cq + 1 \nonumber\\
+    q &= 2^{32} + 15 \nonumber\\
+    c &= 12 \nonumber\\
+    h &= 7 \nonumber\\
+    g &= h^{c} \mod p \nonumber\\
+        &= 13841287201.
+\end{align}
+
+Alice chooses her private key and public key so that
+
+\begin{align}
+    x &= 3713319676 \nonumber\\
+    y &= g^{x} \mod p \nonumber\\
+        &= 43016495308.
+\end{align}
+
+\noindent
+Alice wants to sign the same message
+
+\begin{equation}
+    m = \texttt{00010203}
+\end{equation}
+
+\noindent
+as before; this time, she wants to use DSA.
+
+\paragraph{Signature Generation}
+Alice chooses
+
+\begin{align}
+    k &= 2073840447 \nonumber\\
+    r &= \brackets{g^{k} \mod p} \mod q \nonumber\\
+        &= 1886505440.
+\end{align}
+
+\noindent
+She then computes
+
+\begin{align}
+    s &= k^{-1}\brackets{H(m) + xr} \mod q \nonumber\\
+        &= 2123944771.
+\end{align}
+
+\noindent
+The signature is $\parens{1886505440, 2123944771}$.
+
+\paragraph{Signature Verification}
+Bob receives $\parens{1886505440, 2123944771}$
+along with the message $m = \texttt{00010203}$.
+Alice has the public key
+
+\begin{equation}
+    y = 43016495308.
+\end{equation}
+
+\noindent
+Bob computes
+
+\begin{align}
+    w &= s^{-1} \mod q \nonumber\\
+        &= 1156096597 \nonumber\\
+    u_{1} &= H(m)\cdot w \mod q \nonumber\\
+        &= 938259556 \nonumber\\
+    u_{2} &= r\cdot w \mod q \nonumber\\
+        &= 75869898 \nonumber\\
+    v &= \parens{g^{u_{1}}y^{u_{2}} \mod p} \mod q \nonumber\\
+        &= 1886505440.
+\end{align}
+
+\noindent
+Bob determines the signature is valid because $r = v$.
+\end{example}
+
+
+
+\section{Problems with DSA}
+
+There are some critical problems with DSA.
+
+It is critical that the \gls{nonce} $k$ be sufficiently random.
+As noted above, \gls{nonce} reuse allows for the recovery of the signing key.
+Furthermore, if $k$ is not chosen uniformly
+but comes from a biased distribution as a result of
+poor random number generation,
+then information about the signing key can be leaked.
+This information may lead to signing key recovery;
+see~\cite{PartialNonces2002}.
+Because of this, it is \emph{critical} that $k$ be chosen carefully.
+It is \emph{recommended} to deterministically choose $k$~\cite{rfc6979}.
+
+The fact there are subexponential algorithms for factoring
+integers leads to subexponential algorithms for breaking DSA.
+This is discussed more in Chapter~\ref{sec:Fp_problems}.
+
+
+
+\section{Comparison of Digital Signature Schemes}
+\label{sec:signatures_comparison}
+
+We now perform a comparison between the different signature
+algorithms and why one might prefer one to the others.
+
+Given the standard security requirements
+(discussed in Chapter~\ref{chap:hardness}; see Table~\ref{table:key_lengths}),
+the above signature algorithms require $p$ to be a 3072-bit prime.
+In the case of DSA, $q$ is required to be a 256-bit prime.
+
+\subsection{Public Key Length}
+
+We begin by discussing the public key length:
+
+\begin{itemize}
+    \item Elgamal: 3072 bits; 384 bytes
+    \item Schnorr: 3072 bits; 384 bytes
+    \item DSA: 3072 bits; 384 bytes
+\end{itemize}
+
+\noindent
+In each case, the public key length is the same.
+
+\subsection{Signature Length}
+
+We now discuss the signature length:
+
+\begin{itemize}
+    \item Elgamal: $2\cdot3072$ bits; 768 bytes
+    \item Schnorr: $3072 + 256$ bits; 416 bytes
+    \item DSA: $2\cdot 256$ bits; 64 bytes
+\end{itemize}
+
+\noindent
+In each case, DSA clearly has the smallest signature.
+Schnorr also produces a small signature.
+
+\subsection{Computational Complexity}
+
+Finally, we discuss the computational complexity for signature generation:
+
+\begin{itemize}
+    \item Elgamal: 1 exponentiation, 1 modular inverse, 1 hash
+    \item Schnorr: 1 exponentiation, 1 hash
+    \item DSA: 1 exponentiation, 1 modular inverse, 1 hash
+\end{itemize}
+
+\noindent
+Here, we see that DSA and Elgamal have essentially the same complexity
+for signing.
+We remember that when working in $\F_{p}$, exponentiation
+and modular inversion have similar complexity.
+Furthermore, hashing is cheap.
+Thus, Schnorr signatures have the smallest complexity.
+
+\subsection{Conclusion}
+
+After comparing major aspects of these \glspl{signature},
+we see that Schnorr signatures can be computed the fastest
+while having signatures that are not too large.
+One challenge, as noted above, is that Schnorr signatures
+were patented.
+For this reason, DSA was developed by NIST to be algorithm
+that everyone could use.
+It results in a smaller signature but larger computational
+cost when compared with Schnorr.
+
+As noted, \emph{all} of these algorithms have problems when
+$k$ is not uniformly random.
+Some attacks can be found~\cite{cryptoeprint:2019:023,PartialNonces2002}.
+The use of deterministic \glspl{nonce} is
+\emph{strongly encouraged}~\cite{rfc6979}.
+
+
+
+\section{Malleable Signatures}
+
+Similar to \glspl{encryption scheme}, \gls{signature} schemes may also
+be malleable.
+We mention that the original RSA signature algorithm~\cite{RSApaper}
+is malleable.

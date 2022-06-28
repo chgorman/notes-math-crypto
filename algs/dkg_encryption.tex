@@ -1,0 +1,42 @@
+\begin{algorithm}[t]
+\caption{\Glsentrytext{encryption scheme} in the \glsentrytext{distributed key generation} protocol}
+\label{alg:dkg_encryption}
+\begin{algorithmic}[1]
+\Procedure{\Enc{}}{$\sk{}_{i}$,$\pk{}_{j}$,$s_{i\to j}$,$j$}
+    \State $k \algAssign{} \pk{}_{j}^{\sk{}_{i}}$
+    \Comment{Compute the \gls{dhke} \gls{shared secret}}
+    \State $\texttt{kX} \algAssign{} \texttt{toBytes}(k_{x})$
+    \Comment{Use the $x$ coordinate}
+    \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
+    \State $\texttt{s} \algAssign{} \texttt{toBytes}(s_{i\to j})$
+    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}||\texttt{j})$
+    \State $\overline{\texttt{s}}_{i\to j} \algAssign{}
+        \texttt{s} \oplus \texttt{HashKJ}$
+    \State \Return $\overline{\texttt{s}}_{i\to j}$
+\EndProcedure
+\State
+\Procedure{\Dec{}}{$\sk{}_{i}$,$\pk{}_{j}$,$\overline{\texttt{s}}_{i\to j}$,$j$}
+    \State $k \algAssign{} \pk{}_{j}^{\sk{}_{i}}$
+    \Comment{Compute the \gls{dhke} \gls{shared secret}}
+    \State $\texttt{kX} \algAssign{} \texttt{toBytes}(k_{x})$
+    \Comment{Use the $x$ coordinate}
+    \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
+    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}||\texttt{j})$
+    \State $\texttt{s} \algAssign{}
+        \overline{\texttt{s}}_{i\to j} \oplus \texttt{HashKJ}$
+    \State $s_{i\to j} \algAssign{} \texttt{fromBytes}(\texttt{s})$
+    \State \Return $s_{i\to j}$
+\EndProcedure
+\State
+\Procedure{\Dec{}SS}{$k$,$\overline{\texttt{s}}_{i\to j}$,$j$}
+    \State $\texttt{kX} \algAssign{} \texttt{toBytes}(k_{x})$
+    \Comment{Use the $x$ coordinate}
+    \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
+    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}||\texttt{j})$
+    \State $\texttt{s} \algAssign{}
+        \overline{\texttt{s}}_{i\to j} \oplus \texttt{HashKJ}$
+    \State $s_{i\to j} \algAssign{} \texttt{fromBytes}(\texttt{s})$
+    \State \Return $s_{i\to j}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
