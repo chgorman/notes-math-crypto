@@ -1,8 +1,8 @@
 \chapter{Symmetric Key Cryptography}
 \label{chap:symmetric}
 
-We now begin our discussion of \gls{symmetriccrypto}.
-\Gls{symmetriccrypto} involves one secret key.
+We now begin our discussion of \gls{symmetriccrypto},
+which involves one secret key.
 This distinguishes it from \gls{publiccrypto}, which we will
 discuss in Chapter~\ref{chap:public}, which uses \emph{two} keys:
 one public key and one private key.
@@ -216,6 +216,7 @@ based on the material presented here.}
 
 
 \subsection{Stream Ciphers}
+\label{ssec:stream_cipher}
 
 Throughout this section, let $L>0$ denote the length of the message in bits.
 In general, we will assume that $L$ is significantly larger
@@ -284,13 +285,31 @@ A \gls{nonce} is a \emph{\textbf{n}umber used only \textbf{once}}.
 \Glspl{stream cipher} operate on the plaintext in a continuous manner.
 Some standard examples include RC4~\cite{rivest2016spritz},
 Salsa20~\cite{salsa20}, and ChaCha~\cite{chacha}.
-In the case of Salsa20 and ChaCha, the secret key is 256 bits
-and the \gls{nonce} is 96 or 64 bits.
+
+\paragraph{RC4}
+Designed by Rivest in 1987 for RSA Security;
+originally a trade secret, the algorithm was made public in 1994 after being
+reverse engineered~\cite{rivest2016spritz}.
 RC4 \emph{should not be used} because it is a cryptographically-broken
 \gls{stream cipher}~\cite{rfc7465,rivest2016spritz}.
 
+\paragraph{Salsa20}
+In the case of Salsa20, the secret key is 256 bits
+and the \gls{nonce} is 64 bits~\cite{salsa20};
+a version with a 192 bit \gls{nonce} is also available~\cite{xsalsa20}.
+Developed by Daniel Bernstein in 2005,
+the cipher uses only additions, rotations, and XOR operations;
+ciphers which only use these operations are called \emph{ARX ciphers}.
+
+\paragraph{ChaCha}
+The design of ChaCha~\cite{chacha} is a modification of Salsa20 cipher;
+ChaCha was also designed by Bernstein.
+While the original specification uses a 64 bit nonce,
+one standardization uses a 96 bit nonce~\cite{rfc8439}.
+
 
 \subsection{Block Ciphers}
+\label{ssec:block_cipher}
 
 \subsubsection{Discussion}
 
@@ -352,33 +371,66 @@ the message blocks $m_{i}$ will be highly structured.
 Also, if $m_{i} = m_{j}$ for $i\ne j$,
 then we clearly will have $c_{i} = c_{j}$.
 Any secure \gls{block cipher} mode will not leak this information.
+We end with one quote about ECB~\cite[Chapter 4.2]{CryptoEng}:
+
+\begin{quote}
+    Do not ever use ECB for anything.
+    It has serious weaknesses, and is only included here
+    so that we can warn you away from it.
+\end{quote}
+
+\noindent
+Instead of using ECB, consider the algorithm in
+Figure~\ref{fig:xkcd_cryptography}.
+
+\input{figures/xkcd/xkcd_cryptography.tex}
 
 \subsubsection{Examples}
 
 Some standard examples of \glspl{block cipher} include
-Advanced Encryption Standard (AES)~\cite{FIPS-197-2001},
-Data Encryption Standard (DES)~\cite{FIPS-46-3-1977},
+AES~\cite{FIPS-197-2001}, DES~\cite{FIPS-46-3-1977},
 Twofish~\cite{TwofishAlg},
 and Blowfish~\cite{BlowfishAlg}.
-AES has a block size of 128 bits and key sizes of 128, 192, and 256 bits.
+
+\paragraph{AES} The \emph{Advanced Encryption Standard}
+has a block size of 128 bits and key sizes of 128, 192,
+and 256 bits~\cite{FIPS-197-2001}.
+AES uses the Rijndael cipher~\cite{RijndaelAlg}.
+When using AES, care should be taken so that timing information
+does not leak the private key~\cite{bernstein2005cache,weiss2012cache}.
+
+\paragraph{DES} The \emph{Data Encryption Standard}
+was originally standardized in 1977~\cite{FIPS-46-3-1977}.
 DES should not be used because it is a cryptographically-broken
 \gls{block cipher}~\cite{rfc4772};
 it has a block size of 64 bits and a key size of 56 bits.
+The small block size and key size makes it vulnerable to attacks.
+and \emph{should not be used.}
 AES was in fact designed to replace DES.
-Twofish is a \gls{block cipher} designed by Bruce Schneier;
-it was a finalist for AES but was not selected as the standard.
-Blowfish is old and should not be used;
-it was also designed by Schneier.
-In 2007, Schneier
-\href{https://www.schneier.com/news/archives/2007/12/bruce_almighty_schne.html}{recommended}
+
+Triple DES (3DES) is a variant of DES which performs encryption
+using three different keys~\cite{NIST-SP-800-67r2,rfc1851}.
+While it is still currently approved for certain instances
+(\cite{NIST-SP-800-67r2} was published in 2017),
+it is ``Depreciated through 2023'' and
+``Disallowed after 2023''~\cite{NIST-SP-800-131Ar2};
+it was also recommended that 3DES be depreciated in 2018~\cite{rfc8429}.
+
+All of this points to the fact that DES and Triple DES
+\emph{should not be used}.
+
+\paragraph{Twofish} A \gls{block cipher} designed by Bruce Schneier in 1998
+as part of the AES Competition~\cite{TwofishAlg}.
+Twofish made it to the final round of the competition
+but was not selected as the standard.
+
+\paragraph{Blowfish}
+Blowfish is a cipher designed by Bruce Schneier in 1993~\cite{BlowfishAlg}.
+Its old design and small block size (64 bits like DES)
+means it should not be be used.
+In 2007, Schneier recommended%
+\footnote{\url{https://www.schneier.com/news/archives/2007/12/bruce_almighty_schne.html}}
 switching from Blowfish to Twofish.
-
-As mentioned above, the Electronic Codebook (ECB) mode
-\emph{should not be used.}
-Instead, consider the algorithm in Figure~\ref{fig:xkcd_cryptography}.
-
-\input{figures/xkcd/xkcd_cryptography.tex}
-
 
 
 \section{Cryptographic Hash Functions}
@@ -436,10 +488,10 @@ In particular, we note that the outputs of LCGs
 \emph{fall in planes}~\cite{marsaglia1968random}
 and that the internal state recovery of PCGs
 is \emph{practical}~\cite{bouillaguet2020practical}.
-Also, we note that an
-\href{https://cryptopals.com/sets/3/challenges/23}{online challenge}
+Also, we note that an online challenge%
+\footnote{\url{https://cryptopals.com/sets/3/challenges/23}}
 is devoted to cloning the internal state of the Mersenne Twister
-based solely on its outputs.
+based solely on its output.
 
 \Glsfirstplural{csprng} are similar to \glspl{stream cipher}, in that they take
 an initial random seed and stretch it into random output.
@@ -476,11 +528,11 @@ They are also used when constructing large prime numbers.
 Unless an algorithm has been \emph{specifically designed} to be a
 \glsfirstplural{csprng},
 it \emph{should not used} when cryptographic random numbers are required.
-Otherwise, \href{https://github.com/johguse/profanity/issues/61}{this}
-could happen:
-\gls{ethereum} private keys could be brute-forced due to insufficient
-randomization;
-\emph{you have been warned.}
+Otherwise, this could happen:
+your \gls{ethereum} private keys could be brute-forced due to
+insufficient randomization%
+\footnote{\url{https://github.com/johguse/profanity/issues/61}}.
+\emph{You have been warned.}
 
 \input{figures/xkcd/xkcd_rng.tex}
 

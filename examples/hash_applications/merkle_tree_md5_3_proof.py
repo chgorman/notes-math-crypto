@@ -2,22 +2,22 @@
 
 import hashlib
 
-root = bytes.fromhex('a9250f9b87b54a884997c41042029ed9')
+root = bytes.fromhex('18446692e822581d02b096e1b77c9fff')
 
 # Set up data and proof
-x5  = bytes.fromhex('05050505050505050505050505050505')
-y6  = bytes.fromhex('e5f636381c9702b63aa666ef2a6f8e20')
-y12 = bytes.fromhex('6b169c5ae04d0da8360ec5475c16983a')
-y13 = bytes.fromhex('4ed351819fee1c3b3ecfe7620bed7a5c')
+x4  = bytes.fromhex('04040404040404040404040404040404')
+y5  = bytes.fromhex('af52282db55243f4c147ba5d7fb1155a')
+y11 = bytes.fromhex('70d0669eae8c7a5dce3b3ff4ccf4adbb')
+y12 = bytes.fromhex('a3f21dba8fa8de359220c29c00467556')
 
 # Merkle Proof
-md5 = hashlib.md5(); md5.update(x5);     yHat5 = md5.digest()
-md5 = hashlib.md5(); md5.update(yHat5);  md5.update(y6)
-yHat11 = md5.digest()
-md5 = hashlib.md5(); md5.update(yHat11); md5.update(y12)
+md5 = hashlib.md5(); md5.update(x4);     yHat4 = md5.digest()
+md5 = hashlib.md5(); md5.update(yHat4);  md5.update(y5)
+yHat10 = md5.digest()
+md5 = hashlib.md5(); md5.update(yHat10); md5.update(y11)
+yHat13 = md5.digest()
+md5 = hashlib.md5(); md5.update(y12);    md5.update(yHat13)
 yHat14 = md5.digest()
-md5 = hashlib.md5(); md5.update(y13);    md5.update(yHat14)
-yHat15 = md5.digest()
 
 print("3-Layer MD5 Merkle Proof")
 print("#"*72)
@@ -28,10 +28,10 @@ print()
 
 print("Data and Proof")
 print()
-print('x5  = %s' % (x5.hex()))
-print('y6  = %s' % (y6.hex()))
+print('x4  = %s' % (x4.hex()))
+print('y5  = %s' % (y5.hex()))
+print('y11 = %s' % (y11.hex()))
 print('y12 = %s' % (y12.hex()))
-print('y13 = %s' % (y13.hex()))
 print()
 print()
 
@@ -39,15 +39,15 @@ print()
 print("Merkle Proof")
 print()
 
-print('yHat5  = md5(x5)')
-print('       = %s' % (yHat5.hex()))
-print('yHat11 = md5(yHat5 ||y6    )')
-print('       = %s' % (yHat11.hex()))
-print('yHat14 = md5(yHat11||y12   )')
+print('yHat4  = md5(x4)')
+print('       = %s' % (yHat4.hex()))
+print('yHat10 = md5(yHat4 ||y5    )')
+print('       = %s' % (yHat10.hex()))
+print('yHat13 = md5(yHat10||y11   )')
+print('       = %s' % (yHat13.hex()))
+print('yHat14 = md5(y12   ||yHat13)')
 print('       = %s' % (yHat14.hex()))
-print('yHat15 = md5(y13   ||yHat14)')
-print('       = %s' % (yHat15.hex()))
 print()
 
-assert yHat15 == root # Valid
+assert yHat14 == root # Valid
 print('Valid Proof')

@@ -258,7 +258,8 @@ a proof which shows the individual data block is valid.
 The algorithm defining the Merkle Tree root hash can be found in
 Alg.~\ref{alg:merkle_tree};
 see Alg.~\ref{alg:merkle_proof} for the proof of inclusion.
-These definitions come from~\cite[Chapter 8.9]{BonehShoupGraduateApplied}.
+These definitions are modified
+from~\cite[Chapter 8.9]{BonehShoupGraduateApplied}.
 
 \input{algs/merkle_tree.tex}
 \input{algs/merkle_proof.tex}
@@ -287,7 +288,7 @@ second-preimage resistance~\cite{rfc6962,rfc9162}.
 \subsection{Examples}
 
 \begin{example}[2-Layer Merkle Tree]
-\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5.py}
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_2.py}
 
 We begin by starting with an example involving 4 blocks of data;
 see the Merkle Tree in Figure~\ref{fig:merkle_tree_2}
@@ -298,83 +299,83 @@ for the example.
 In this case, we see that we have the following:
 
 \begin{align}
+    y_{0} &= H(x_{0})
+        &
+    y_{4} &= H(y_{0}||y_{1}) \nonumber\\
     y_{1} &= H(x_{1})
         &
-    y_{5} &= H(y_{1}||y_{2}) \nonumber\\
+    y_{5} &= H(y_{2}||y_{3}) \nonumber\\
     y_{2} &= H(x_{2})
         &
-    y_{6} &= H(y_{3}||y_{4}) \nonumber\\
+    y_{6} &= H(y_{4}||y_{5}). \nonumber\\
     y_{3} &= H(x_{3})
-        &
-    y_{7} &= H(y_{5}||y_{6}). \nonumber\\
-    y_{4} &= H(x_{4})
     \label{eq:merkle_tree_2_def}
 \end{align}
 
 \noindent
-In this case, $y_{7}$ is our root hash.
+In this case, $y_{6}$ is our root hash.
 
 To make this more practical, we will work through an example
-using \MDFive{}; see Listing~\ref{list:merkle_tree_md5}.
+using \MDFive{}; see Listing~\ref{list:merkle_tree_md5_2}.
 We have the data
 
 \begin{align}
+    x_{0} &= \texttt{00000000000000000000000000000000}
+        \nonumber\\
     x_{1} &= \texttt{11111111111111111111111111111111}
         \nonumber\\
     x_{2} &= \texttt{22222222222222222222222222222222}
         \nonumber\\
-    x_{3} &= \texttt{33333333333333333333333333333333}
-        \nonumber\\
-    x_{4} &= \texttt{44444444444444444444444444444444}.
+    x_{3} &= \texttt{33333333333333333333333333333333}.
 \end{align}
 
-\input{code/hash_applications/merkle_tree_md5.tex}
+\input{code/hash_applications/merkle_tree_md5_2.tex}
 
 \noindent
 After working through all the hashing in Eq.~\eqref{eq:merkle_tree_2_def},
 we have the root hash
 
 \begin{equation}
-    y_{7} = \texttt{74c2208dee857014164825cfbc045371}.
+    y_{6} = \texttt{40c0b71ca488d334d266beecac02a16c}.
 \end{equation}
 \end{example}
 
 \begin{example}[2-Layer Merkle Tree Proof]
-\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_proof.py}
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_2\_proof.py}
 
-We will now look at Merkle Proof showing that $x_{3}$
-is a member of this tree;
+We will now look at Merkle Proof showing that $x_{2}$
+is a member of this tree at position 2;
 see Figure~\ref{fig:merkle_tree_2_proof}
 and Listing~\ref{list:merkle_tree_md5_proof}.
 Our data and proof is
 
-\input{code/hash_applications/merkle_tree_md5_proof.tex}
+\input{code/hash_applications/merkle_tree_md5_2_proof.tex}
 
 \begin{align}
-    x_{3} &= \texttt{33333333333333333333333333333333}
+    x_{2} &= \texttt{22222222222222222222222222222222}
         \nonumber\\
-    y_{4} &= \texttt{629f0b541d8ebec86267b948c0381de5}
+    y_{3} &= \texttt{28bfcf057ec5a48f18c3154c1f2bd324}
         \nonumber\\
-    y_{5} &= \texttt{7536b40f7385c138406ae2cd703e2bad}.
+    y_{4} &= \texttt{b05df6fba6c1c53e8ddb98ffd386ffc8}.
 \end{align}
 
 \noindent
 Using these values, we see
 
 \begin{align}
-    \hat{y}_{3} &= H(x_{3}) \nonumber\\
-        &= \texttt{28bfcf057ec5a48f18c3154c1f2bd324}
+    \hat{y}_{2} &= H(x_{2}) \nonumber\\
+        &= \texttt{fbc3cf71d993ca7bec2664357ccdac2b}
             \nonumber\\
-    \hat{y}_{6} &= H(\hat{y}_{3}, y_{4}) \nonumber\\
-        &= \texttt{cfa3bb502293d3b8acaa608628ca06fb}
+    \hat{y}_{5} &= H(\hat{y}_{2}, y_{3}) \nonumber\\
+        &= \texttt{8f7a2a2dcd297872689e177953270f37}
             \nonumber\\
-    \hat{y}_{7} &= H(y_{5}, \hat{y}_{6}) \nonumber\\
-        &= \texttt{74c2208dee857014164825cfbc045371}.
+    \hat{y}_{6} &= H(y_{4}, \hat{y}_{5}) \nonumber\\
+        &= \texttt{40c0b71ca488d334d266beecac02a16c}.
 \end{align}
 
 \noindent
-Because $\hat{y}_{7} = y_{7}$, we have shown that $x$ is the data
-at position 3 in our Merkle Tree.
+Because $\hat{y}_{6} = y_{6}$, we have shown that $x_{2}$ is the data
+at position 2 in our Merkle Tree.
 This completes the proof;
 it required computing 3 hashes.
 \end{example}
@@ -390,37 +391,39 @@ In this case, we see that we have the following:
 \input{code/hash_applications/merkle_tree_md5_3.tex}
 
 \begin{align}
+    y_{0}  &= H(x_{0})
+        &
+    y_{8}  &= H(y_{0}||y_{1}) \nonumber\\
     y_{1}  &= H(x_{1})
         &
-    y_{9}  &= H(y_{1}||y_{2}) \nonumber\\
+    y_{9}  &= H(y_{2}||y_{3}) \nonumber\\
     y_{2}  &= H(x_{2})
         &
-    y_{10} &= H(y_{3}||y_{4}) \nonumber\\
+    y_{10} &= H(y_{4}||y_{5}) \nonumber\\
     y_{3}  &= H(x_{3})
         &
-    y_{11} &= H(y_{5}||y_{6}) \nonumber\\
+    y_{11} &= H(y_{6}||y_{7}) \nonumber\\
     y_{4}  &= H(x_{4})
         &
-    y_{12} &= H(y_{7}||y_{8}) \nonumber\\
+    y_{12} &= H(y_{8}||y_{9}) \nonumber\\
     y_{5}  &= H(x_{5})
         &
-    y_{13} &= H(y_{9}||y_{10}) \nonumber\\
+    y_{13} &= H(y_{10}||y_{11}) \nonumber\\
     y_{6}  &= H(x_{6})
         &
-    y_{14} &= H(y_{11}||y_{12}) \nonumber\\
+    y_{14} &= H(y_{12}||y_{13}). \nonumber\\
     y_{7}  &= H(x_{7})
-        &
-    y_{15} &= H(y_{13}||y_{14}). \nonumber\\
-    y_{8}  &= H(x_{8})
     \label{eq:merkle_tree_3_def}
 \end{align}
 
 \noindent
-Here, $y_{15}$ is the root hash.
+Here, $y_{14}$ is the root hash.
 
 For our data, we set
 
 \begin{align}
+    x_{0} &= \texttt{00000000000000000000000000000000}
+        \nonumber\\
     x_{1} &= \texttt{01010101010101010101010101010101}
         \nonumber\\
     x_{2} &= \texttt{02020202020202020202020202020202}
@@ -433,16 +436,14 @@ For our data, we set
         \nonumber\\
     x_{6} &= \texttt{06060606060606060606060606060606}
         \nonumber\\
-    x_{7} &= \texttt{07070707070707070707070707070707}
-        \nonumber\\
-    x_{8} &= \texttt{08080808080808080808080808080808}.
+    x_{7} &= \texttt{07070707070707070707070707070707}.
 \end{align}
 
 \noindent
 We have the root hash
 
 \begin{equation}
-    y_{15} = \texttt{a9250f9b87b54a884997c41042029ed9}.
+    y_{14} = \texttt{18446692e822581d02b096e1b77c9fff}.
     \label{eq:merkle_tree_3_root_hash}
 \end{equation}
 \end{example}
@@ -451,7 +452,7 @@ We have the root hash
 \exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_3\_proof.py}
 
 We continue our previous example to show a Merkle proof showing
-$x_{5}$ is an element of our Merkle Tree;
+$x_{4}$ is an element of our Merkle Tree;
 see Figure~\ref{fig:merkle_tree_3_proof}
 and Listing~\ref{list:merkle_tree_md5_3_proof}.
 Our data and proof is
@@ -459,35 +460,36 @@ Our data and proof is
 \input{code/hash_applications/merkle_tree_md5_3_proof.tex}
 
 \begin{align}
-    x_{5} &= \texttt{05050505050505050505050505050505}
+    x_{4}  &= \texttt{04040404040404040404040404040404}
         \nonumber\\
-    y_{6}  &= \texttt{e5f636381c9702b63aa666ef2a6f8e20}
+    y_{5}  &= \texttt{af52282db55243f4c147ba5d7fb1155a}
         \nonumber\\
-    y_{12} &= \texttt{6b169c5ae04d0da8360ec5475c16983a}
+    y_{11} &= \texttt{70d0669eae8c7a5dce3b3ff4ccf4adbb}
         \nonumber\\
-    y_{13} &= \texttt{4ed351819fee1c3b3ecfe7620bed7a5c}.
+    y_{12} &= \texttt{a3f21dba8fa8de359220c29c00467556}.
 \end{align}
 
 \noindent
 Using these values, we see
 
 \begin{align}
-    \hat{y}_{5}  &= H(x_{5}) \nonumber\\
-        &= \texttt{af52282db55243f4c147ba5d7fb1155a}
+    \hat{y}_{4}  &= H(x_{4}) \nonumber\\
+        &= \texttt{b40ebeba833c1c07e74d9e4c6ebb8230}
             \nonumber\\
-    \hat{y}_{11} &= H(\hat{y}_{5}, y_{6}) \nonumber\\
-        &= \texttt{406c1b079725e8d5f889b5450c72c4f9}
+    \hat{y}_{10} &= H(\hat{y}_{4}, y_{5}) \nonumber\\
+        &= \texttt{524856d86cb1006e9e9e9149f36b2875}
             \nonumber\\
-    \hat{y}_{14} &= H(\hat{y}_{11}, y_{12}) \nonumber\\
-        &= \texttt{f63aee7a89333c34333544fb87ac424c}
+    \hat{y}_{13} &= H(\hat{y}_{10}, y_{11}) \nonumber\\
+        &= \texttt{da95d6882598892592ccd54bc89f7bdb
+            }
             \nonumber\\
-    \hat{y}_{15} &= H(y_{13}, \hat{y}_{14}) \nonumber\\
-        &= \texttt{a9250f9b87b54a884997c41042029ed9}.
+    \hat{y}_{14} &= H(y_{12}, \hat{y}_{13}) \nonumber\\
+        &= \texttt{18446692e822581d02b096e1b77c9fff}.
 \end{align}
 
 \noindent
-Because $\hat{y}_{15} = y_{15}$ in Eq.~\eqref{eq:merkle_tree_3_root_hash},
-we have shown that $x_{5}$ is the data at position 5 in our Merkle Tree.
+Because $\hat{y}_{14} = y_{14}$ in Eq.~\eqref{eq:merkle_tree_3_root_hash},
+we have shown that $x_{4}$ is the data at position 4 in our Merkle Tree.
 This completes the proof;
 it required computing 4 hashes.
 \end{example}
@@ -499,7 +501,7 @@ it required computing 4 hashes.
 We continue the previous example working with a 3-layer Merkle Tree
 by showing an example of a Merkle Multi-Proof.
 In this case, we want to proof the inclusion of
-$x_{2}$, $x_{4}$, and $x_{7}$;
+$x_{1}$, $x_{3}$, and $x_{6}$;
 see Figure~\ref{fig:merkle_tree_3_multi-proof}
 and Listing~\ref{list:merkle_tree_md5_3_multi-proof}.
 
@@ -509,61 +511,61 @@ and Listing~\ref{list:merkle_tree_md5_3_multi-proof}.
 We have the data
 
 \begin{align}
-    x_{2} &= \texttt{02020202020202020202020202020202}
+    x_{1} &= \texttt{01010101010101010101010101010101}
         \nonumber\\
-    x_{4} &= \texttt{04040404040404040404040404040404}
+    x_{3} &= \texttt{03030303030303030303030303030303}
         \nonumber\\
-    x_{7} &= \texttt{07070707070707070707070707070707}.
+    x_{6} &= \texttt{06060606060606060606060606060606}.
 \end{align}
 
 \noindent
 Our proof is
 
 \begin{align}
-    y_{1}  &= \texttt{24311d9abc4077123c2c9a167afbe754}
+    y_{0}  &= \texttt{4ae71336e44bf9bf79d2752e234818a5}
         \nonumber\\
-    y_{3}  &= \texttt{b09931959951caa2ac110feebbd16750}
+    y_{2}  &= \texttt{437b25ad27df2f61eb14c6400ae98309}
         \nonumber\\
-    y_{8}  &= \texttt{01e8f7a7da1a35b3138845a7a2f18b46}
+    y_{7}  &= \texttt{a4aa9a02aa65f31d17dce9f944a57ab2}
         \nonumber\\
-    y_{11} &= \texttt{406c1b079725e8d5f889b5450c72c4f9}.
+    y_{10} &= \texttt{524856d86cb1006e9e9e9149f36b2875}.
 \end{align}
 
 \noindent
 We have the following computed values:
 
 \begin{align}
-    \hat{y}_{2} &= H(x_{2}) \nonumber\\
-        &= \texttt{437b25ad27df2f61eb14c6400ae98309}
+    \hat{y}_{1} &= H(x_{1}) \nonumber\\
+        &= \texttt{24311d9abc4077123c2c9a167afbe754}
             \nonumber\\
-    \hat{y}_{4} &= H(x_{4}) \nonumber\\
-        &= \texttt{b40ebeba833c1c07e74d9e4c6ebb8230}
+    \hat{y}_{3} &= H(x_{3}) \nonumber\\
+        &= \texttt{b09931959951caa2ac110feebbd16750}
             \nonumber\\
-    \hat{y}_{7} &= H(x_{7}) \nonumber\\
-        &= \texttt{a4aa9a02aa65f31d17dce9f944a57ab2}
+    \hat{y}_{6} &= H(x_{6}) \nonumber\\
+        &= \texttt{e5f636381c9702b63aa666ef2a6f8e20}
             \nonumber\\
-    \hat{y}_{9} &= H(y_{1}||\hat{y}_{2}) \nonumber\\
-        &= \texttt{ba2e572a294bc9ae6ba63dd9ac1afdbd}
+    \hat{y}_{8} &= H(y_{0}||\hat{y}_{1}) \nonumber\\
+        &= \texttt{f8a9500bb41d7312abd46b0d01404fca}
             \nonumber\\
-    \hat{y}_{10} &= H(y_{3}||\hat{y}_{4}) \nonumber\\
-        &= \texttt{8eaf6226825dd37b0901407a4727ab88}
+    \hat{y}_{9} &= H(y_{2}||\hat{y}_{3}) \nonumber\\
+        &= \texttt{8bfbb2226583b489fbc3cdfee7adc2c7}
             \nonumber\\
-    \hat{y}_{12} &= H(\hat{y}_{7},y_{8}) \nonumber\\
-        &= \texttt{6b169c5ae04d0da8360ec5475c16983a}
+    \hat{y}_{11} &= H(\hat{y}_{6},y_{7}) \nonumber\\
+        &= \texttt{70d0669eae8c7a5dce3b3ff4ccf4adbb}
             \nonumber\\
-    \hat{y}_{13} &= H(\hat{y}_{9}||\hat{y}_{10}) \nonumber\\
-        &= \texttt{4ed351819fee1c3b3ecfe7620bed7a5c}
+    \hat{y}_{12} &= H(\hat{y}_{8}||\hat{y}_{9}) \nonumber\\
+        &= \texttt{a3f21dba8fa8de359220c29c00467556}
             \nonumber\\
-    \hat{y}_{14} &= H(y_{11}||\hat{y}_{12}) \nonumber\\
-        &= \texttt{f63aee7a89333c34333544fb87ac424c}
+    \hat{y}_{13} &= H(y_{10}||\hat{y}_{11}) \nonumber\\
+        &= \texttt{da95d6882598892592ccd54bc89f7bdb}
             \nonumber\\
-    \hat{y}_{15} &= H(\hat{y}_{13}||\hat{y}_{14}) \nonumber\\
-        &= \texttt{a9250f9b87b54a884997c41042029ed9}.
+    \hat{y}_{14} &= H(\hat{y}_{12}||\hat{y}_{13}) \nonumber\\
+        &= \texttt{18446692e822581d02b096e1b77c9fff}.
 \end{align}
 
 \noindent
-Because $\hat{y}_{15} = y_{15}$, we have shown that
-$x_{2}$, $x_{4}$, and $x_{7}$ are valid and are at the specified positions.
+Because $\hat{y}_{14} = y_{14}$, we have shown that
+$x_{1}$, $x_{3}$, and $x_{6}$ are valid and are at the specified positions.
 This completes the proof.
 This proof requires computing 9 hash values,
 which is less than the 12 hash computations required to prove the inclusions

@@ -208,6 +208,65 @@
     year={2001}
 }
 
+@article{NIST-SP-800-67r2,
+    title={Recommendation for the Triple Data Encryption Algorithm
+        (TDEA) Block Cipher},
+    author={Barker, Elaine and Mouha, Nicky},
+    series={NIST Special Publication},
+    number={800-67Rev2},
+    year={2017},
+    doi={https://doi.org/10.6028/NIST.SP.800-67r2},
+}
+
+@article{NIST-SP-800-131Ar2,
+    title={Transitioning the Use of Cryptographic Algorithms and Key Lengths},
+    author={Barker, Elaine and Roginsky, Allen},
+    series={NIST Special Publication},
+    number={800-131ARev2},
+    year={2018},
+    doi={https://doi.org/10.6028/NIST.SP.800-131Ar2},
+}
+
+@misc{rfc1851,
+    series = {Request for Comments},
+    number = 1851,
+    howpublished = {RFC 1851},
+    publisher = {RFC Editor},
+    doi = {10.17487/RFC1851},
+    url = {https://www.rfc-editor.org/info/rfc1851},
+    author = {Phil R. Karn and William A. Simpson and Perry E. Metzger},
+    title = {{The ESP Triple DES Transform}},
+    pagetotal = 11,
+    year = 1995,
+    month = sep,
+    abstract = {This document describes the Triple DES-CBC security transform for the Encapsulating Security Payload (ESP).},
+}
+
+@misc{rfc8429,
+    series = {Request for Comments},
+    number = 8429,
+    howpublished = {RFC 8429},
+    publisher = {RFC Editor},
+    doi = {10.17487/RFC8429},
+    url = {https://www.rfc-editor.org/info/rfc8429},
+    author = {Benjamin Kaduk and Michiko Short},
+    title = {{Deprecate Triple-DES (3DES) and RC4 in Kerberos}},
+    pagetotal = 10,
+    year = 2018,
+    month = oct,
+    abstract = {The triple-DES (3DES) and RC4 encryption types are steadily weakening in cryptographic strength, and the deprecation process should begin for their use in Kerberos. Accordingly, RFC 4757 has been moved to Historic status, as none of the encryption types it specifies should be used, and RFC 3961 has been updated to note the deprecation of the triple-DES encryption types. RFC 4120 is likewise updated to remove the recommendation to implement triple-DES encryption and checksum types.},
+}
+
+@Book{RijndaelAlg,
+    author = "Joan Daemen and Vincent Rijmen",
+    title = "The design of {Rijndael}: {AES} --- the {Advanced
+        Encryption Standard}",
+    publisher = "Spring{\-}er-Ver{\-}lag",
+    pages = "238",
+    year = "2002",
+    ISBN = "3-540-42580-2"
+}
+
 @misc{scryptPaper,
     title={Stronger Key Derivation via Sequential Memory-Hard Functions},
     author={Percival, Colin},
@@ -492,6 +551,15 @@
     url={https://cr.yp.to/snuffle/salsafamily-20071225.pdf},
 }
 
+@inproceedings{xsalsa20,
+    title={Extending the Salsa20 nonce},
+    author={Bernstein, Daniel J.},
+    booktitle={Symmetric Key Encryption Workshop},
+    volume={2011},
+    year={2011},
+    url={https://cr.yp.to/snuffle/xsalsa-20110204.pdf},
+}
+
 @inproceedings{chacha,
     title={ChaCha, a variant of Salsa20},
     author={Bernstein, Daniel J.},
@@ -516,6 +584,24 @@
     isbn={978-3-662-49301-4},
     doi={10.1007/978-3-662-49301-4_17},
     url={https://projectbullrun.org/dual-ec/documents/dual-ec-20150731.pdf},
+}
+
+@article{bernstein2005cache,
+    title={Cache-timing attacks on AES},
+    author={Bernstein, Daniel J.},
+    year={2005},
+    url={https://cr.yp.to/antiforgery/cachetiming-20050414.pdf},
+}
+
+@inproceedings{weiss2012cache,
+    title={A Cache Timing Attack on AES in Virtualization Environments},
+    author={Wei{\ss}, Michael and Heinz, Benedikt and Stumpf, Frederic},
+    booktitle={International Conference on Financial Cryptography
+        and Data Security},
+    pages={314--328},
+    year={2012},
+    organization={Springer},
+    url={https://fc12.ifca.ai/pre-proceedings/paper_70.pdf}
 }
 
 @inproceedings{BlowfishAlg,
@@ -1268,4 +1354,16 @@
     year={2022},
     url = {https://github.com/alicenet/whitepaper},
     notes = {Initial Draft: January 25, 2021}
+}
+
+@online{vennDiagram,
+    author={Uwe Ziegenhagen},
+    year={2010},
+    url={https://texample.net/tikz/examples/set-operations-illustrated-with-venn-diagrams/},
+}
+
+@online{md5Collision,
+    author={Marc Stevens},
+    year={2012},
+    url={https://marc-stevens.nl/research/md5-1block-collision/},
 }

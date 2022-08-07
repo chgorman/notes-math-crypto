@@ -36,13 +36,12 @@
 \newcommand*{\chgcomment}[1]{\todo[author=CHG,color=green,inline]{#1}}
 
 % New commands
-\newcommand*{\MDFive}[0]{MD5}
-\newcommand*{\ShaOne}[0]{SHA\nobreakdash-1}
-\newcommand*{\ShaTwo}[0]{SHA\nobreakdash-2}
-\newcommand*{\ShaThree}[0]{SHA\nobreakdash-3}
-\newcommand*{\Keccak}[0]{\textsc{Keccak}}
-
-\newcommand*{\MD}[0]{Merkle-Damg\r{a}rd}
+\DeclareRobustCommand*{\MDFive}[0]{MD5}
+\DeclareRobustCommand*{\ShaOne}[0]{SHA\nobreakdash-1}
+\DeclareRobustCommand*{\ShaTwo}[0]{SHA\nobreakdash-2}
+\DeclareRobustCommand*{\ShaThree}[0]{SHA\nobreakdash-3}
+\DeclareRobustCommand*{\Keccak}[0]{\textsc{Keccak}}
+\DeclareRobustCommand*{\MD}[0]{Merkle-Damg\r{a}rd}
 
 \newcommand*{\exampleCodeReference}[1]{Code may be found at~\texttt{#1}.}
 

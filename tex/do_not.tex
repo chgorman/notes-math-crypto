@@ -20,8 +20,8 @@ do any of these things.
         of experience in cryptography and it should have been vetted
         by other people as well.
 
-    Along those lines is a
-    \href{https://www.schneier.com/crypto-gram/archives/1998/1015.html#cipherdesign}{quote}
+    Along those lines is a quote%
+    \footnote{\url{https://www.schneier.com/crypto-gram/archives/1998/1015.html\#cipherdesign}}
     from Bruce Schneier in 1998:
 
 \begin{quote}
@@ -47,7 +47,9 @@ do any of these things.
     There may be times when algorithms requiring randomness
     can be reworked to use ``deterministic randomness'' based on
     \glsfirstplural{hash function}.
-    This would be the preferred method; see~\cite{rfc6979}.
+    This would be the preferred method;
+    see~\cite{rfc6979} for a reference to ``deterministic randomness''
+    in \glspl{signature}.
 
 \item \textbf{Do not use classical algorithms.}
     If any real security is required, do not \emph{ever} use
@@ -81,21 +83,22 @@ do any of these things.
 \item \textbf{Do not use ECB-mode when encrypting with a \gls{block cipher}.}
     ECB stands for \emph{Electronic Codebook}.
     This method should \emph{never} be used when performing
-        encryption with a \gls{block cipher}.
-    It leaks too much information.
+    encryption with a \gls{block cipher}.
+    It leaks too much information; see Chapter~\ref{ssec:block_cipher}
+    for more information.
 \item \textbf{Do not use DES.}
     DES stands for \emph{Data Encryption Standard} and is a \gls{block cipher}.
     The small key size allows it to be easily broken~\cite{rfc4772}.
     The \emph{only} reason to ever use it is because its use is required
-        for compatibility with legacy systems.
+    for compatibility with legacy systems.
 \item \textbf{Do not use RC4.}
-    RC4 is a cryptographically-broken \gls{stream cipher}~\cite{rfc7465}.
+    RC4 is a cryptographically-broken \gls{stream cipher}~\cite{rfc7465};
+    see Chapter~\ref{ssec:stream_cipher} for more information.
 \item \textbf{Do not use Blowfish.}
     Blowfish is an old \gls{block cipher},
-    and in 2007 its author
-    \href{https://www.schneier.com/news/archives/2007/12/bruce_almighty_schne.html}{recommended}
-    switching from Blowfish to a different \gls{encryption scheme}.
-
+    and in 2007 its author recommended%
+    \footnote{\url{https://www.schneier.com/news/archives/2007/12/bruce_almighty_schne.html}}
+    switching from Blowfish~\cite{BlowfishAlg} to Twofish~\cite{TwofishAlg}.
 \end{itemize}
 
 \section{Cryptographic Hash Functions}
@@ -119,8 +122,9 @@ do any of these things.
 
 \begin{itemize}
 \item \textbf{Do not use Dual\_EC\_DRBG.}
-    The standard algorithm has the potential for a
-    backdoor~\cite{BernsteinDualEC}.
+    The standard algorithm~\cite[Section~10.3.1]{NIST-SP-800-90A}
+    is believed to have a backdoor~\cite{BernsteinDualEC}
+    and was removed in a later version~\cite{NIST-SP-800-90ARev1}.
 \item \textbf{Do not use non-cryptographic PRNGs for cryptographic protocols.}
     Cryptographic protocols \emph{require} cryptographically-strong
     pseudorandom numbers;

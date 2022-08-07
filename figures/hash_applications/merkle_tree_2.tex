@@ -8,38 +8,38 @@
         \node[circle,draw] (root) {$H$}
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
+                    child {node[rectangle,draw] {$x_{0}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{0}$}
+                }
+                child {node[circle,draw] {$H$}
                     child {node[rectangle,draw] {$x_{1}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left] {$y_{1}$}
+                    node[right] {$y_{1}$}
                 }
+            edge from parent[<-,thick]
+                node[left] {$y_{4}$}
+            }
+            child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
                     child {node[rectangle,draw] {$x_{2}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[right] {$y_{2}$}
+                    node[left] {$y_{2}$}
                 }
-            edge from parent[<-,thick]
-                node[left] {$y_{5}$}
-            }
-            child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
                     child {node[rectangle,draw] {$x_{3}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left] {$y_{3}$}
-                }
-                child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{4}$}
-                    edge from parent[<-,thick]}
-                edge from parent[<-,thick]
-                    node[right] {$y_{4}$}
+                    node[right] {$y_{3}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{6}$}
+                node[right] {$y_{5}$}
             };
         \node[above=of root] (header) {};
-        \draw[->,thick] (root) to node[auto,swap] {$y_{7}$} (header);
+        \draw[->,thick] (root) to node[auto,swap] {$y_{6}$} (header);
     \end{tikzpicture}
     \caption{2-layer Merkle Tree}
     \label{fig:merkle_tree_2}
@@ -53,43 +53,43 @@
         \node[circle,draw] (root) {$H$}
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
+                    child {node[rectangle,draw] {$x_{0}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{0}$}
+                }
+                child {node[circle,draw] {$H$}
                     child {node[rectangle,draw] {$x_{1}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left] {$y_{1}$}
-                }
-                child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{2}$}
-                    edge from parent[<-,thick]}
-                edge from parent[<-,thick]
-                    node[right] {$y_{2}$}
+                    node[right] {$y_{1}$}
                 }
             edge from parent[<-,thick]
-                node[left,red] {$y_{5}$}
+                node[left,red] {$y_{4}$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw,very thick, blue] {$x_{3}$}
+                    child {node[rectangle,draw,very thick, blue] {$x_{2}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left] {$y_{3}$}
+                    node[left] {$y_{2}$}
                 }
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{4}$}
+                    child {node[rectangle,draw] {$x_{3}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[right,red] {$y_{4}$}
+                    node[right,red] {$y_{3}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{6}$}
+                node[right] {$y_{5}$}
             };
         \node[above=of root] (header) {};
-        \draw[->,thick] (root) to node[auto,swap] {$y_{7}$} (header);
+        \draw[->,thick] (root) to node[auto,swap] {$y_{6}$} (header);
     \end{tikzpicture}
-    \caption{2-layer Merkle Tree with Merkle Proof of $x_{3}$.}
+    \caption{2-layer Merkle Tree with Merkle Proof of $x_{2}$.}
     \label{fig:merkle_tree_2_proof}
 \end{subfigure}
 \caption[2-Layer Merkle Tree and Merkle Proof]{Here
     we have a 2-layer Merkle Tree.
-    There is also a Merkle Proof for $x_{3}$.}
+    There is also a Merkle Proof for $x_{2}$.}
 \end{figure}

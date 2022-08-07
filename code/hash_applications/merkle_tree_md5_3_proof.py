@@ -2,25 +2,25 @@
 
 import hashlib
 
-root = bytes.fromhex('a9250f9b87b54a884997c41042029ed9')
+root = bytes.fromhex('18446692e822581d02b096e1b77c9fff')
 
 # Set up data and proof
-x5  = bytes.fromhex('05050505050505050505050505050505')
-y6  = bytes.fromhex('e5f636381c9702b63aa666ef2a6f8e20')
-y12 = bytes.fromhex('6b169c5ae04d0da8360ec5475c16983a')
-y13 = bytes.fromhex('4ed351819fee1c3b3ecfe7620bed7a5c')
+x4  = bytes.fromhex('04040404040404040404040404040404')
+y5  = bytes.fromhex('af52282db55243f4c147ba5d7fb1155a')
+y11 = bytes.fromhex('70d0669eae8c7a5dce3b3ff4ccf4adbb')
+y12 = bytes.fromhex('a3f21dba8fa8de359220c29c00467556')
 
 # Merkle Proof
-md5 = hashlib.md5(); md5.update(x5);     yHat5 = md5.digest()
-# af52282db55243f4c147ba5d7fb1155a
-md5 = hashlib.md5(); md5.update(yHat5);  md5.update(y6)
-yHat11 = md5.digest()
-# 406c1b079725e8d5f889b5450c72c4f9
-md5 = hashlib.md5(); md5.update(yHat11); md5.update(y12)
+md5 = hashlib.md5(); md5.update(x4);     yHat4 = md5.digest()
+# b40ebeba833c1c07e74d9e4c6ebb8230
+md5 = hashlib.md5(); md5.update(yHat4);  md5.update(y5)
+yHat10 = md5.digest()
+# 524856d86cb1006e9e9e9149f36b2875
+md5 = hashlib.md5(); md5.update(yHat10); md5.update(y11)
+yHat13 = md5.digest()
+# da95d6882598892592ccd54bc89f7bdb
+md5 = hashlib.md5(); md5.update(y12);    md5.update(yHat13)
 yHat14 = md5.digest()
-# f63aee7a89333c34333544fb87ac424c
-md5 = hashlib.md5(); md5.update(y13);    md5.update(yHat14)
-yHat15 = md5.digest()
-# a9250f9b87b54a884997c41042029ed9
+# 18446692e822581d02b096e1b77c9fff
 
-assert yHat15 == root # Valid
+assert yHat14 == root # Valid

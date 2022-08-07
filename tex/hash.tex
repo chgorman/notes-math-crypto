@@ -110,18 +110,8 @@ it is possible to expand the definition from any \gls{set} to
 any other \gls{set}.
 In particular, we look at hashing to \glspl{elliptic curve} in
 Chapter~\ref{chap:pairing}.
-
-Some standard \glspl{hash function} include \MDFive{}~\cite{rfc1321},
-\ShaOne{}~\cite{FIPS-180-1-1995},
-\ShaTwo{}~\cite{FIPS-180-4-2015},
-and \ShaThree{}~\cite{FIPS-202}.
-\MDFive{} and \ShaOne{} should \emph{never} be used except when required
-for legacy systems;
-they are \emph{cryptographically-broken}
-\glspl{hash function}~\cite{rfc6151,rfc6194}.
-We note that \ShaThree{} is a \gls{hash function} which modifies the original
-specification of
-\Keccak{}~\cite{KeccakSponge2011}.
+Some standard \glspl{hash function} will be discussed below
+in Chapter~\ref{sec:hash_examples}.
 
 \emph{Note well:} It is important to note that hashing data
 \emph{does not}, by itself, have anything to do with encrypting
@@ -186,32 +176,62 @@ We will now spend some time looking at the outputs of various
 \exampleCodeReference{examples/hash\_functions/}
 One way to gain some understanding about \glspl{hash function}
 is to repeatedly hash data.
+For each \gls{hash function}, we will look at three different examples:
+
+\begin{enumerate}
+\item ``'' (the empty byte slice);
+\item ``The quick brown fox jumps over the lazy dog''
+    (converted into bytes)
+\item ``The quick brown fox jumps over the lazy dog.''
+    (converted into bytes; note the period).
+\end{enumerate}
+
+\noindent
+Although the last 2 values are very similar,
+we would expect there to be drastic changes in the hash output;
+this happens in all the examples below.
+This drastic change is known as the \emph{avalanche effect}:
+any change in input should result in a vastly different output,
+as we expect the outputs to be completely unrelated.
+
+\paragraph{\MDFive{}} Designed by Ronald Rivest
+and published in 1992~\cite{rfc1321} with an output of 128 bits (16 bytes).
+At this point, due to the small size and significant attacks against it,
+\MDFive{} should no longer be used in any situation
+where a \gls{hash function} is necessary.
+Example hashes can be found in Listing~\ref{list:md5}.
+
+\paragraph{\ShaOne{}} Designed by NIST and published
+in 1995~\cite{FIPS-180-1-1995},
+\ShaOne{} has an output of 160 bits (20 bytes).
+Although more secure than \MDFive{},
+there are also significant attacks against \ShaOne{}
+and it should not be used.
+Example hashes can be found in Listing~\ref{list:sha1}.
+
+\paragraph{\ShaTwo{}} Due to the attacks against \ShaOne{},
+NIST released \ShaTwo{} in 2001~\cite{FIPS-180-4-2015}.
+The standard had multiple algorithms with different output sizes;
+one commonly used algorithm is \ShaTwo{}-256 (also called SHA-256),
+which has a 256 bit (32 byte) output.
+Although still subject to certain attacks (described below),
+it is still considered secure.
+\ShaTwo{}-256 example hashes can be found in Listing~\ref{list:sha2}.
+
+\paragraph{\ShaThree{}}
+The continued cryptanalysis of \MDFive{}, \ShaOne{}, and \ShaTwo{}
+caused NIST to have a competition (similar to the competition which
+produced the block cipher AES, the Advanced Encryption Standard).
+In the end, \Keccak{}~\cite{KeccakSponge2011} became the basis
+for \ShaThree{}~\cite{FIPS-202}.
+Like \ShaTwo{}, there are multiple versions with different output lengths;
+a common one is \ShaThree{}-256 with 256 bits (32 bytes) of output.
+\ShaThree{}-256 example hashes can be found in Listing~\ref{list:sha3}.
 
 \input{code/hash_functions/md5_output.tex}
 \input{code/hash_functions/sha1_output.tex}
 \input{code/hash_functions/sha2_output.tex}
 \input{code/hash_functions/sha3_output.tex}
-
-\MDFive{} example hashes can be found in Listing~\ref{list:md5},
-\ShaOne{} example hashes in Listing~\ref{list:sha1},
-\ShaTwo{}-256 example hashes in Listing~\ref{list:sha2}, and
-\ShaThree{}-256 example hashes in Listing~\ref{list:sha3}.
-For each \gls{hash function}, we look at three different examples:
-hashing the empty byte slice;
-hashing the byte slice corresponding to the sentence
-``The quick brown fox jumps over the lazy dog'';
-and hashing the byte slice corresponding to the sentence
-``The quick brown fox jumps over the lazy dog.''
-(note the added period).
-When we compare the last two hash values, we notice that there
-is a drastic change in the hash output when we add the period.
-This drastic change is also known as the \emph{avalanche effect}:
-any change in input should result in a vastly different output,
-as we expect the outputs to be completely unrelated.
-
-We note that the \MDFive{} and \ShaOne{} \glspl{hash function} have been
-used only as examples.
-As mentioned above, \emph{they should not be used in practice.}
 
 
 
@@ -297,12 +317,14 @@ collisions~\cite{cryptoeprint:2004:199,cryptoeprint:2005:067,
 cryptoeprint:2004:356,cryptoeprint:2020:014,rfc6151,rfc6194};
 preimage resistance has been attacked~\cite{MD5FastPreimage2009}.
 
+See Listing~\ref{list:md5_collision} for an \MDFive{} hash collision
+and Figure~\ref{fig:shattered} for a \ShaOne{} hash collision.
+
+\input{code/hash_functions/md5_collision.tex}
+\input{figures/hash_functions/shattered.tex}
 
 
 \section{Properties of a Secure Cryptographic Hash Function}
-
-We will wrap up with a discussion about what makes a secure
-\glsfirst{hash function}.
 
 Ideally, a \gls{hash function} will be as close to a
 \gls{random oracle} as possible.
@@ -312,9 +334,9 @@ from Chapters~\ref{sec:hash_properties} and
 
 This is not always possible in practice.
 As discussed previously, \MDFive{} and \ShaOne{} do not satisfy
-all of the standard hash properties (particularly collision resistance).
-This makes them insecure.
-Because of this, \MDFive{} and \ShaOne{} should only by used
+all of the standard hash properties (particularly collision resistance);
+this makes them insecure.
+Thus, \MDFive{} and \ShaOne{} should only by used
 when \emph{required} for legacy systems.
 
 Due to length extension attacks, \ShaTwo{} cannot satisfy

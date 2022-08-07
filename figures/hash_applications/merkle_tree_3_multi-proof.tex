@@ -8,78 +8,78 @@
         child {node[circle,draw] {$H$}
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{1}$}
+                    child {node[rectangle,draw] {$x_{0}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left,red] {$y_{1}$}
+                    node[left,red] {$y_{0}$}
                 }
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw,very thick, blue] {$x_{2}$}
+                    child {node[rectangle,draw,very thick, blue] {$x_{1}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[right] {$y_{2}$}
+                    node[right] {$y_{1}$}
                 }
             edge from parent[<-,thick]
-                node[left] {$y_{9}$}
+                node[left] {$y_{8}$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{3}$}
+                    child {node[rectangle,draw] {$x_{2}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left,red] {$y_{3}$}
+                    node[left,red] {$y_{2}$}
                 }
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw,very thick, blue] {$x_{4}$}
+                    child {node[rectangle,draw,very thick, blue] {$x_{3}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[right] {$y_{4}$}
+                    node[right] {$y_{3}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{10}$}
+                node[right] {$y_{9}$}
             }
         edge from parent[<-,thick]
-            node[left] {$y_{13}$}
+            node[left] {$y_{12}$}
         }
         child {node[circle,draw] {$H$}
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{5}$}}
+                    child {node[rectangle,draw] {$x_{4}$}}
                 edge from parent[<-,thick]
-                    node[left] {$y_{5}$}
+                    node[left] {$y_{4}$}
                 }
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{6}$}}
+                    child {node[rectangle,draw] {$x_{5}$}}
                 edge from parent[<-,thick]
-                    node[right] {$y_{6}$}
+                    node[right] {$y_{5}$}
                 }
             edge from parent[<-,thick]
-                node[left,red] {$y_{11}$}
+                node[left,red] {$y_{10}$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw,very thick, blue] {$x_{7}$}
+                    child {node[rectangle,draw,very thick, blue] {$x_{6}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left] {$y_{7}$}
+                    node[left] {$y_{6}$}
                 }
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{8}$}
+                    child {node[rectangle,draw] {$x_{7}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[right,red] {$y_{8}$}
+                    node[right,red] {$y_{7}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{12}$}
+                node[right] {$y_{11}$}
             }
         edge from parent[<-,thick]
-            node[right] {$y_{14}$}
+            node[right] {$y_{13}$}
         };
     \node[above=of root] (header) {};
-    \draw[->,thick] (root) to node[auto,swap] {$y_{15}$} (header);
+    \draw[->,thick] (root) to node[auto,swap] {$y_{14}$} (header);
 \end{tikzpicture}
 \caption[3-Layer Merkle Tree and Merkle Multi-Proof]{Here
     is a 3-layer Merkle Tree with a Merkle Multi-Proof of
-    $x_{2}$, $x_{4}$, and $x_{7}$.}
+    $x_{1}$, $x_{3}$, and $x_{6}$.}
 \label{fig:merkle_tree_3_multi-proof}
 \end{figure}

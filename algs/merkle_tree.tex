@@ -3,16 +3,16 @@
 \label{alg:merkle_tree}
 \begin{algorithmic}[1]
 \Require $n = 2^{k}$ for some $k\ge1$; $H$ is a \gls{hash function}.
-\Procedure{MerkleTreeRoot}{$x_{1}, x_{2}, \cdots, x_{n}$}
-    \For {$i=1; i \le n; i{+}{+}$}
+\Procedure{MerkleTreeRoot}{$x_{0}, x_{1}, \cdots, x_{n-1}$}
+    \For {$i=0; i < n; i{+}{+}$}
         \State $y_{i} \algAssign{} H(x_{i})$
         \Comment{Compute leaf hashes}
     \EndFor
-    \For {$i=1; i < n; i{+}{+}$}
-        \State $y_{n+i} \algAssign{} H(y_{2i-1}||y_{2i})$
+    \For {$i=0; i < n-1; i{+}{+}$}
+        \State $y_{n+i} \algAssign{} H(y_{2i}||y_{2i+1})$
         \Comment{Compute internal hashes}
     \EndFor
-    \State \Return $y_{2n-1}$
+    \State \Return $y_{2n-2}$
     \Comment{Return root hash}
 \EndProcedure
 \end{algorithmic}
