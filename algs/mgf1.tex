@@ -1,0 +1,16 @@
+\begin{algorithm}[t]
+\caption{Mask Generation Function 1}
+\label{alg:mgf1}
+\begin{algorithmic}[1]
+\Require \textsf{Hash} is a hash function with output size $n$
+\Procedure{MGF1}{\textsf{seed}, $\ell$}
+    \State $t \algAssign{} \ceil{\ell/n}$
+    \State $T \algAssign{} \text{``''}$
+    \Comment{Empty byte string}
+    \For{$i=0$; $i<t$; $i{+}{+}$}
+        \State $T \algAssign{} T\|\textsf{Hash}(\textsf{seed}\|i)$
+    \EndFor
+    \State \Return $\textsf{trunc}(T, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

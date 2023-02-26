@@ -3,7 +3,7 @@
 \label{alg:md_construction}
 \begin{algorithmic}[1]
 \Procedure{\MD{}}{$m$}
-    \State $m_{0}||m_{1}||\cdots||m_{k-1} \algAssign{} \textsf{pad}(m)$
+    \State $m_{0}\|m_{1}\|\cdots\|m_{k-1} \algAssign{} \textsf{pad}(m)$
     \Comment{Pad $m$ appropriately}
     \State $h_{0} \algAssign{} h(\textsf{IV}, m_{0})$
     \Comment{\textsf{IV} is the \gls{initialization vector}}

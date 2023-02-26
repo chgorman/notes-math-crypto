@@ -1,0 +1,13 @@
+\begin{algorithm}[t]
+\caption{Keccak Message Authentication Code}
+\label{alg:kmac}
+\begin{algorithmic}[1]
+\Require \textsf{Hash} is a hash function based on \textsc{Keccak} with internal rate $r$
+\Procedure{KMAC}{$k$, $m$}
+    \State $k' \algAssign{} \textsf{pad}(k, r)$
+    \Comment{Pad $k$ to a multiple of $r$ bytes with zero bytes}
+    \State $t \algAssign{} \textsf{Hash}(k', m)$
+    \State \Return $t$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

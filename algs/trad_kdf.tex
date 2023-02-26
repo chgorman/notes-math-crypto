@@ -1,0 +1,16 @@
+\begin{algorithm}[t]
+\caption{Traditional Key Derivation Function}
+\label{alg:trad_kdf}
+\begin{algorithmic}[1]
+\Require \textsf{Hash} is a hash function with output size $n$
+\Procedure{TraditionalKDF}{\textsf{skm}, \textsf{ctx}, $\ell$}
+    \State $t \algAssign{} \ceil{\ell/n}$
+    \State $T \algAssign{} \text{``''}$
+    \Comment{Empty byte string}
+    \For{$i=1$; $i\le t$; $i{+}{+}$}
+        \State $T \algAssign{} T\|\textsf{Hash}(\textsf{skm}\|i\|\textsf{ctx})$
+    \EndFor
+    \State \Return $\textsf{trunc}(T, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

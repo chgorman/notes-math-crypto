@@ -1,0 +1,287 @@
+\begin{figure}[p]
+\centering
+\begin{tikzpicture}
+    [level 1/.style={sibling distance=80mm},
+     level 2/.style={sibling distance=40mm},
+     level 3/.style={sibling distance=20mm}]
+    \node[circle,draw] (root) {$H$}
+        child {node[circle,draw] {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{0}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{0}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{1}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{1}$}
+                }
+            edge from parent[<-,thick]
+                node[left=3pt] {$y_{4}$}
+            }
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{2}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{2}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{3}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{3}$}
+                }
+            edge from parent[<-,thick]
+                node[right=3pt] {$y_{5}$}
+            }
+        edge from parent[<-,thick]
+            node[left=9pt] {$y_{6}$}
+        }
+        child {node[rectangle,draw,rounded corners] {$H$}
+            child {node[rectangle,draw] {$x_{4}$}
+            edge from parent[<-,thick]}
+        edge from parent[<-,thick]
+            node[right=10pt] {$y_{7}$}
+        };
+    \node[above=of root] (header) {};
+    \draw[->,thick] (root) to node[auto,swap] {$y_{8}$} (header);
+\end{tikzpicture}
+\caption{Merkle Tree with 5 leaves using
+    recursive definition from~\cite{rfc9162}.}
+\label{fig:merkle_tree_ctv_5}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\begin{tikzpicture}
+    [level 1/.style={sibling distance=80mm},
+     level 2/.style={sibling distance=40mm},
+     level 3/.style={sibling distance=20mm}]
+    \node[circle,draw] (root) {$H$}
+        child {node[circle,draw] {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{0}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{0}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{1}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{1}$}
+                }
+            edge from parent[<-,thick]
+                node[left=3pt] {$y_{4}$}
+            }
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{2}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{2}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{3}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{3}$}
+                }
+            edge from parent[<-,thick]
+                node[right=3pt] {$y_{5}$}
+            }
+        edge from parent[<-,thick]
+            node[left=9pt] {$y_{8}$}
+        }
+        child {node[circle,draw] {$H$}
+            child {node[rectangle,draw,rounded corners] {$H$}
+                child {node[rectangle,draw] {$x_{4}$}
+                edge from parent[<-,thick]}
+            edge from parent[<-,thick]
+                node[left=3pt] {$y_{6}$}
+            }
+            child {node[rectangle,draw,rounded corners] {$H$}
+                child {node[rectangle,draw] {$x_{5}$}
+                edge from parent[<-,thick]}
+            edge from parent[<-,thick]
+                node[right=3pt] {$y_{7}$}
+            }
+        edge from parent[<-,thick]
+            node[right=10pt] {$y_{9}$}
+        };
+    \node[above=of root] (header) {};
+    \draw[->,thick] (root) to node[auto,swap] {$y_{10}$} (header);
+\end{tikzpicture}
+\caption{Merkle Tree with 6 leaves using
+    recursive definition from~\cite{rfc9162}.}
+\label{fig:merkle_tree_ctv_6}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\begin{tikzpicture}
+    [level 1/.style={sibling distance=80mm},
+     level 2/.style={sibling distance=40mm},
+     level 3/.style={sibling distance=20mm}]
+    \node[circle,draw] (root) {$H$}
+        child {node[circle,draw] {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{0}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{0}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{1}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{1}$}
+                }
+            edge from parent[<-,thick]
+                node[left=3pt] {$y_{6}$}
+            }
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{2}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{2}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{3}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{3}$}
+                }
+            edge from parent[<-,thick]
+                node[right=3pt] {$y_{7}$}
+            }
+        edge from parent[<-,thick]
+            node[left=9pt] {$y_{10}$}
+        }
+        child {node[circle,draw] {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{4}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{4}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{5}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{5}$}
+                }
+            edge from parent[<-,thick]
+                node[left=3pt] {$y_{8}$}
+            }
+            child {node[rectangle,draw,rounded corners] {$H$}
+                child {node[rectangle,draw] {$x_{6}$}
+                edge from parent[<-,thick]}
+            edge from parent[<-,thick]
+                node[right=3pt] {$y_{9}$}
+            }
+        edge from parent[<-,thick]
+            node[right=10pt] {$y_{11}$}
+        };
+    \node[above=of root] (header) {};
+    \draw[->,thick] (root) to node[auto,swap] {$y_{12}$} (header);
+\end{tikzpicture}
+\caption{Merkle Tree with 7 leaves using
+    recursive definition from~\cite{rfc9162}.}
+\label{fig:merkle_tree_ctv_7}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\begin{tikzpicture}
+    [level 1/.style={sibling distance=80mm},
+     level 2/.style={sibling distance=40mm},
+     level 3/.style={sibling distance=20mm}]
+    \node[circle,draw] (root) {$H$}
+        child {node[circle,draw] {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{0}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{0}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{1}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{1}$}
+                }
+            edge from parent[<-,thick]
+                node[left=3pt] {$y_{8}$}
+            }
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{2}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{2}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{3}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{3}$}
+                }
+            edge from parent[<-,thick]
+                node[right=3pt] {$y_{9}$}
+            }
+        edge from parent[<-,thick]
+            node[left=9pt] {$y_{12}$}
+        }
+        child {node[circle,draw] {$H$}
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{4}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{4}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{5}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{5}$}
+                }
+            edge from parent[<-,thick]
+                node[left=3pt] {$y_{10}$}
+            }
+            child {node[circle,draw] {$H$}
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{6}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[left] {$y_{6}$}
+                }
+                child {node[rectangle,draw,rounded corners] {$H$}
+                    child {node[rectangle,draw] {$x_{7}$}
+                    edge from parent[<-,thick]}
+                edge from parent[<-,thick]
+                    node[right] {$y_{7}$}
+                }
+            edge from parent[<-,thick]
+                node[right=3pt] {$y_{11}$}
+            }
+        edge from parent[<-,thick]
+            node[right=10pt] {$y_{13}$}
+        };
+    \node[above=of root] (header) {};
+    \draw[->,thick] (root) to node[auto,swap] {$y_{14}$} (header);
+\end{tikzpicture}
+\caption{Merkle Tree with 8 leaves using
+    recursive definition from~\cite{rfc9162}.}
+\label{fig:merkle_tree_ctv_8}
+\end{figure}

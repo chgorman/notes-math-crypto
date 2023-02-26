@@ -9,7 +9,7 @@
     \Comment{Use the $x$ coordinate}
     \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
     \State $\texttt{s} \algAssign{} \texttt{toBytes}(s_{i\to j})$
-    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}||\texttt{j})$
+    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}\|\texttt{j})$
     \State $\overline{\texttt{s}}_{i\to j} \algAssign{}
         \texttt{s} \oplus \texttt{HashKJ}$
     \State \Return $\overline{\texttt{s}}_{i\to j}$
@@ -21,7 +21,7 @@
     \State $\texttt{kX} \algAssign{} \texttt{toBytes}(k_{x})$
     \Comment{Use the $x$ coordinate}
     \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
-    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}||\texttt{j})$
+    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}\|\texttt{j})$
     \State $\texttt{s} \algAssign{}
         \overline{\texttt{s}}_{i\to j} \oplus \texttt{HashKJ}$
     \State $s_{i\to j} \algAssign{} \texttt{fromBytes}(\texttt{s})$
@@ -32,7 +32,7 @@
     \State $\texttt{kX} \algAssign{} \texttt{toBytes}(k_{x})$
     \Comment{Use the $x$ coordinate}
     \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
-    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}||\texttt{j})$
+    \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}\|\texttt{j})$
     \State $\texttt{s} \algAssign{}
         \overline{\texttt{s}}_{i\to j} \oplus \texttt{HashKJ}$
     \State $s_{i\to j} \algAssign{} \texttt{fromBytes}(\texttt{s})$

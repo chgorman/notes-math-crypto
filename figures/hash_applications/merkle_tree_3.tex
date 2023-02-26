@@ -22,7 +22,7 @@
                         node[right] {$y_{1}$}
                     }
                 edge from parent[<-,thick]
-                    node[left] {$y_{8}$}
+                    node[left=3pt] {$y_{8}$}
                 }
                 child {node[circle,draw] {$H$}
                     child {node[circle,draw] {$H$}
@@ -38,25 +38,27 @@
                         node[right] {$y_{3}$}
                     }
                 edge from parent[<-,thick]
-                    node[right] {$y_{9}$}
+                    node[right=3pt] {$y_{9}$}
                 }
             edge from parent[<-,thick]
-                node[left] {$y_{12}$}
+                node[left=9pt] {$y_{12}$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
                     child {node[circle,draw] {$H$}
-                        child {node[rectangle,draw] {$x_{4}$}}
+                        child {node[rectangle,draw] {$x_{4}$}
+                        edge from parent[<-,thick]}
                     edge from parent[<-,thick]
                         node[left] {$y_{4}$}
                     }
                     child {node[circle,draw] {$H$}
-                        child {node[rectangle,draw] {$x_{5}$}}
+                        child {node[rectangle,draw] {$x_{5}$}
+                        edge from parent[<-,thick]}
                     edge from parent[<-,thick]
                         node[right] {$y_{5}$}
                     }
                 edge from parent[<-,thick]
-                    node[left] {$y_{10}$}
+                    node[left=3pt] {$y_{10}$}
                 }
                 child {node[circle,draw] {$H$}
                     child {node[circle,draw] {$H$}
@@ -72,10 +74,10 @@
                         node[right] {$y_{7}$}
                     }
                 edge from parent[<-,thick]
-                    node[right] {$y_{11}$}
+                    node[right=3pt] {$y_{11}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{13}$}
+                node[right=10pt] {$y_{13}$}
             };
         \node[above=of root] (header) {};
         \draw[->,thick] (root) to node[auto,swap] {$y_{14}$} (header);
@@ -106,7 +108,7 @@
                         node[right] {$y_{1}$}
                     }
                 edge from parent[<-,thick]
-                    node[left] {$y_{8}$}
+                    node[left=3pt] {$y_{8}$}
                 }
                 child {node[circle,draw] {$H$}
                     child {node[circle,draw] {$H$}
@@ -122,25 +124,27 @@
                         node[right] {$y_{3}$}
                     }
                 edge from parent[<-,thick]
-                    node[right] {$y_{9}$}
+                    node[right=3pt] {$y_{9}$}
                 }
             edge from parent[<-,thick]
-                node[left,red] {$y_{12}$}
+                node[left=9pt,red] {$y_{12}$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
                     child {node[circle,draw] {$H$}
-                        child {node[rectangle,draw,very thick,blue] {$x_{4}$}}
+                        child {node[rectangle,draw,very thick,blue] {$x_{4}$}
+                        edge from parent[<-,thick]}
                     edge from parent[<-,thick]
                         node[left] {$y_{4}$}
                     }
                     child {node[circle,draw] {$H$}
-                        child {node[rectangle,draw] {$x_{5}$}}
+                        child {node[rectangle,draw] {$x_{5}$}
+                        edge from parent[<-,thick]}
                     edge from parent[<-,thick]
                         node[right,red] {$y_{5}$}
                     }
                 edge from parent[<-,thick]
-                    node[left] {$y_{10}$}
+                    node[left=3pt] {$y_{10}$}
                 }
                 child {node[circle,draw] {$H$}
                     child {node[circle,draw] {$H$}
@@ -156,10 +160,10 @@
                         node[right] {$y_{7}$}
                     }
                 edge from parent[<-,thick]
-                    node[right,red] {$y_{11}$}
+                    node[right=3pt,red] {$y_{11}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{13}$}
+                node[right=10pt] {$y_{13}$}
             };
         \node[above=of root] (header) {};
         \draw[->,thick] (root) to node[auto,swap] {$y_{14}$} (header);
@@ -168,6 +172,6 @@
     \label{fig:merkle_tree_3_proof}
 \end{subfigure}
 \caption[3-Layer Merkle Tree and Merkle Proof]{Here
-    is a 3-layer Merkle Tree.
+    is a 3-layer \gls{merkle tree}.
     There is also a Merkle Proof for $x_{4}$.}
 \end{figure}

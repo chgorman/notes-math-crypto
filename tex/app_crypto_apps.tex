@@ -32,7 +32,7 @@ One potential method for constructing a \gls{mac} based on a
 Given a message $m$ and secret key $k$, compute
 
 \begin{equation}
-    t \mathDef{} H(k||m).
+    t \mathDef{} H(k\|m).
 \end{equation}
 
 \noindent
@@ -40,7 +40,7 @@ While this could be used, the challenge with this method is that,
 if $H$ is based on the \MD{} construction,
 this is susceptible to length extension attacks.
 Given a valid $\parens{m,t}$, Eve would be able to construct
-valid MAC tags for all messages of the form $\textsf{pad}(m)||y$.
+valid MAC tags for all messages of the form $\textsf{pad}(m)\|y$.
 \emph{This should not be possible.}
 
 \subsubsection{HMAC Definition}
@@ -53,9 +53,11 @@ we compute the following:
 \begin{align}
     k_{1} &\mathDef{} k\oplus\textsf{ipad} \nonumber\\
     k_{2} &\mathDef{} k\oplus\textsf{opad} \nonumber\\
-    t' &\mathDef{} H(k_{1}||m) \nonumber\\
-    t &\mathDef{} H(k_{2}||t').
+    t' &\mathDef{} H(k_{1}\|m) \nonumber\\
+    t &\mathDef{} H(k_{2}\|t').
 \end{align}
+
+\input{algs/hmac.tex}
 
 \noindent
 Here, \textsf{ipad} and \textsf{opad} are two different public
@@ -70,9 +72,15 @@ The HMAC definition can be combined to
 \begin{align}
     t &\mathDef{} \textsf{HMAC}(k, m) \nonumber\\
     \textsf{HMAC}(k, m) &\mathDef{}
-    H\parens{\brackets{k\oplus\textsf{opad}}||
-        H\parens{\brackets{k\oplus\textsf{ipad}}||m}}.
+    H\parens{\brackets{k\oplus\textsf{opad}}\|
+        H\parens{\brackets{k\oplus\textsf{ipad}}\|m}}.
 \end{align}
+
+\noindent
+The formal specification may be found in
+Alg.~\ref{alg:hmac}.
+The minimum recommended key size is length of the hash function
+output~\cite{rfc2104}.
 
 This scheme has been proven secure~\cite{cryptoeprint:2014:578}.
 Because the \MDFive{} and \ShaOne{} \glspl{hash function} are compromised,
@@ -82,6 +90,33 @@ they should \emph{only} be used when \emph{required} for legacy systems.
 Although it may be the case that HMAC-\ShaOne{}
 is still secure~\cite[Section 3.3]{rfc6194},
 the fact remains that \ShaOne{} is a \emph{compromised} \gls{hash function}.
+
+\begin{example}[HMAC-\MDFive{}]
+\exampleCodeReference{examples/app\_crypto/hmac\_md5.py}
+
+We compute the output of HMAC using \MDFive{};
+see Listing~\ref{list:hmac_md5}.
+We have the following key and message pair:
+
+\begin{align}
+    \textsf{key} &=
+            \textsf{\MDFive{}}(\texttt{13131313131313131313131313131313})
+            \nonumber\\
+        &= \texttt{e885a118b42df3823f4999d4135ce08f} \nonumber\\
+    \textsf{msg} &= 
+    \texttt{4242424242424242424242424242424242424242424242424242424242424242}.
+\end{align}
+
+\noindent
+The resulting value is
+
+\begin{equation}
+    \textsf{HMAC-\MDFive{}}\parens{\textsf{key},\textsf{msg}} =
+        \texttt{7fc82df5f026fab8f8f880bf73a8bb08}.
+\end{equation}
+
+\input{code/app_crypto/hmac_md5.tex}
+\end{example}
 
 
 \subsection{Keccak Message Authentication Code (KMAC)}
@@ -98,9 +133,11 @@ we let $H$ be a \gls{hash function} based on the \Keccak{} sponge function
 with rate $r$.
 The tag is then
 
+\input{algs/kmac.tex}
+
 \begin{align}
     t &\mathDef{} \textsf{KMAC}(k,m) \nonumber\\
-        &= H\parens{\textsf{pad}(k,r)||m}.
+        &= H\parens{\textsf{pad}(k,r)\|m}.
 \end{align}
 
 \noindent
@@ -113,6 +150,37 @@ By padding to a multiple of the rate, it is possible to precompute
 the internal state so that the first iteration has already been processed.
 This would allow for faster computation
 if many tags need to be calculated for the same key.
+The formal specification may be found in
+Alg.~\ref{alg:kmac}.
+
+\begin{example}[KMAC using \ShaThree{}]
+\exampleCodeReference{examples/app\_crypto/kmac\_sha3.py}
+
+We compute the output of KMAC using \ShaThree{};
+see Listing~\ref{list:kmac_sha3}.
+We have the following key and message pair:
+
+\begin{align}
+    \textsf{key} &=
+    \textsf{\ShaThree{}}(
+    \texttt{1313131313131313131313131313131313131313131313131313131313131313})
+        \nonumber\\
+    &= \texttt{0554a7d12c7a1bfcb47088e98851c036ca90c3e2d2b0ef6d88b341d86ec6bd4a}
+        \nonumber\\
+    \textsf{msg} &= 
+    \texttt{4242424242424242424242424242424242424242424242424242424242424242}.
+\end{align}
+
+\noindent
+The resulting value is
+
+\begin{align}
+    &\textsf{KMAC-\ShaThree{}}\parens{\textsf{key},\textsf{msg}} = \nonumber\\
+    &\texttt{b4033d41cef0553003b8e1b189fae0c44283a4b1870f59cdd8a8133a7d31c585}.
+\end{align}
+
+\input{code/app_crypto/kmac_sha3.tex}
+\end{example}
 
 
 \subsection{HMAC-based Key Derivation Function (HKDF)}
@@ -122,11 +190,13 @@ Here we will discuss the \gls{hkdf} (HKDF) protocol,
 attempting to condense the main ideas from
 the primary sources~\cite{HKDF2010,rfc5869}.
 
-The purpose of \emph{\glspl{kdf}}
+\subsubsection{Purpose of Key Derivation Functions}
+
+The purpose of a \emph{\gls{kdf}}
 is to convert \emph{nonuniform} randomness into \emph{uniform} randomness.
-Nonuniform randomness could come from the \gls{shared secret}
-of a \gls{dhke};
-in this case, the \gls{shared secret} is a random group element
+Nonuniform randomness may arise in a variety of places.
+One example is the \gls{shared secret} of a \gls{dhke}:
+the \gls{shared secret} is a random group element
 but not a \emph{uniformly} random bit string.
 Most \gls{symmetric key encryption} protocols assume a
 \emph{uniform} random key,
@@ -134,6 +204,54 @@ so merely using the \gls{shared secret} would violate the assumptions
 of the protocol;
 violating cryptographic protocol security assumptions is
 \emph{always} a bad idea.
+
+\subsubsection{Traditional KDF Protocol}
+
+As stated in~\cite[Section 8]{HKDF2010},
+the traditional KDF scheme is given as
+
+\begin{equation}
+    T \mathDef{} \textsf{Hash}\parens{\textsf{skm}\|1\|\textsf{ctx}}
+                 \textsf{Hash}\parens{\textsf{skm}\|2\|\textsf{ctx}}
+                 \textsf{Hash}\parens{\textsf{skm}\|3\|\textsf{ctx}}\cdots
+\end{equation}
+
+\noindent
+Here, \textsf{skm} is the source key material,
+\textsf{ctx} is the context information, and $\ell$ is the output in bits;
+The result is truncated to the appropriate length.
+A formal specification may be found in Alg.~\ref{alg:trad_kdf}.
+
+\input{algs/trad_kdf.tex}
+
+The NIST KDF scheme slightly modifies the traditional scheme
+by switching the order of the counter and the source key material:
+
+\begin{equation}
+    T \mathDef{} \textsf{Hash}\parens{1\|\textsf{skm}\|\textsf{ctx}}
+                 \textsf{Hash}\parens{2\|\textsf{skm}\|\textsf{ctx}}
+                 \textsf{Hash}\parens{3\|\textsf{skm}\|\textsf{ctx}}\cdots
+\end{equation}
+
+\noindent
+A formal specification may be found in Alg.~\ref{alg:nist_kdf}.
+This version (One-Step Key Derivation) is still approved by
+NIST~\cite[Section 4]{NIST-SP-800-56Cr2}.
+In both the Traditional and NIST KDF specification,
+the counter is 4 bytes (32 bits),
+and the maximum number of iterations is $2^{32}$.
+
+\input{algs/nist_kdf.tex}
+
+It is noted that both instances,
+the inputs of the hash function are highly correlated;
+there are only a few bits which differ between hash calls.
+While this is fine when using a \gls{random oracle},
+the \glspl{hash function} used in practice are not perfect.
+\Gls{hkdf} was designed to counter these problems~\cite{HKDF2010}.
+
+
+\subsubsection{HKDF Protocol}
 
 The \gls{hkdf} protocol is based on an
 \emph{extract-then-expand} principle:
@@ -143,14 +261,15 @@ uniformly random bits.
 From~\cite{HKDF2010}, we have
 
 \begin{equation}
-    \textsf{HKDF}\parens{\textsf{salt}, \textsf{skm}, \textsf{ctx}, L}
-        \mathDef{} \textsf{trunc}\parens{T(1) || T(2) || \cdots || T(t), L},
+    \textsf{HKDF}\parens{\textsf{salt}, \textsf{skm}, \textsf{ctx}, \ell}
+        \mathDef{} \textsf{trunc}\parens{T(1) \| T(2) \| \cdots \| T(t), \ell},
 \end{equation}
 
 \noindent
 where \textsf{salt} is a \gls{salt},
 \textsf{skm} is the source key material,
-\textsf{ctx} is the context information, and $L$ is the output in bits.
+\textsf{ctx} is the context information,
+and $\ell$ is the length of output in bits.
 We recall that a \glsfirst{salt} is used to ensure
 that different source key materials produce different pseudorandom keys.
 \Glspl{salt} are closely related to \glspl{nonce}.
@@ -159,10 +278,10 @@ From here, we define $T(i)$ by
 \begin{align}
     \textsf{prk} &\mathDef{} \textsf{HMAC}\parens{\textsf{salt},\textsf{skm}}
             \nonumber\\
-    T(1) &\mathDef{} \textsf{HMAC}\parens{\textsf{prk}, \textsf{ctx}||1}
+    T(1) &\mathDef{} \textsf{HMAC}\parens{\textsf{prk}, \textsf{ctx}\|1}
             \nonumber\\
-    T(i) &\mathDef{} \textsf{HMAC}\parens{\textsf{prk},T(i-1)||
-        \textsf{ctx}||i} \quad i\in\braces{2,\cdots,t}.
+    T(i) &\mathDef{} \textsf{HMAC}\parens{\textsf{prk},T(i-1)\|
+        \textsf{ctx}\|i} \quad i\in\braces{2,\cdots,t}.
 \end{align}
 
 \noindent
@@ -179,9 +298,166 @@ are independent.
 The context information enables the same source key material
 to be reused in different settings while ensuring
 independent keys.
+A formal specification may be found in Alg.~\ref{alg:hkdf}.
+In~\cite{rfc5869}, the counter is 1 byte
+and the number of iterations are limited to 255.
+
+\input{algs/hkdf.tex}
 
 We note that all of the operations here which use \textsf{HMAC}
-could also be replaced with calls to \textsf{KMAC}.
+could also be replaced with calls to \textsf{KMAC},
+and this is done in Example~\ref{example:hkdf-kmac-sha3} below.
+
+As seen in Examples~\ref{example:hkdf-hmac-sha2} and
+\ref{example:hkdf-kmac-sha3},
+calling \textsf{HKDF} with the same
+\textsf{skm}, \textsf{salt}, and \textsf{ctx} values
+but varying lengths will cause the shorter outputs to be
+contained within longer outputs.
+Although within the \gls{hkdf} specification
+there is no strict requirement that the length of the output
+be included within the \textsf{ctx} information,
+the author of this work feels this should be encouraged
+if there is the slightest chance for variable-length outputs
+to occur in practice.
+
+\begin{example}[HKDF using HMAC-\ShaTwo{}-256]
+\label{example:hkdf-hmac-sha2}
+\exampleCodeReference{examples/app\_crypto/hkdf\_hmac\_sha2.py}
+
+We compute the output of HKDF using HMAC-\ShaTwo{}-256;
+see Listing~\ref{list:hkdf_hmac_sha2}.
+We have the following source key material, salt, and context:
+
+\begin{align}
+    \textsf{skm} &=
+    \textsf{\MDFive{}}(
+    \texttt{01010101010101010101010101010101})\|\texttt{00\dots00}
+        \nonumber\\
+    &= \texttt{24311d9abc4077123c2c9a167afbe75400000000000000000000000000000000}
+        \nonumber\\
+    \textsf{salt} &= 
+    \texttt{0202020202020202020202020202020202020202020202020202020202020202}.
+\end{align}
+
+\noindent
+We let \textsf{ctx} be empty.
+In this instance, we are modeling the situation where
+some of the source key material has entropy
+while other parts of it do not has as much entropy.
+We have the following results:
+
+\begin{align}
+    &\textsf{HKDF-HMAC-\ShaTwo{}}\parens{
+        \textsf{skm},\textsf{salt},\textsf{ctx}, 16} = \nonumber\\
+    &\texttt{209a24fb9c313a19d8ece110a922a75c}
+        \nonumber\\
+    &\textsf{HKDF-HMAC-\ShaTwo{}}\parens{
+        \textsf{skm},\textsf{salt},\textsf{ctx}, 32} = \nonumber\\
+    &\texttt{209a24fb9c313a19d8ece110a922a75c7fdccb0ea20fff64eacf0bc621e688fe}
+        \nonumber\\
+    &\textsf{HKDF-HMAC-\ShaTwo{}}\parens{
+        \textsf{skm},\textsf{salt},\textsf{ctx}, 64} = \nonumber\\
+    &\texttt{209a24fb9c313a19d8ece110a922a75c7fdccb0ea20fff64eacf0bc621e688fe\textbackslash}
+        \nonumber\\
+    &\texttt{9d905f252edb3b56a13609eaab6c13cd446a073ea08423c32b2fc009271d828c}.
+\end{align}
+
+\noindent
+As we can see, the output looks pretty random.
+
+\input{code/app_crypto/hkdf_hmac_sha2.tex}
+\end{example}
+
+\begin{example}[HKDF using KMAC-\ShaThree{}-256]
+\label{example:hkdf-kmac-sha3}
+\exampleCodeReference{examples/app\_crypto/hkdf\_kmac\_sha3.py}
+
+We compute the output of HKDF using KMAC-\ShaThree{}-256;
+see Listing~\ref{list:hkdf_kmac_sha3}.
+We use the same values for \textsf{skm}, \textsf{salt}, and \textsf{ctx}
+as in Example~\ref{example:hkdf-hmac-sha2}.
+We have the following results:
+
+\begin{align}
+    &\textsf{HKDF-KMAC-\ShaThree{}}\parens{
+        \textsf{skm},\textsf{salt},\textsf{ctx}, 16} = \nonumber\\
+    &\texttt{f9b8dbec9e6ba6c6862cc45cfc408e0b}
+        \nonumber\\
+    &\textsf{HKDF-KMAC-\ShaThree{}}\parens{
+        \textsf{skm},\textsf{salt},\textsf{ctx}, 32} = \nonumber\\
+    &\texttt{f9b8dbec9e6ba6c6862cc45cfc408e0b33b125aecff2705650f191b7cb599b74}
+        \nonumber\\
+    &\textsf{HKDF-KMAC-\ShaThree{}}\parens{
+        \textsf{skm},\textsf{salt},\textsf{ctx}, 64} = \nonumber\\
+    &\texttt{f9b8dbec9e6ba6c6862cc45cfc408e0b33b125aecff2705650f191b7cb599b74\textbackslash}
+        \nonumber\\
+    &\texttt{02c32a28defa349720c44c449319f9cff77b211fa5262de491334409115c712d}.
+\end{align}
+
+\input{code/app_crypto/hkdf_kmac_sha3.tex}
+\end{example}
+
+
+\subsection{Mask Generation Function and Extendable Output Function}
+\label{app:crypto_mgf_xof}
+
+We now discuss \glspl{mgf} and \glspl{xof}.
+
+\Glspl{hash function} are very useful,
+but when a random output is needed with length greater than
+the message digest length, something else must be done.
+This was needed in the case of the RSA
+encryption or signature schemes~\cite{cryptoeprint:2006/223,rfc8017}.
+This lead to the development of a \gls{mgf}.
+The particular scheme in~\cite{rfc8017} is given here:
+
+\begin{equation}
+    \textsf{MGF}(\textsf{seed}, \ell) \mathDef{}
+        \textsf{Hash}(\textsf{seed}\|0)\,
+        \textsf{Hash}(\textsf{seed}\|1)\,
+        \textsf{Hash}(\textsf{seed}\|2)\,\cdots
+\end{equation}
+
+\noindent
+In this case, \textsf{Hash} is a hash function,
+$\textsf{seed}$ is the data to be hashed,
+and $\ell$ is the specified output length.
+The numbers are encoded as 32-bit unsigned integers,
+and the result is truncated to the desired length;
+thus, there is a  maximum of $2^{32}$ iterations.
+One reference defining a padding scheme which uses
+a \gls{mgf} is from 1998~\cite{rfc2437}.
+
+This definition is for ``MGF1'';
+no additional versions appear to have been specified.
+A formal specification may be found in Alg.~\ref{alg:mgf1}.
+This is very similar to the definition
+of the Traditional KDF from Alg.~\ref{alg:trad_kdf}
+(the only difference being a lack of notion for context),
+and this also means that it has similar problems.
+
+\input{algs/mgf1.tex}
+
+Later, when defining the \ShaThree{} standard~\cite{FIPS-202},
+additional functions, called \glspl{xof},
+were specified which were like \glspl{hash function}
+but with the ability to produce
+arbitrarily long output~\cite[Section 6.2]{FIPS-202}.
+This is due in part to the sponge function structure of \ShaThree{}.
+
+The difference between \glspl{mgf} and \glspl{xof}
+may be that a \gls{mgf} is designed to use a \gls{hash function}
+to produce arbitrarily long output
+while an \gls{xof} is a ``hash function'' designed
+to produce arbitrarily long output.
+
+In summary, the \gls{mgf} as defined in~\cite{rfc8017}
+\emph{should not be used except for backward compatibility}
+due to the weakness of its definition.
+If possible, use an \gls{xof} such as
+SHAKE128 or SHAKE256~\cite{FIPS-202,NIST-SP-800-185};
+otherwise, use \gls{hkdf} with \textsf{HMAC} or \textsf{KMAC}.
 
 
 \subsection{PBKDF2}
@@ -205,19 +481,21 @@ application-specific integrated circuits (ASICs)%
 it is necessary to add computations
 which \emph{must} be performed sequentially.
 
+\input{algs/pbkdf2.tex}
+
 We now give the specification from~\cite{rfc8018};
 we use \textsf{HMAC} as the required pseudorandom function:
 
 \begin{equation}
-    \textsf{PBKDF2}\parens{\textsf{pw}, \textsf{salt}, c, L}
-        \mathDef{} T_{1} || T_{2} || \cdots || T_{k}.
+    \textsf{PBKDF2}\parens{\textsf{pw}, \textsf{salt}, c, \ell}
+        \mathDef{} T_{1} \| T_{2} \| \cdots \| T_{k}.
 \end{equation}
 
 \noindent
 Here, $\textsf{pw}$ is the password,
 $\textsf{salt}$ is the \gls{salt},
 $c$ is the number of iterations,
-and $L$ is the derived key output length.
+and $\ell$ is the derived key output length.
 
 We have
 
@@ -229,7 +507,7 @@ We have
 where
 
 \begin{align}
-    U_{1,i} &\mathDef{} \textsf{HMAC}\parens{\textsf{pw}, \textsf{salt} || i}
+    U_{1,i} &\mathDef{} \textsf{HMAC}\parens{\textsf{pw}, \textsf{salt} \| i}
         \nonumber\\
     U_{2,i} &\mathDef{} \textsf{HMAC}\parens{\textsf{pw}, U_{1,i}}
         \nonumber\\
@@ -245,8 +523,9 @@ scheme in Appendix~\ref{app:crypto_hkdf}.
 Greater computation can be required by having a large $c$ value,
 as these require many \emph{sequential} \textsf{HMAC} iterations.
 This causes a slowdown in the total operation.
+A formal specification may be found in Alg.~\ref{alg:pbkdf2}.
 
-We note that although this is a good starting place,
+We note that although this is a good starting place for password storage,
 recent work has shown that the protection PBKDF2 offers
 is insufficient against dedicated attackers~\cite{blocki2018economics}.
 This is because it is possible to build dedicated hardware
@@ -263,8 +542,8 @@ As such, the algorithm does not have large memory requirements.
 Here we will work out the details proving the bounds for hashing
 to \gls{finite field}.
 
-Suppose we have a \gls{random oracle} $\widetilde{H}:\braces{0,1}^{*}\to\Z_{N}$.
-We are interested in knowing how much $\widetilde{H}(m) \mod p$
+Suppose we have a \gls{random oracle} $H:\braces{0,1}^{*}\to\Z_{N}$.
+We are interested in knowing how much $H(m) \mod p$
 deviates from the uniform distribution.
 
 We suppose that $N>p$ and $p\nmid N$;
@@ -284,29 +563,31 @@ and $X_{p} \mathDef{} X \mod p$.
 Then we have the following:
 
 \begin{align}
-    \mathcal{P}\parens{X_{p} = k} &= \frac{q+1}{N},
-        \quad k\in \braces{0,\cdots,r-1} \nonumber\\
-    \mathcal{P}\parens{X_{p} = k} &= \frac{q}{N},
-        \quad k \in \braces{r,\cdots,N-1}.
+    \mathcal{P}\parens{X_{p} = \ell} &= \frac{q+1}{N},
+        \quad \ell\in \braces{0,\cdots,r-1} \nonumber\\
+    \mathcal{P}\parens{X_{p} = \ell} &= \frac{q}{N},
+        \quad \ell\in \braces{r,\cdots,N-1}.
 \end{align}
 
 \noindent
 Here, $\mathcal{P}$ is the probability of an event occurring.
-Thus, $\mathcal{P}(X_{p} = k)$ denotes the probability
-that the random variable $X_{p}$ equals the value $k$.
+Thus, $\mathcal{P}(X_{p} = \ell)$ denotes the probability
+that the random variable $X_{p}$ equals the value $\ell$.
 
 We now determine how far $X_{p}$ deviates from the uniform
 distribution $U_{p}$:
 
 \begin{align}
     \Delta(X_{p},U_{p}) &\mathDef{}
-    \sum_{k=0}^{p-1} \abs{\mathcal{P}(X_{p}=k) - \mathcal{P}(U_{p}=k)}
+    \sum_{\ell=0}^{p-1} \abs{\mathcal{P}(X_{p}=\ell) - \mathcal{P}(U_{p}=\ell)}
         \nonumber\\
-    &= \sum_{k=0}^{r-1} \abs{\frac{q+1}{N} - \frac{1}{p}} +
-        \sum_{k=r}^{p-1} \abs{\frac{q}{N} - \frac{1}{p}} \nonumber\\
+    &= \sum_{\ell=0}^{r-1} \abs{\frac{q+1}{N} - \frac{1}{p}} +
+        \sum_{\ell=r}^{p-1} \abs{\frac{q}{N} - \frac{1}{p}} \nonumber\\
     &= r\frac{qp + p - N}{pN} + \parens{p-r}\frac{N-qp}{pN}
         \nonumber\\
-    &\le \frac{p}{N}.
+    &= \frac{2r(p-r)}{pN}
+        \nonumber\\
+    &\le \frac{p}{2N}.
 \end{align}
 
 \noindent

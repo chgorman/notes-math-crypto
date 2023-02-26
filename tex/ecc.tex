@@ -703,11 +703,11 @@ Next, we compute the checksum
 that is, hash the random bits and take the first $k$ bits for the checksum.
 
 At this point, we now derive the mnemonic phrase from the
-$\texttt{r}||\texttt{c}$ bits.
+$\texttt{r}\|\texttt{c}$ bits.
 We set
 
 \begin{equation}
-    \texttt{R} \mathDef{} \texttt{r}||\texttt{c}.
+    \texttt{R} \mathDef{} \texttt{r}\|\texttt{c}.
 \end{equation}
 
 \noindent
@@ -895,7 +895,7 @@ Thus, we have
 
 \begin{equation}
     \texttt{R} \mathDef{} \texttt{6768033e216468247bd031a0a2d9876d79818f8f}_{16}
-    ||\texttt{01001}_{2}.
+    \|\texttt{01001}_{2}.
 \end{equation}
 
 We now split this into 11-bit words:

@@ -1,0 +1,24 @@
+\begin{algorithm}[t]
+\caption{Compute Merkle Tree root hash using \gls{recursion}
+    from~\cite{rfc9162}}
+\label{alg:merkle_tree_ctv}
+\begin{algorithmic}[1]
+\Procedure{MerkleRootCTV}{$x_{0}, x_{1}, \cdots, x_{n-1}$}
+    \If {$n = 0$}
+        \State \Return $\textsf{Hash}()$
+        \Comment{Hash of empty byte string}
+    \ElsIf {$n = 1$}
+        \State \Return $\textsf{Hash}(\texttt{0x00}, x_{0})$
+    \Else
+        \State $k \algAssign{}
+            \max\braces{2^{\ell} \mid \ell\in\N_{0} \land 2^{\ell} < n}$
+        \Comment{$k$ is largest power-of-two strictly less than $n$}
+        \State $h_{0} \algAssign{}
+            \textsc{MerkleRootCTV}(x_{0}, x_{1}, \cdots, x_{k-1})$
+        \State $h_{1} \algAssign{}
+            \textsc{MerkleRootCTV}(x_{k}, x_{k+1}, \cdots, x_{n-1})$
+        \State \Return $\textsf{Hash}(\texttt{0x01}, h_{0}, h_{1})$
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

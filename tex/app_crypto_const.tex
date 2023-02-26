@@ -54,7 +54,7 @@ Let us suppose we have a message $m\in\braces{0,1}^{\ell n}$;
 that is, we have
 
 \begin{equation}
-    m = m_{0}||m_{1}||\cdots||m_{\ell-1}
+    m = m_{0}\|m_{1}\|\cdots\|m_{\ell-1}
 \end{equation}
 
 \noindent
@@ -88,7 +88,7 @@ of different lengths will \emph{always} result in different padded messages.
 Padded messages will always have the following form:
 
 \begin{equation}
-    \textsf{pad}(m) = m_{0}||m_{1}||\cdots||m_{\ell-1}.
+    \textsf{pad}(m) = m_{0}\|m_{1}\|\cdots\|m_{\ell-1}.
 \end{equation}
 
 \noindent
@@ -98,7 +98,7 @@ $m_{i}\in\braces{0,1}^{n}$.
 For a general message $m$, we have
 
 \begin{align}
-    \textsf{pad}(m) &= m_{0}||m_{1}||\cdots||m_{\ell-1} \nonumber\\
+    \textsf{pad}(m) &= m_{0}\|m_{1}\|\cdots\|m_{\ell-1} \nonumber\\
     h_{0} &= h(\textsf{IV}, m_{0}) \nonumber\\
     h_{1} &= h(h_{0}, m_{1}) \nonumber\\
     h_{2} &= h(h_{1}, m_{2}) \nonumber\\
@@ -136,12 +136,12 @@ We will now discuss length extension attacks and how they affect
 Suppose we are given $\text{len}(x)$ and $H(x)$.
 That is, we are told the length of the unpadded message $x$ and its digest,
 but not the message itself.
-Then for any message $y$, we can easily compute $H(\textsf{pad}(x)||y)$.
+Then for any message $y$, we can easily compute $H(\textsf{pad}(x)\|y)$.
 
 First, we suppose that
 
 \begin{equation}
-    \textsf{pad}(x) = x_{0}||x_{1}||\cdots||x_{\ell-1}.
+    \textsf{pad}(x) = x_{0}\|x_{1}\|\cdots\|x_{\ell-1}.
 \end{equation}
 
 \noindent
@@ -161,11 +161,11 @@ have finished processing $\textsf{pad}(x)$.
 We also know
 
 \begin{equation}
-    \textsf{pad}\parens{\textsf{pad}(x)||y} = 
-        x_{0}||x_{1}||\cdots||x_{\ell-1}||y_{0}||y_{1}||\cdots||y_{k-1}.
+    \textsf{pad}\parens{\textsf{pad}(x)\|y} = 
+        x_{0}\|x_{1}\|\cdots\|x_{\ell-1}\|y_{0}\|y_{1}\|\cdots\|y_{k-1}.
 \end{equation}
 
-The explicit way to compute $H(\textsf{pad}(x)||y)$ would be
+The explicit way to compute $H(\textsf{pad}(x)\|y)$ would be
 the following:
 
 \begin{align}
@@ -175,26 +175,26 @@ the following:
     h_{\ell} &= h(h_{\ell-1}, y_{0}) \nonumber\\
         &\quad \vdots \nonumber\\
     h_{\ell+k-2} &= h(h_{\ell+k-3}, y_{k-1}) \nonumber\\
-    H(\textsf{pad}(x)||y) &\mathDef{} h_{\ell+k-2}.
+    H(\textsf{pad}(x)\|y) &\mathDef{} h_{\ell+k-2}.
 \end{align}
 
 \noindent
 But because we have $H(x) = h_{\ell-1}$, we can instead compute
-$H(\textsf{pad}(x)||y)$ by
+$H(\textsf{pad}(x)\|y)$ by
 
 \begin{align}
     h_{\ell} &= h(h_{\ell-1}, y_{0}) \nonumber\\
     h_{\ell+1} &= h(h_{\ell}, y_{1}) \nonumber\\
         &\quad \vdots \nonumber\\
     h_{\ell+k-2} &= h(h_{\ell+k-3}, y_{k-1}) \nonumber\\
-    H(\textsf{pad}(x)||y) &\mathDef{} h_{\ell+k-2}.
+    H(\textsf{pad}(x)\|y) &\mathDef{} h_{\ell+k-2}.
 \end{align}
 
 \noindent
 From our discussion about properties of \glspl{random oracle},
-$H(\textsf{pad}(x)||y)$ should always be independent of $H(x)$
-(even though $\textsf{pad}(x) = x||z$ for some $z$),
-and the only way to learn $H(\textsf{pad}(x)||y)$ should be to explicitly
+$H(\textsf{pad}(x)\|y)$ should always be independent of $H(x)$
+(even though $\textsf{pad}(x) = x\|z$ for some $z$),
+and the only way to learn $H(\textsf{pad}(x)\|y)$ should be to explicitly
 query the \gls{random oracle}.
 We see this is not the case for the \MD{} construction.
 
@@ -256,7 +256,7 @@ More formally, we first pad the message to a multiple of the rate
 with the appropriate padding scheme:
 
 \begin{equation}
-    \textsf{pad}(m) = m_{0}||m_{1}||\cdots||m_{k-1}.
+    \textsf{pad}(m) = m_{0}\|m_{1}\|\cdots\|m_{k-1}.
 \end{equation}
 
 \noindent
@@ -266,15 +266,15 @@ We then absorb the message into the internal state of the sponge:
 \begin{align}
     s_{0} &= 0^{b}
         \nonumber\\
-    \hat{s}_{0} &= s_{0} \oplus \parens{m_{0}||0^{b-r}}
+    \hat{s}_{0} &= s_{0} \oplus \parens{m_{0}\|0^{b-r}}
         \nonumber\\
     s_{1} &= f(\hat{s}_{0})
         \nonumber\\
-    \hat{s}_{1} &= s_{1} \oplus \parens{m_{1}||0^{b-r}}
+    \hat{s}_{1} &= s_{1} \oplus \parens{m_{1}\|0^{b-r}}
         \nonumber\\
     &\quad \vdots
         \nonumber\\
-    \hat{s}_{k-1} &= s_{k-2} \oplus \parens{m_{k-1}||0^{b-r}}
+    \hat{s}_{k-1} &= s_{k-2} \oplus \parens{m_{k-1}\|0^{b-r}}
         \nonumber\\
     s_{k} &= f(\hat{s}_{k-1})
 \end{align}
@@ -300,7 +300,7 @@ then compute
         \nonumber\\
     z_{j} &= \textsf{trunc}(s_{k+j}, r)
         \nonumber\\
-    z &= \textsf{trunc}(z_{0}||z_{1}||\cdots||z_{j}, \ell)
+    z &= \textsf{trunc}(z_{0}\|z_{1}\|\cdots\|z_{j}, \ell)
         \nonumber\\
     H(m) &\mathDef{} z.
 \end{align}
@@ -342,11 +342,11 @@ We now list the sponge parameters used in
 
 \begin{align}
     \textsf{pad}_{\text{\Keccak{}}}(m) &\mathDef{}
-            m||\texttt{10}^{*}\texttt{1} \nonumber\\
-        &= m_{0}||m_{1}||\cdots||m_{\ell-1} \nonumber\\
+            m\|\texttt{10}^{*}\texttt{1} \nonumber\\
+        &= m_{0}\|m_{1}\|\cdots\|m_{\ell-1} \nonumber\\
     \textsf{pad}_{\text{\ShaThree{}}}(m) &\mathDef{}
-            m||\texttt{0110}^{*}\texttt{1} \nonumber\\
-        &= m_{0}||m_{1}||\cdots||m_{\ell-1}.
+            m\|\texttt{0110}^{*}\texttt{1} \nonumber\\
+        &= m_{0}\|m_{1}\|\cdots\|m_{\ell-1}.
 \end{align}
 
 \noindent

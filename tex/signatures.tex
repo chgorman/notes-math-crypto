@@ -239,7 +239,7 @@ Set $r = g^{k}$.
 Let
 
 \begin{equation}
-    e = H(r||m);
+    e = H(r\|m);
 \end{equation}
 
 \noindent
@@ -260,7 +260,7 @@ Let
 \begin{align}
     r_{v} &= g^{s}y^{e}
         \nonumber\\
-    e_{v} &= H(r_{v}||m).
+    e_{v} &= H(r_{v}\|m).
 \end{align}
 
 \noindent
@@ -282,8 +282,8 @@ In this case, if we use the values as defined, we see
 Therefore, $r_{v} = r$ and
 
 \begin{align}
-    e_{v} &= H(r_{v}||m) \nonumber\\
-        &= H(r||m) \nonumber\\
+    e_{v} &= H(r_{v}\|m) \nonumber\\
+        &= H(r\|m) \nonumber\\
         &= e.
 \end{align}
 
@@ -336,9 +336,9 @@ but reuses the \gls{nonce} $k$ to save computation.
 That is, we have $r = g^{k}$ with
 
 \begin{align}
-    e &= H(r||m) \nonumber\\
+    e &= H(r\|m) \nonumber\\
     s &= k - xe \nonumber\\
-    e' &= H(r||m') \nonumber\\
+    e' &= H(r\|m') \nonumber\\
     s' &= k - xe'.
 \end{align}
 
@@ -425,7 +425,7 @@ Alice chooses
 She then computes
 
 \begin{align}
-    e &= \text{\MDFive{}}\parens{r||m} \mod q \nonumber\\
+    e &= \text{\MDFive{}}\parens{r\|m} \mod q \nonumber\\
         &= 1756904634.
 \end{align}
 
@@ -461,7 +461,7 @@ Bob computes
 He then sees
 
 \begin{align}
-    e_{v} &= \text{\MDFive{}}\parens{r_{v}||m} \mod q \nonumber\\
+    e_{v} &= \text{\MDFive{}}\parens{r_{v}\|m} \mod q \nonumber\\
         &= 1756904634.
 \end{align}
 

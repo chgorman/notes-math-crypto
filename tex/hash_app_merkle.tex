@@ -1,0 +1,532 @@
+\section{Merkle Trees I}
+\label{sec:merkle_trees}
+
+Another useful application of \glspl{hash function} are
+\emph{\glspl{merkle tree}}.
+In this section, we will focus on \glspl{merkle tree} involving
+leaves which are a power-of-two.
+We will look at trees with an arbitrary number of leaves in
+Chap.~\ref{sec:merkle_trees_2}.
+In Chap.~\ref{sec:sparse_merkle_trees},
+we will look at \emph{\glspl{smt}}.
+
+\subsection{Intuition}
+
+It is challenging to send large amounts of data at one time.
+It would be convenient to chop the data into small pieces
+and then send those small pieces of data separately.
+The challenge is then to ensure the validity of each small
+piece of data.
+
+A \emph{\gls{merkle tree}} can help solve this problem.
+It uses one cryptographic hash value to represent the \emph{entire}
+collection of data.
+At the same time, individual blocks of data can be retrieved
+along with its associated \emph{Merkle Proof}:
+a proof which shows the individual data block is valid.
+
+\subsection{Definition}
+
+The algorithm defining the \gls{merkle tree} root hash can be found in
+Alg.~\ref{alg:merkle_tree};
+see Alg.~\ref{alg:merkle_proof} for the proof of inclusion.
+These definitions are modified
+from~\cite[Chapter 8.9]{BonehShoupGraduateApplied}.
+This is valid only for trees with leaves
+which are a power-of-two;
+as mentioned, we will discuss the situation involving
+an arbitrary number of leaves in Chap.~\ref{sec:merkle_trees_2}.
+
+\input{algs/merkle_tree.tex}
+\input{algs/merkle_proof.tex}
+
+\subsection{Continued Discussion}
+
+As mentioned above, there is an associated proof of inclusion
+for each piece of data.
+These individual proofs are inexpensive.
+It is possible to perform multiple inclusion-proofs at once;
+this is a called a \emph{Merkle Multi-Proof}.
+We will not give a formal definition of a multi-proof
+but see Example~\ref{example:hash_app_merkle_tree_multi-proof}
+for an example.
+
+We note the following details which are useful
+but which will not be discussed any further here.
+In addition to proofs of inclusion,
+it is also possible to have \emph{proofs of exclusion};
+doing this requires additional assumptions on the
+input data~\cite{EfficientSMT}.
+Furthermore, some implementations may use prefixes when hashing;
+the purpose of this is to provide
+second-preimage resistance~\cite{rfc6962,rfc9162}.
+The need for this will be shown in
+Example~\ref{example:hash_app_merkle_tree_security}.
+
+\subsection{Examples}
+
+\begin{example}[2-Layer Merkle Tree]
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_2.py}
+
+We begin by starting with an example involving 4 blocks of data;
+see the \gls{merkle tree} in Figure~\ref{fig:merkle_tree_2}
+for the example.
+
+\input{figures/hash_applications/merkle_tree_2.tex}
+
+In this case, we see that we have the following:
+
+\begin{align}
+    y_{0} &= H(x_{0})
+        &
+    y_{4} &= H(y_{0}\|y_{1}) \nonumber\\
+    y_{1} &= H(x_{1})
+        &
+    y_{5} &= H(y_{2}\|y_{3}) \nonumber\\
+    y_{2} &= H(x_{2})
+        &
+    y_{6} &= H(y_{4}\|y_{5}). \nonumber\\
+    y_{3} &= H(x_{3})
+    \label{eq:merkle_tree_2_def}
+\end{align}
+
+\noindent
+In this case, $y_{6}$ is our root hash.
+
+To make this more practical, we will work through an example
+using \MDFive{}; see Listing~\ref{list:merkle_tree_md5_2}.
+We have the data
+
+\begin{align}
+    x_{0} &= \texttt{00000000000000000000000000000000}
+        \nonumber\\
+    x_{1} &= \texttt{11111111111111111111111111111111}
+        \nonumber\\
+    x_{2} &= \texttt{22222222222222222222222222222222}
+        \nonumber\\
+    x_{3} &= \texttt{33333333333333333333333333333333}.
+\end{align}
+
+\input{code/hash_applications/merkle_tree_md5_2.tex}
+
+\noindent
+After working through all the hashing in Eq.~\eqref{eq:merkle_tree_2_def},
+we have the root hash
+
+\begin{equation}
+    y_{6} = \texttt{40c0b71ca488d334d266beecac02a16c}.
+\end{equation}
+\end{example}
+
+\begin{example}[2-Layer Merkle Tree Proof]
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_2\_proof.py}
+
+We will now look at Merkle Proof showing that $x_{2}$
+is a member of this tree at position 2;
+see Figure~\ref{fig:merkle_tree_2_proof}
+and Listing~\ref{list:merkle_tree_md5_proof}.
+Our data and proof is
+
+\input{code/hash_applications/merkle_tree_md5_2_proof.tex}
+
+\begin{align}
+    x_{2} &= \texttt{22222222222222222222222222222222}
+        \nonumber\\
+    y_{3} &= \texttt{28bfcf057ec5a48f18c3154c1f2bd324}
+        \nonumber\\
+    y_{4} &= \texttt{b05df6fba6c1c53e8ddb98ffd386ffc8}.
+\end{align}
+
+\noindent
+Using these values, we see
+
+\begin{align}
+    \hat{y}_{2} &= H(x_{2}) \nonumber\\
+        &= \texttt{fbc3cf71d993ca7bec2664357ccdac2b}
+            \nonumber\\
+    \hat{y}_{5} &= H(\hat{y}_{2}, y_{3}) \nonumber\\
+        &= \texttt{8f7a2a2dcd297872689e177953270f37}
+            \nonumber\\
+    \hat{y}_{6} &= H(y_{4}, \hat{y}_{5}) \nonumber\\
+        &= \texttt{40c0b71ca488d334d266beecac02a16c}.
+\end{align}
+
+\noindent
+Because $\hat{y}_{6} = y_{6}$, we have shown that $x_{2}$ is the data
+at position 2 in our \gls{merkle tree}.
+This completes the proof;
+it required computing 3 hashes.
+\end{example}
+
+\begin{example}[3-Layer Merkle Tree]
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_3.py}
+
+A 3-layer \gls{merkle tree} can be found in Figure~\ref{fig:merkle_tree_3};
+also see Listing~\ref{list:merkle_tree_md5_3}.
+In this case, we see that we have the following:
+
+\input{figures/hash_applications/merkle_tree_3.tex}
+\input{code/hash_applications/merkle_tree_md5_3.tex}
+
+\begin{align}
+    y_{0}  &= H(x_{0})
+        &
+    y_{8}  &= H(y_{0}\|y_{1}) \nonumber\\
+    y_{1}  &= H(x_{1})
+        &
+    y_{9}  &= H(y_{2}\|y_{3}) \nonumber\\
+    y_{2}  &= H(x_{2})
+        &
+    y_{10} &= H(y_{4}\|y_{5}) \nonumber\\
+    y_{3}  &= H(x_{3})
+        &
+    y_{11} &= H(y_{6}\|y_{7}) \nonumber\\
+    y_{4}  &= H(x_{4})
+        &
+    y_{12} &= H(y_{8}\|y_{9}) \nonumber\\
+    y_{5}  &= H(x_{5})
+        &
+    y_{13} &= H(y_{10}\|y_{11}) \nonumber\\
+    y_{6}  &= H(x_{6})
+        &
+    y_{14} &= H(y_{12}\|y_{13}). \nonumber\\
+    y_{7}  &= H(x_{7})
+    \label{eq:merkle_tree_3_def}
+\end{align}
+
+\noindent
+Here, $y_{14}$ is the root hash.
+
+For our data, we set
+
+\begin{align}
+    x_{0} &= \texttt{00000000000000000000000000000000}
+        \nonumber\\
+    x_{1} &= \texttt{01010101010101010101010101010101}
+        \nonumber\\
+    x_{2} &= \texttt{02020202020202020202020202020202}
+        \nonumber\\
+    x_{3} &= \texttt{03030303030303030303030303030303}
+        \nonumber\\
+    x_{4} &= \texttt{04040404040404040404040404040404}
+        \nonumber\\
+    x_{5} &= \texttt{05050505050505050505050505050505}
+        \nonumber\\
+    x_{6} &= \texttt{06060606060606060606060606060606}
+        \nonumber\\
+    x_{7} &= \texttt{07070707070707070707070707070707}.
+    \label{eq:merkle_tree_3_data}
+\end{align}
+
+\noindent
+We have the root hash
+
+\begin{equation}
+    y_{14} = \texttt{18446692e822581d02b096e1b77c9fff}.
+    \label{eq:merkle_tree_3_root_hash}
+\end{equation}
+\end{example}
+
+\begin{example}[3-Layer Merkle Tree Proof]
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_3\_proof.py}
+
+We continue our previous example to show a Merkle proof showing
+$x_{4}$ is an element of our \gls{merkle tree};
+see Figure~\ref{fig:merkle_tree_3_proof}
+and Listing~\ref{list:merkle_tree_md5_3_proof}.
+Our data and proof is
+
+\input{code/hash_applications/merkle_tree_md5_3_proof.tex}
+
+\begin{align}
+    x_{4}  &= \texttt{04040404040404040404040404040404}
+        \nonumber\\
+    y_{5}  &= \texttt{af52282db55243f4c147ba5d7fb1155a}
+        \nonumber\\
+    y_{11} &= \texttt{70d0669eae8c7a5dce3b3ff4ccf4adbb}
+        \nonumber\\
+    y_{12} &= \texttt{a3f21dba8fa8de359220c29c00467556}.
+\end{align}
+
+\noindent
+Using these values, we see
+
+\begin{align}
+    \hat{y}_{4}  &= H(x_{4}) \nonumber\\
+        &= \texttt{b40ebeba833c1c07e74d9e4c6ebb8230}
+            \nonumber\\
+    \hat{y}_{10} &= H(\hat{y}_{4}, y_{5}) \nonumber\\
+        &= \texttt{524856d86cb1006e9e9e9149f36b2875}
+            \nonumber\\
+    \hat{y}_{13} &= H(\hat{y}_{10}, y_{11}) \nonumber\\
+        &= \texttt{da95d6882598892592ccd54bc89f7bdb
+            }
+            \nonumber\\
+    \hat{y}_{14} &= H(y_{12}, \hat{y}_{13}) \nonumber\\
+        &= \texttt{18446692e822581d02b096e1b77c9fff}.
+\end{align}
+
+\noindent
+Because $\hat{y}_{14} = y_{14}$ in Eq.~\eqref{eq:merkle_tree_3_root_hash},
+we have shown that $x_{4}$ is the data at position 4
+in our \gls{merkle tree}.
+This completes the proof;
+it required computing 4 hashes.
+\end{example}
+
+\begin{example}[3-Layer Merkle Tree Multi-Proof]
+\label{example:hash_app_merkle_tree_multi-proof}
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_3\_multi-proof.py}
+
+We continue the previous example working with a 3-layer \gls{merkle tree}
+by showing an example of a Merkle Multi-Proof.
+In this case, we want to proof the inclusion of
+$x_{1}$, $x_{3}$, and $x_{6}$;
+see Figure~\ref{fig:merkle_tree_3_multi-proof}
+and Listing~\ref{list:merkle_tree_md5_3_multi-proof}.
+
+\input{figures/hash_applications/merkle_tree_3_multi-proof.tex}
+\input{code/hash_applications/merkle_tree_md5_3_multi-proof.tex}
+
+We have the data
+
+\begin{align}
+    x_{1} &= \texttt{01010101010101010101010101010101}
+        \nonumber\\
+    x_{3} &= \texttt{03030303030303030303030303030303}
+        \nonumber\\
+    x_{6} &= \texttt{06060606060606060606060606060606}.
+\end{align}
+
+\noindent
+Our proof is
+
+\begin{align}
+    y_{0}  &= \texttt{4ae71336e44bf9bf79d2752e234818a5}
+        \nonumber\\
+    y_{2}  &= \texttt{437b25ad27df2f61eb14c6400ae98309}
+        \nonumber\\
+    y_{7}  &= \texttt{a4aa9a02aa65f31d17dce9f944a57ab2}
+        \nonumber\\
+    y_{10} &= \texttt{524856d86cb1006e9e9e9149f36b2875}.
+\end{align}
+
+\noindent
+We have the following computed values:
+
+\begin{align}
+    \hat{y}_{1} &= H(x_{1}) \nonumber\\
+        &= \texttt{24311d9abc4077123c2c9a167afbe754}
+            \nonumber\\
+    \hat{y}_{3} &= H(x_{3}) \nonumber\\
+        &= \texttt{b09931959951caa2ac110feebbd16750}
+            \nonumber\\
+    \hat{y}_{6} &= H(x_{6}) \nonumber\\
+        &= \texttt{e5f636381c9702b63aa666ef2a6f8e20}
+            \nonumber\\
+    \hat{y}_{8} &= H(y_{0}\|\hat{y}_{1}) \nonumber\\
+        &= \texttt{f8a9500bb41d7312abd46b0d01404fca}
+            \nonumber\\
+    \hat{y}_{9} &= H(y_{2}\|\hat{y}_{3}) \nonumber\\
+        &= \texttt{8bfbb2226583b489fbc3cdfee7adc2c7}
+            \nonumber\\
+    \hat{y}_{11} &= H(\hat{y}_{6},y_{7}) \nonumber\\
+        &= \texttt{70d0669eae8c7a5dce3b3ff4ccf4adbb}
+            \nonumber\\
+    \hat{y}_{12} &= H(\hat{y}_{8}\|\hat{y}_{9}) \nonumber\\
+        &= \texttt{a3f21dba8fa8de359220c29c00467556}
+            \nonumber\\
+    \hat{y}_{13} &= H(y_{10}\|\hat{y}_{11}) \nonumber\\
+        &= \texttt{da95d6882598892592ccd54bc89f7bdb}
+            \nonumber\\
+    \hat{y}_{14} &= H(\hat{y}_{12}\|\hat{y}_{13}) \nonumber\\
+        &= \texttt{18446692e822581d02b096e1b77c9fff}.
+\end{align}
+
+\noindent
+Because $\hat{y}_{14} = y_{14}$, we have shown that
+$x_{1}$, $x_{3}$, and $x_{6}$ are valid and are at the specified positions.
+This completes the proof.
+This proof requires computing 9 hash values,
+which is less than the 12 hash computations required to prove the inclusions
+separately ($12 = 3\cdot 4$; 3 proofs involving 4 hash computations each).
+\end{example}
+
+
+\begin{example}[3-Layer Merkle Tree Security]
+\label{example:hash_app_merkle_tree_security}
+\exampleCodeReference{examples/hash\_applications/merkle\_tree\_md5\_3\_security.py}
+
+We continue the previous example working with a 3-layer \gls{merkle tree}
+by showing what can go wrong by using the standard definitions
+given in Algs.~\ref{alg:merkle_tree} and \ref{alg:merkle_proof}.
+
+In particular, we will show that the value
+
+\begin{equation}
+    x \mathDef{} y_{4}\|y_{5}
+\end{equation}
+
+\noindent
+is a ``leaf node'' in the tree;
+see Figure~\ref{fig:merkle_tree_3_security}
+and Listing~\ref{list:merkle_tree_md5_3_security}.
+The values $y_{4}$ and $y_{5}$ are derived from the data
+in Eq.~\eqref{eq:merkle_tree_3_data}.
+
+\input{figures/hash_applications/merkle_tree_3_security.tex}
+\input{code/hash_applications/merkle_tree_md5_3_security.tex}
+
+Our data and proof is
+
+\begin{align}
+    x  &=
+    \texttt{b40ebeba833c1c07e74d9e4c6ebb8230af52282db55243f4c147ba5d7fb1155a}
+        \nonumber\\
+    y_{11} &= \texttt{70d0669eae8c7a5dce3b3ff4ccf4adbb}
+        \nonumber\\
+    y_{12} &= \texttt{a3f21dba8fa8de359220c29c00467556}.
+\end{align}
+
+\noindent
+Using these values, we see
+
+\begin{align}
+    \hat{y} &= H(x) \nonumber\\
+        &= \texttt{524856d86cb1006e9e9e9149f36b2875}
+            \nonumber\\
+    \hat{y}_{13} &= H(\hat{y}, y_{11}) \nonumber\\
+        &= \texttt{da95d6882598892592ccd54bc89f7bdb
+            }
+            \nonumber\\
+    \hat{y}_{14} &= H(y_{12}, \hat{y}_{13}) \nonumber\\
+        &= \texttt{18446692e822581d02b096e1b77c9fff}.
+\end{align}
+
+\noindent
+Because $\hat{y}_{14} = y_{14}$ in Eq.~\eqref{eq:merkle_tree_3_root_hash},
+we have ``proven'' that $x$ is a leaf in our \gls{merkle tree}.
+The reason for this will be discussed more in
+Chapter~\ref{ssec:mt2_security}.
+\end{example}
+
+
+
+\section{Merkle Trees II}
+\label{sec:merkle_trees_2}
+
+The previous section focused on generic \glspl{merkle tree} when
+the number of leaves are a power-of-two.
+We now look at the more general situation involving an
+arbitrary number of leaves.
+First, we start by looking more closely at \gls{merkle tree}
+security concerns.
+
+\subsection{Merkle Tree Security}
+\label{ssec:mt2_security}
+
+In Example~\ref{example:hash_app_merkle_tree_security},
+we were able to ``prove'' that another data value
+was present in the \gls{merkle tree}.
+The fact such easy ``proofs'' exist and may be readily found
+scares cryptographers
+(who have a ``professional paranoia mindset''~\cite[Chapter 1.12]{CryptoEng}).
+This is unacceptable;
+it should be impractical to find any data
+and a valid inclusion proof if that data is not present within the
+\gls{merkle tree}.
+
+This problem arises because the same hash algorithm is used
+for both leaf and interior nodes.
+One way to get around this is to use domain separation
+within the definition of the leaf hashes and interior hashes;
+this choice is used in~\cite{rfc6962,rfc9162}.
+In particular, leaf hashes begin with the zero byte \texttt{0x00}
+while other hashes (interior hashes) start with the one byte \texttt{0x01}.
+The stated reason is that
+``this domain separation is required to give
+second preimage resistance.''~\cite[Section 2.1.1]{rfc9162}.
+
+\subsection{Merkle Trees with Arbitrary Leaves}
+
+Our \gls{merkle tree} definitions in Algs.~\ref{alg:merkle_tree}
+and \ref{alg:merkle_proof} only allowed for leaves
+which were a power-of-two.
+While it would be possible to always use this
+by padding with a specific value,
+we would prefer to not have this restriction.
+
+To get around this, a convention must be followed.
+One choice may be found in~\cite{rfc6962,rfc9162};
+another convention is specified in the OpenZeppelin \gls{merkle tree}
+library~\cite{MerkleTreeOZ}.
+
+\subsubsection{Certificate Transparency Convention}
+
+We will first look at the convention in~\cite{rfc6962,rfc9162},
+although we will use the general hash from~\cite{rfc9162}
+rather than \ShaTwo{}-256 from~\cite{rfc6962}.
+The precise definition for computing the \gls{merkle tree}
+root hash may be found in Alg.~\ref{alg:merkle_tree_ctv};
+the definition is defined using \gls{recursion}.
+Some visualizations of these trees may be found in
+Figures~\ref{fig:merkle_tree_ctv_5},
+\ref{fig:merkle_tree_ctv_6},
+\ref{fig:merkle_tree_ctv_7}, and
+\ref{fig:merkle_tree_ctv_8}.
+Algorithms for constructing inclusion proofs and verifying them
+may be found in~\cite{rfc9162}.
+As mentioned above, second preimage security is ensured by
+using domain separation.
+
+\input{algs/merkle_ctv.tex}
+\input{figures/hash_applications/merkle_tree_ctv.tex}
+
+\subsubsection{OpenZeppelin Convention}
+
+A slightly different convention is specified in the OpenZeppelin
+\gls{merkle tree} library~\cite{MerkleTreeOZ};
+this convention has been used on the \gls{ethereum} blockchain
+within \glspl{smart contract}.
+The definition for computing the \gls{merkle tree}
+root hash may be found in Alg.~\ref{alg:merkle_tree_oz}.
+Second preimage security is ensured by double-hashing the leaf nodes.
+Some visualizations of these trees may be found in
+Figures~\ref{fig:merkle_tree_oz_5},
+\ref{fig:merkle_tree_oz_6},
+\ref{fig:merkle_tree_oz_7}, and
+\ref{fig:merkle_tree_oz_8}.
+Additional algorithms may be found in~\cite{MerkleTreeOZ}.
+
+\input{algs/merkle_oz.tex}
+\input{figures/hash_applications/merkle_tree_oz.tex}
+
+
+\section{Sparse Merkle Trees}
+\label{sec:sparse_merkle_trees}
+
+\subsection{Discussion}
+
+We continue our discussion of \glspl{merkle tree} by noting
+another variation: \emph{\glspl{smt}}.
+In this case, the number of leaves may be very large;
+however, \emph{most} of the leaves are empty,
+so it is still practical to work with the tree.
+
+In particular, using a 256-bit \gls{hash function} such as
+\ShaTwo{}-256 or \ShaThree{}-256,
+there are a maximum of $2^{256}\simeq 10^{77}$ leaves.
+
+Additionally, while when we discussed \glspl{merkle tree} in
+Chapters~\ref{sec:merkle_trees} and \ref{sec:merkle_trees_2}
+we placed no restriction on the key order,
+in \glspl{smt} the keys will be sorted.
+Furthermore, if there is no data for a particular key,
+it is handled in a special way.
+
+\subsection{Conventions}
+
+There are various conventions for \glspl{smt};
+this is needed in order to know how to handle empty leaves.
+Some references include~\cite{EfficientSMT,CompactSMT,CompactMerkleMultiproofs,
+RevocationTransparency2012,AngelaSMT}.

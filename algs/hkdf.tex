@@ -1,0 +1,24 @@
+\begin{algorithm}[t]
+\caption{HMAC-based Key Derivation Function}
+\label{alg:hkdf}
+\begin{algorithmic}[1]
+\Require \textsf{HMAC} is a Hash-based MAC
+    which uses a hash function with output size $n$
+\Procedure{HKDF}{\textsf{salt}, \textsf{skm}, \textsf{ctx}, $\ell$}
+    \State $t \algAssign{} \ceil{\ell/n}$
+    \State $T \algAssign{} \text{``''}$
+    \Comment{Empty byte string}
+    \State $\textsf{prk} \algAssign{}
+        \textsf{HMAC}(\textsf{salt}, \textsf{skm})$
+    \State $\textsf{out} \algAssign{} 
+        \textsf{HMAC}(\textsf{prk}, \textsf{ctx}\|1)$
+    \State $T \algAssign{} T\|\textsf{out}$
+    \For{$i=2$; $i\le t$; $i{+}{+}$}
+        \State $\textsf{out} \algAssign{} 
+            \textsf{HMAC}(\textsf{prk}, \textsf{out}\|\textsf{ctx}\|i)$
+        \State $T \algAssign{} T\|\textsf{out}$
+    \EndFor
+    \State \Return $\textsf{trunc}(T, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

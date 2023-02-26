@@ -517,8 +517,10 @@ this is sufficient for normal users.
 Do \emph{not} use Dual\_EC\_DRBG~\cite[Section~10.3.1]{NIST-SP-800-90A},
 as the standard implementation
 is thought to have a backdoor~\cite{BernsteinDualEC}.
-See Figure~\ref{fig:xkcd_rng} for another example of a
-secure random number generator.
+Figure~\ref{fig:xkcd_rng} shows an example of a
+secure software random number generator
+while Figure~\ref{fig:xkcd_d65536} shows an example of a
+secure hardware random number generator.
 
 \Glsfirstplural{csprng} are used for constructing private keys,
 \glspl{initialization vector}, \glspl{nonce},
@@ -535,6 +537,7 @@ insufficient randomization%
 \emph{You have been warned.}
 
 \input{figures/xkcd/xkcd_rng.tex}
+\input{figures/xkcd/xkcd_dice.tex}
 
 
 

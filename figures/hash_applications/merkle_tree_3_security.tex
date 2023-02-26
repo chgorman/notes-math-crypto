@@ -11,10 +11,10 @@
                     child {node[rectangle,draw] {$x_{0}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left,red] {$y_{0}$}
+                    node[left] {$y_{0}$}
                 }
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw,very thick, blue] {$x_{1}$}
+                    child {node[rectangle,draw] {$x_{1}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
                     node[right] {$y_{1}$}
@@ -27,10 +27,10 @@
                     child {node[rectangle,draw] {$x_{2}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[left,red] {$y_{2}$}
+                    node[left] {$y_{2}$}
                 }
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw,very thick, blue] {$x_{3}$}
+                    child {node[rectangle,draw] {$x_{3}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
                     node[right] {$y_{3}$}
@@ -39,28 +39,18 @@
                 node[right=3pt] {$y_{9}$}
             }
         edge from parent[<-,thick]
-            node[left=9pt] {$y_{12}$}
+            node[left=9pt,red] {$y_{12}$}
         }
         child {node[circle,draw] {$H$}
             child {node[circle,draw] {$H$}
-                child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{4}$}
+                child {node[rectangle,draw,very thick,blue] {$x$}
                     edge from parent[<-,thick]}
-                edge from parent[<-,thick]
-                    node[left] {$y_{4}$}
-                }
-                child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw] {$x_{5}$}
-                    edge from parent[<-,thick]}
-                edge from parent[<-,thick]
-                    node[right] {$y_{5}$}
-                }
             edge from parent[<-,thick]
-                node[left=3pt,red] {$y_{10}$}
+                node[left=3pt] {$y$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
-                    child {node[rectangle,draw,very thick, blue] {$x_{6}$}
+                    child {node[rectangle,draw] {$x_{6}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
                     node[left] {$y_{6}$}
@@ -69,10 +59,10 @@
                     child {node[rectangle,draw] {$x_{7}$}
                     edge from parent[<-,thick]}
                 edge from parent[<-,thick]
-                    node[right,red] {$y_{7}$}
+                    node[right] {$y_{7}$}
                 }
             edge from parent[<-,thick]
-                node[right=3pt] {$y_{11}$}
+                node[right=3pt,red] {$y_{11}$}
             }
         edge from parent[<-,thick]
             node[right=10pt] {$y_{13}$}
@@ -80,8 +70,10 @@
     \node[above=of root] (header) {};
     \draw[->,thick] (root) to node[auto,swap] {$y_{14}$} (header);
 \end{tikzpicture}
-\caption[3-Layer Merkle Tree and Merkle Multi-Proof]{Here
-    is a 3-layer \gls{merkle tree} with a Merkle Multi-Proof of
-    $x_{1}$, $x_{3}$, and $x_{6}$.}
-\label{fig:merkle_tree_3_multi-proof}
+\caption[3-Layer Merkle Tree and Security]{Here
+    is a 3-layer \gls{merkle tree} with a Merkle Proof for showing
+    that $x \mathDef{} y_{4}||y_{5}$ is a ``leaf node'' in the tree.
+    This is possible if there is not difference between hashing
+    leaf nodes and interior nodes in a \gls{merkle tree}.}
+\label{fig:merkle_tree_3_security}
 \end{figure}

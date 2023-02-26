@@ -118,7 +118,8 @@ in Chapter~\ref{sec:hash_examples}.
 said data.
 Additionally, the relationship between preimage resistance,
 second-preimage resistance, and collision resistance is intricate;
-see~\cite{cryptoeprint:2004:035} for an extended discussion about
+see~\cite{cryptoeprint:2004:035,cryptoeprint:2019/492}
+for extended discussions about
 the relationships between them.
 
 
@@ -158,7 +159,7 @@ There are additional properties that we want in a \glsfirst{hash function}:
         unrelated.
  \item [Length-extension Resistance]
     If $H(x) = H(y)$ with $x\ne y$, then for any bit string $z$
-    of positive length, $H(x||z)$ and $H(y||z)$ are independent.
+    of positive length, $H(x\|z)$ and $H(y\|z)$ are independent.
 
     \emph{Discussion:} Again, this provides greater detail related to
         the \textbf{Random Output} property.
@@ -220,8 +221,9 @@ it is still considered secure.
 
 \paragraph{\ShaThree{}}
 The continued cryptanalysis of \MDFive{}, \ShaOne{}, and \ShaTwo{}
-caused NIST to have a competition (similar to the competition which
-produced the block cipher AES, the Advanced Encryption Standard).
+caused NIST to have a competition
+(similar to the competition which produced the block cipher AES,
+the Advanced Encryption Standard~\cite{FIPS-197-2001}).
 In the end, \Keccak{}~\cite{KeccakSponge2011} became the basis
 for \ShaThree{}~\cite{FIPS-202}.
 Like \ShaTwo{}, there are multiple versions with different output lengths;
@@ -250,8 +252,8 @@ In particular, if $H$ is a \gls{hash function}, we can make two different
 \glspl{hash function} by specifying
 
 \begin{align}
-    H_{0}(x) &\mathDef{} H(\texttt{0}||x) \nonumber\\
-    H_{1}(x) &\mathDef{} H(\texttt{1}||x),
+    H_{0}(x) &\mathDef{} H(\texttt{0}\|x) \nonumber\\
+    H_{1}(x) &\mathDef{} H(\texttt{1}\|x),
 \end{align}
 
 \noindent
@@ -282,7 +284,7 @@ there exists $y$ such that for any $z$
 it is easy to compute
 
 \begin{equation}
-    H(x||y||z).
+    H(x\|y\|z).
 \end{equation}
 
 \noindent
@@ -317,10 +319,15 @@ collisions~\cite{cryptoeprint:2004:199,cryptoeprint:2005:067,
 cryptoeprint:2004:356,cryptoeprint:2020:014,rfc6151,rfc6194};
 preimage resistance has been attacked~\cite{MD5FastPreimage2009}.
 
-See Listing~\ref{list:md5_collision} for an \MDFive{} hash collision
-and Figure~\ref{fig:shattered} for a \ShaOne{} hash collision.
+In order to show just how practical hash collisions are
+for \MDFive{} and \ShaOne{},
+see Listing~\ref{list:md5_collision}
+for an \MDFive{} hash collision~\cite{md5Collision}
+and Listing~\ref{list:sha1_collision} and Figure~\ref{fig:shattered}
+for a \ShaOne{} hash collision~\cite{sha1Collision}.
 
 \input{code/hash_functions/md5_collision.tex}
+\input{code/hash_functions/sha1_collision.tex}
 \input{figures/hash_functions/shattered.tex}
 
 

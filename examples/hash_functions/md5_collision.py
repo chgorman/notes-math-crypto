@@ -57,7 +57,7 @@ print(hash_sha1_2)
 print()
 print()
 
-assert hash_md5_1 == hash_md5_2 # Passes
+assert hash_md5_1  == hash_md5_2  # Passes
 print("md5  hash values: equal")
 assert hash_sha1_1 != hash_sha1_2 # Passes
 print("sha1 hash values: different")

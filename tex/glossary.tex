@@ -9,14 +9,14 @@
         with \glsfirstplural{hash function}.
         When used within a \gls{hash function}, a salt ensures
         domain separation.
-        Compare with \glspl{nonce} and \glspl{initialization vector}.},
+        Compare with \gls{nonce} and \gls{initialization vector}.},
 }
 
 \newglossaryentry{nonce}
 {
     name={nonce},
     description={A \textbf{n}umber used only \textbf{once}.
-        Compare with \glspl{salt} and \glspl{initialization vector}.},
+        Compare with \gls{salt} and \gls{initialization vector}.},
 }
 
 \newglossaryentry{initialization vector}
@@ -24,7 +24,7 @@
     name={initialization vector},
     description={A bit string used to initialize an
         \glspl{encryption scheme}.
-        Compare with \glspl{nonce} and \glspl{salt}.},
+        Compare with \gls{nonce} and \gls{salt}.},
 }
 
 \newglossaryentry{perfect security}
@@ -138,6 +138,26 @@
         a \gls{kdf} from a \gls{hash function}.},
 }
 
+\newglossaryentry{mgf}
+{
+    name={mask generation function},
+    description={A deterministic method for producing a digital identifier
+        of variable length;
+        similar to a \glsfirst{hash function}.
+        It specifies one way to enable a \gls{hash function}
+        to have a variable output length.
+        Compare with \gls{xof}.},
+}
+
+\newglossaryentry{xof}
+{
+    name={extendable output function},
+    description={A deterministic method for producing a digital identifier
+        of variable length;
+        similar to a \glsfirst{hash function}.
+        Compare with \gls{mgf}.},
+}
+
 \newglossaryentry{csprng}
 {
     name={pseudorandom number generator},
@@ -192,6 +212,21 @@
     name={authenticated encryption},
     description={A method for combining an \gls{encryption scheme} with
         message integrity.},
+}
+
+\newglossaryentry{merkle tree}
+{
+    name={Merkle tree},
+    description={A data structure consisting of leaves and nodes
+        which allow for efficient proofs of inclusion.
+        Uses a \gls{hash function} for security.},
+}
+
+\newglossaryentry{smt}
+{
+    name={Sparse Merkle tree},
+    description={A \gls{merkle tree} where most of the leaves
+        are empty.},
 }
 
 \newglossaryentry{smart contract}

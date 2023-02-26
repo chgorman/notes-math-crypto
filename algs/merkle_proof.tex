@@ -11,11 +11,11 @@
         \If {$\mu$ odd}
             \State $\ell \algAssign{} (\mu-1)/2$
             \State $\nu \algAssign{} n + \ell$
-            \State $\hat{y}_{\nu} \algAssign{} H(\pi_{k}||\hat{y}_{\mu})$
+            \State $\hat{y}_{\nu} \algAssign{} H(\pi_{k}\|\hat{y}_{\mu})$
         \Else
             \State $\ell \algAssign{} \mu/2$
             \State $\nu \algAssign{} n + \ell$
-            \State $\hat{y}_{\nu} \algAssign{} H(\hat{y}_{\mu}||\pi_{k})$
+            \State $\hat{y}_{\nu} \algAssign{} H(\hat{y}_{\mu}\|\pi_{k})$
         \EndIf
         \State $\mu \algAssign{} \nu$
     \EndFor

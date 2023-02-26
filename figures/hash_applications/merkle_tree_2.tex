@@ -20,7 +20,7 @@
                     node[right] {$y_{1}$}
                 }
             edge from parent[<-,thick]
-                node[left] {$y_{4}$}
+                node[left=3pt] {$y_{4}$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
@@ -36,7 +36,7 @@
                     node[right] {$y_{3}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{5}$}
+                node[right=3pt] {$y_{5}$}
             };
         \node[above=of root] (header) {};
         \draw[->,thick] (root) to node[auto,swap] {$y_{6}$} (header);
@@ -65,7 +65,7 @@
                     node[right] {$y_{1}$}
                 }
             edge from parent[<-,thick]
-                node[left,red] {$y_{4}$}
+                node[left=3pt,red] {$y_{4}$}
             }
             child {node[circle,draw] {$H$}
                 child {node[circle,draw] {$H$}
@@ -81,7 +81,7 @@
                     node[right,red] {$y_{3}$}
                 }
             edge from parent[<-,thick]
-                node[right] {$y_{5}$}
+                node[right=3pt] {$y_{5}$}
             };
         \node[above=of root] (header) {};
         \draw[->,thick] (root) to node[auto,swap] {$y_{6}$} (header);
@@ -90,6 +90,6 @@
     \label{fig:merkle_tree_2_proof}
 \end{subfigure}
 \caption[2-Layer Merkle Tree and Merkle Proof]{Here
-    we have a 2-layer Merkle Tree.
+    we have a 2-layer \gls{merkle tree}.
     There is also a Merkle Proof for $x_{2}$.}
 \end{figure}

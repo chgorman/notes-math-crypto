@@ -1,0 +1,25 @@
+\begin{algorithm}[t]
+\caption{Password-Based Key Derivation Function Version 2 with \textsf{HMAC}}
+\label{alg:pbkdf2}
+\begin{algorithmic}[1]
+\Require \textsf{HMAC} is a Hash-based MAC
+    which uses a hash function with output size $n$
+\Procedure{PBKDF2}{\textsf{pw}, \textsf{salt}, $c$, $\ell$}
+    \State $t \algAssign{} \ceil{\ell/n}$
+    \State $T \algAssign{} \text{``''}$
+    \Comment{Empty byte string}
+    \For{$i=1$; $i\le t$; $i{+}{+}$}
+        \State $U_{1} \algAssign{} 
+            \textsf{HMAC}(\textsf{pw}, \textsf{salt}\|i)$
+        \For{$k=2$; $k\le c$; $k{+}{+}$}
+            \State $U_{k} \algAssign{} 
+                \textsf{HMAC}(\textsf{pw}, U_{k-1})$
+        \EndFor
+        \State $\textsf{out} \algAssign{}
+            U_{1} \oplus U_{2} \oplus \cdots \oplus U_{c}$
+        \State $T \algAssign{} T\|\textsf{out}$
+    \EndFor
+    \State \Return $\textsf{trunc}(T, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

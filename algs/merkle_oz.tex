@@ -1,0 +1,40 @@
+\begin{algorithm}[t]
+\caption{Compute Merkle Tree root hash from~\cite{MerkleTreeOZ}}
+\label{alg:merkle_tree_oz}
+\begin{algorithmic}[1]
+\Procedure{MerkleRootOZ}{$\texttt{data}$}
+    \State $n \algAssign{} \textsc{Length}(\texttt{data})$
+    \State $\texttt{leaves} \algAssign{} \textsc{Make}(\text{array}, n)$
+    \Comment{Initialize an empty array of length $n$}
+    \For{$k=0$; $k < n$; $k{+}{+}$}
+        \State $\texttt{leaves}[k] \algAssign{}
+            \textsc{LeafHash}(\texttt{data}[k])$
+    \EndFor
+    \State $\texttt{tree} \algAssign{} \textsc{Make}(\text{array}, 2n-1)$
+    \Comment{Initialize an empty array of length $2n-1$}
+    \For{$k=0$; $k < n$; $k{+}{+}$}
+        \State $\texttt{tree}[2n-2-k] \algAssign{} \texttt{leaves}[k])$
+    \EndFor
+    \For{$k=n-2$; $k\ge0$; $k{-}{-}$}
+        \State $\texttt{tree}[k] \algAssign{}
+            \textsc{InteriorHash}(\texttt{tree}[2k+1],\texttt{tree}[2k+2])$
+    \EndFor
+    \State \Return $\texttt{tree}[0]$
+    \Comment{Return the root hash}
+\EndProcedure
+
+\State
+\Procedure{LeafHash}{$x$}
+    \State \Return $\textsf{Hash}(\textsf{Hash}(x))$
+\EndProcedure
+
+\State
+\Procedure{InteriorHash}{$a$, $b$}
+    \If {$\text{int}(a) < \text{int}(b)$}
+        \State \Return $\textsf{Hash}(a, b)$
+    \Else
+        \State \Return $\textsf{Hash}(b, a)$
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

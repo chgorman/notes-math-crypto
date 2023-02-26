@@ -1,0 +1,17 @@
+\begin{algorithm}[t]
+\caption{NIST Key Derivation Function
+    (One-Step Key Derivation~\cite[Section 4]{NIST-SP-800-56Cr2})}
+\label{alg:nist_kdf}
+\begin{algorithmic}[1]
+\Require \textsf{Hash} is a hash function with output size $n$
+\Procedure{NIST-KDF}{\textsf{skm}, \textsf{ctx}, $\ell$}
+    \State $t \algAssign{} \ceil{\ell/n}$
+    \State $T \algAssign{} \text{``''}$
+    \Comment{Empty byte string}
+    \For{$i=1$; $i\le t$; $i{+}{+}$}
+        \State $T \algAssign{} T\|\textsf{Hash}(i\|\textsf{skm}\|\textsf{ctx})$
+    \EndFor
+    \State \Return $\textsf{trunc}(T, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
