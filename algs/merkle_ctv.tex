@@ -11,7 +11,7 @@
         \State \Return $\textsf{Hash}(\texttt{0x00}, x_{0})$
     \Else
         \State $k \algAssign{}
-            \max\braces{2^{\ell} \mid \ell\in\N_{0} \land 2^{\ell} < n}$
+            \max\braces{2^{\ell} \mid \ell\in\N \land 2^{\ell} < n}$
         \Comment{$k$ is largest power-of-two strictly less than $n$}
         \State $h_{0} \algAssign{}
             \textsc{MerkleRootCTV}(x_{0}, x_{1}, \cdots, x_{k-1})$

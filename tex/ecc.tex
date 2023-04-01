@@ -383,11 +383,9 @@ In particular, the \gls{nonce} is deterministic in its definition.
 Once a private key is computed, there is no further need
 for cryptographic random numbers.
 This reduces the likelihood of poor implementations.
-One of the authors of EdDSA wrote a blog post%
-\footnote{\url{https://blog.cr.yp.to/20140323-ecdsa.html}}
+One of the authors of EdDSA wrote a blog post~\cite{BernsteinBlog2014}
 about its design;
-later, he gave his thoughts%
-\footnote{\url{https://blog.cr.yp.to/20191024-eddsa.html}}
+later, he gave his thoughts~\cite{BernsteinBlog2019}
 on why EdDSA is more immune to attacks than ECDSA.
 
 We do not present a formal definition of EdDSA;
@@ -604,8 +602,7 @@ The additional restriction on $s$ is due to concerns about signature
 malleability as discussed in Chapter~\ref{ssec:ecdsa_malleability};
 with this restriction, there is only \emph{one} valid ECDSA signature
 for each message.
-This is discussed in Ethereum Improvement Proposal 2 (EIP-2)%
-\footnote{\url{https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2.md}}.
+This is discussed in Ethereum Improvement Proposal 2 (EIP-2)~\cite{EIP-2}.
 In order to uniquely determine the $y$ coordinate, $v$ specifies
 whether $y$ is even ($v=0$) or odd ($v=1$);
 we note that previous versions of the
@@ -633,8 +630,7 @@ If it is going to have full entropy (that is, be truly random),
 it would take considerable effort to remember the password.
 
 Mnemonic Seed Phrases were developed to make this easier;
-this is described in Bitcoin Improvement Proposal 39 (BIP-39)%
-\footnote{\url{https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki}}
+this is described in Bitcoin Improvement Proposal 39 (BIP-39)~\cite{BIP-39}
 and we will work to understand that material now.
 
 The main idea is to convert a password that is difficult to remember
@@ -676,8 +672,7 @@ A \emph{Mnemonic Seed Phrase} is a list of words which are used to then
 derive a seed;
 this seed can then be used to construct private keys.
 The method of derivation is important;
-one method of standardization is BIP-39%
-\footnote{\url{https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki}}.
+one method of standardization is BIP-39~\cite{BIP-39}.
 We note that BIP-39 uses PBKDF2~\cite{rfc8018} to derive the seed;
 as mentioned previously in Chapter~\ref{sec:hash_apps_password_hashing},
 the use of PBKDF2 is discouraged due to its insufficient
@@ -715,8 +710,7 @@ From our previous work, \texttt{R} is a bit string of length $11\cdot3k$.
 Split \texttt{R} into $3k$ bit words of $11$ bits each.
 For each bit word, look up the corresponding mnemonic word.
 The resulting $3k$ words (in that order) is the Mnemonic Seed Phrase.
-We will use the BIP-39 English word list%
-\footnote{\url{https://github.com/bitcoin/bips/blob/master/bip-0039/english.txt}}.
+We will use the BIP-39 English word list~\cite{BIP-39-wordlist}.
 
 \subsubsection{From Mnemonic to Seed}
 

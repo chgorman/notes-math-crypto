@@ -23,7 +23,7 @@
 {
     name={initialization vector},
     description={A bit string used to initialize an
-        \glspl{encryption scheme}.
+        \gls{encryption scheme}.
         Compare with \gls{nonce} and \gls{salt}.},
 }
 
@@ -42,7 +42,7 @@
     name={encryption scheme},
     description={A general method for converting a message (\emph{plaintext})
         into random-looking data (\emph{ciphertext}).
-        Alice and Bob use an encryption scheme to communicate
+        Alice and Bob use an encryption scheme to communicate securely
         over an \gls{insecure channel}.},
 }
 
@@ -101,7 +101,7 @@
     description={A method for communication where no secrecy is assured.
         For instance, when Alice and Bob communicate over an insecure channel,
         they assume that Eve will learn everything they discuss.
-        Because of this, there is no privacy on insecure channels.},
+        There is no privacy on insecure channels.},
 }
 
 \newglossaryentry{hash function}
@@ -211,7 +211,7 @@
 {
     name={authenticated encryption},
     description={A method for combining an \gls{encryption scheme} with
-        message integrity.},
+        a \gls{mac}.},
 }
 
 \newglossaryentry{merkle tree}
@@ -265,7 +265,10 @@
 {
     name={Public Key Cryptography},
     description={The area of cryptography which uses a two keys:
-        a public key and a private key.}
+        a public key and a private key.
+        The public key is derived from the private key,
+        and it should be impractical to derive the private key
+        from the public key.}
 }
 
 \newglossaryentry{pairingcrypto}
@@ -463,7 +466,7 @@
 {
     name={discrete logarithm},
     description={For a \gls{cyclic group} $G = \angles{g}$
-        and $h\in G$, if $h = g^{x}$, then $x$ is the discrete logarithm
+        and $h\in G$, if $h = g^{x}$, then $x\in\Z$ is the discrete logarithm
         of $h$ with respect to $g$.},
 }
 
@@ -471,7 +474,7 @@
 {
     name={Discrete Logarithm Problem},
     description={Given a \gls{finite cyclic group} $G = \angles{g}$
-        and $h\in G$, compute $x$ such that $h = g^{x}$.},
+        and $h\in G$, compute $x\in\Z$ such that $h = g^{x}$.},
 }
 
 \newglossaryentry{dhke}

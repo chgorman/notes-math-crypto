@@ -291,7 +291,9 @@ Designed by Rivest in 1987 for RSA Security;
 originally a trade secret, the algorithm was made public in 1994 after being
 reverse engineered~\cite{rivest2016spritz}.
 RC4 \emph{should not be used} because it is a cryptographically-broken
-\gls{stream cipher}~\cite{rfc7465,rivest2016spritz}.
+\gls{stream cipher}%
+~\cite{rfc7465,rivest2016spritz,sen2014non,mantin2002practical,%
+alfardan2013security,alfardan2013full}.
 
 \paragraph{Salsa20}
 In the case of Salsa20, the secret key is 256 bits
@@ -428,9 +430,8 @@ but was not selected as the standard.
 Blowfish is a cipher designed by Bruce Schneier in 1993~\cite{BlowfishAlg}.
 Its old design and small block size (64 bits like DES)
 means it should not be be used.
-In 2007, Schneier recommended%
-\footnote{\url{https://www.schneier.com/news/archives/2007/12/bruce_almighty_schne.html}}
-switching from Blowfish to Twofish.
+In 2007, Schneier recommended
+switching from Blowfish to Twofish~\cite{SchneierNews2007}.
 
 
 \section{Cryptographic Hash Functions}
@@ -488,8 +489,7 @@ In particular, we note that the outputs of LCGs
 \emph{fall in planes}~\cite{marsaglia1968random}
 and that the internal state recovery of PCGs
 is \emph{practical}~\cite{bouillaguet2020practical}.
-Also, we note that an online challenge%
-\footnote{\url{https://cryptopals.com/sets/3/challenges/23}}
+Also, we note that an online challenge~\cite{CryptoPals23}
 is devoted to cloning the internal state of the Mersenne Twister
 based solely on its output.
 
@@ -516,7 +516,9 @@ cryptographically random bits within a cryptographic library;
 this is sufficient for normal users.
 Do \emph{not} use Dual\_EC\_DRBG~\cite[Section~10.3.1]{NIST-SP-800-90A},
 as the standard implementation
-is thought to have a backdoor~\cite{BernsteinDualEC}.
+is thought to have a backdoor~\cite{BernsteinDualEC};
+furthermore, it was removed in a later version
+of the standard~\cite{NIST-SP-800-90ARev1}.
 Figure~\ref{fig:xkcd_rng} shows an example of a
 secure software random number generator
 while Figure~\ref{fig:xkcd_d65536} shows an example of a
@@ -532,8 +534,7 @@ Unless an algorithm has been \emph{specifically designed} to be a
 it \emph{should not used} when cryptographic random numbers are required.
 Otherwise, this could happen:
 your \gls{ethereum} private keys could be brute-forced due to
-insufficient randomization%
-\footnote{\url{https://github.com/johguse/profanity/issues/61}}.
+insufficient randomization~\cite{ProfanityBreak}.
 \emph{You have been warned.}
 
 \input{figures/xkcd/xkcd_rng.tex}

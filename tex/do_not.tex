@@ -20,9 +20,8 @@ do any of these things.
         of experience in cryptography and it should have been vetted
         by other people as well.
 
-    Along those lines is a quote%
-    \footnote{\url{https://www.schneier.com/crypto-gram/archives/1998/1015.html\#cipherdesign}}
-    from Bruce Schneier in 1998:
+    Along those lines is a quote from Bruce Schneier
+    in 1998~\cite{SchneierBlog1998}:
 
 \begin{quote}
     Anyone, from the most clueless amateur to the best cryptographer,
@@ -32,7 +31,7 @@ do any of these things.
 \end{quote}
 
     Bad things can happen when you do not know what you are doing;
-    see Figure~\ref{fig:xkcd_security_holes} for an example.
+    see Figure~\ref{fig:xkcd_security_holes} and~\cite{SchneierBlog2008}.
 
 \input{figures/xkcd/xkcd_security_holes.tex}
 
@@ -101,8 +100,7 @@ do any of these things.
     see Chapter~\ref{ssec:stream_cipher} for more information.
 \item \textbf{Do not use Blowfish.}
     Blowfish is an old \gls{block cipher},
-    and in 2007 its author recommended%
-    \footnote{\url{https://www.schneier.com/news/archives/2007/12/bruce_almighty_schne.html}}
+    and in 2007 its author recommended~\cite{SchneierNews2007}
     switching from Blowfish~\cite{BlowfishAlg} to Twofish~\cite{TwofishAlg}.
 \end{itemize}
 
@@ -114,7 +112,8 @@ do any of these things.
     The \emph{only} reason to ever use it is because its use is required
         for compatibility with legacy systems.
 \item \textbf{Do not use \ShaOne{}.}
-    See the reasons above about why \MDFive{} should not be used~\cite{rfc6194}.
+    See the reasons above about why \MDFive{}
+    should not be used~\cite{rfc6194,cryptoeprint:2020/014}.
 \item \textbf{Do not use PBKDF2 as a \gls{kdf}.}
     It has been shown to provide insufficient protection
     when protecting passwords~\cite{blocki2018economics}.

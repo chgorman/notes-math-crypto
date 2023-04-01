@@ -316,8 +316,8 @@ are \emph{significantly below} their original security level
 (respectively 64 bits and 80 bits).
 It is \emph{practical} to find \MDFive{} and \ShaOne{} hash
 collisions~\cite{cryptoeprint:2004:199,cryptoeprint:2005:067,
-cryptoeprint:2004:356,cryptoeprint:2020:014,rfc6151,rfc6194};
-preimage resistance has been attacked~\cite{MD5FastPreimage2009}.
+cryptoeprint:2004:356,rfc6151,rfc6194};
+\MDFive{} preimage resistance has been attacked~\cite{MD5FastPreimage2009}.
 
 In order to show just how practical hash collisions are
 for \MDFive{} and \ShaOne{},
@@ -325,6 +325,31 @@ see Listing~\ref{list:md5_collision}
 for an \MDFive{} hash collision~\cite{md5Collision}
 and Listing~\ref{list:sha1_collision} and Figure~\ref{fig:shattered}
 for a \ShaOne{} hash collision~\cite{sha1Collision}.
+More complicated collision attacks
+(called \emph{chosen-prefix collision})
+exist for both \MDFive{} and
+\ShaOne{}~\cite{stevens2012chosen,leurent2020sha1,cryptoeprint:2020/014}.
+
+We conclude with this quote~\cite[Section 7]{cryptoeprint:2020/014}
+(emphasis in original but citations have been modified):
+
+\begin{quote}
+    More generally, as cryptographers, we recommend to deprecate
+    \texttt{SHA-1} everywhere, even when there is no direct evidence
+    that [these] weaknesses can be exploited.
+    \texttt{SHA-1} has been broken regarding collision resistance for 15 years,
+    and there are better alternatives available, well-studied,
+    and standardized (\texttt{SHA-2}~\cite{FIPS-180-4-2015},
+    \texttt{SHA-3}~\cite{FIPS-202}).
+    There is no good reason to use \texttt{SHA-1} in modern security software.
+    Attacks only get better over time,
+    and the goal of the cryptanalysis effort is to warn users
+    so that they can deprecate algorithms
+    \emph{before} the attacks get practical.
+\end{quote}
+
+\noindent
+This quote also applies to \MDFive{} given that it is weaker than \ShaOne{}.
 
 \input{code/hash_functions/md5_collision.tex}
 \input{code/hash_functions/sha1_collision.tex}

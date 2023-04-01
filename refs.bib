@@ -97,22 +97,25 @@
         Systems},
     author={Anderson, Ross},
     year={2020},
-    publisher={John Wiley \& Sons}
+    edition={3},
+    publisher={John Wiley \& Sons},
 }
 
 @book{ComputationalIntroNTA,
     title={A Computational Introduction to Number Theory and Algebra},
     author={Shoup, Victor},
     year={2009},
+    edition={2},
     publisher={Cambridge University Press},
-    url={https://shoup.net/ntb/}
+    url={https://shoup.net/ntb/},
 }
 
 @book{IntroProbModels,
     title={Introduction to Probability Models},
     author={Ross, Sheldon M.},
-    year={2014},
-    publisher={Academic Press}
+    year={2019},
+    edition={12},
+    publisher={Academic Press},
 }
 
 @book{DummitFooteAlgebra,
@@ -121,6 +124,22 @@
     year={2004},
     edition={3},
     publisher={Prentice Hall Englewood Cliffs, NJ}
+}
+
+@book{BabyRudin,
+    title={Principles of Mathematical Analysis},
+    author={Rudin, Walter},
+    year={1976},
+    edition={3},
+    publisher={McGraw-Hill New York},
+}
+
+@book{LeblBasicAnalysisI,
+    title={Basic Analysis I},
+    author={{Ji\v{r}\'{i} Lebl}},
+    year={2022},
+    note={Version 5.6},
+    url={https://github.com/jirilebl/ra},
 }
 
 @book{KoblitzCourseNTCrypto,
@@ -487,11 +506,102 @@
     url={https://github.com/ethereum/yellowpaper}
 }
 
-@article{BitcoinWhitepaper,
+@online{BitcoinWhitepaper,
     title={Bitcoin: A Peer-to-Peer Electronic Cash System},
     author={Nakamoto, Satoshi},
     year={2008},
     url={https://bitcoin.org/bitcoin.pdf}
+}
+
+@online{NotesMathCrypto,
+    author={Christopher Gorman},
+    title={Notes on Mathematics and Cryptography},
+    url={https://github.com/chgorman/notes-math-crypto},
+    urldate={2023-03-11},
+}
+
+@online{AMSOpenMathNotes,
+    author={{American Mathematical Society}},
+    title={Open Math Notes},
+    url={https://www.ams.org/open-math-notes},
+    urldate={2023-03-11},
+}
+
+@online{AIMTextbooks,
+    author={{American Institute of Mathematics}},
+    title={Approved Textbooks},
+    url={https://aimath.org/textbooks/approved-textbooks/},
+    urldate={2023-03-11},
+}
+
+@online{BonehCourseraCryptoI,
+    author={Dan Boneh},
+    title={Cryptography I},
+    url={https://www.coursera.org/learn/crypto},
+    urldate={2023-03-11},
+}
+
+@online{BonehCourseraCryptoII,
+    author={Dan Boneh},
+    title={Cryptography II},
+    url={https://www.coursera.org/learn/crypto2},
+    urldate={2023-03-11},
+}
+
+@online{OnlineMOOCZKProofs,
+    author={Dan Boneh and Shafi Goldwasser and Dawn Song and Justin Thaler
+        and Yupeng Zhang},
+    title={Zero Knowledge Proofs},
+    url={https://zk-learning.org},
+    urldate={2023-03-31},
+}
+
+@online{ThalerProofsZK,
+    author={Justin Thaler},
+    title={Proofs, Arguments, and Zero-Knowledge},
+    date={2023-01-24},
+    url={https://people.cs.georgetown.edu/jthaler/ProofsArgsAndZK.pdf},
+    urldate={2023-03-31},
+}
+
+@online{EIP-2,
+    author={Vitalik Buterin},
+    title={Homestead Hard-fork Changes},
+    date={2015-11-15},
+    url={https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2.md},
+    urldate={2023-03-11},
+}
+
+@online{BIP-39,
+    author={Marek Palatinus and Pavol Rusnak and Aaron Voisine and Sean Bowe},
+    title={Mnemonic code for generating deterministic keys},
+    date={2013-09-10},
+    url={https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki},
+    urldate={2023-03-11},
+}
+
+@online{BIP-39-wordlist,
+    author={Marek Palatinus and Pavol Rusnak and Aaron Voisine and Sean Bowe},
+    title={BIP-39 English Wordlist},
+    date={2013-09-10},
+    url={https://github.com/bitcoin/bips/blob/master/bip-0039/english.txt},
+    urldate={2023-03-11},
+}
+
+@online{BernsteinBlog2014,
+    author={Bernstein, Daniel J.},
+    title={How to design an elliptic-curve signature system},
+    date={2014-03-23},
+    url={https://blog.cr.yp.to/20140323-ecdsa.html},
+    urldate={2023-03-11},
+}
+
+@online{BernsteinBlog2019,
+    author={Bernstein, Daniel J.},
+    title={Why EdDSA held up better than ECDSA against Minerva},
+    date={2019-10-24},
+    url={https://blog.cr.yp.to/20191024-eddsa.html},
+    urldate={2023-03-11},
 }
 
 @inproceedings{Curve25519,
@@ -606,7 +716,7 @@
     url={https://projectbullrun.org/dual-ec/documents/dual-ec-20150731.pdf},
 }
 
-@article{bernstein2005cache,
+@online{bernstein2005cache,
     title={Cache-timing attacks on AES},
     author={Bernstein, Daniel J.},
     year={2005},
@@ -648,6 +758,45 @@
     author={Ferguson, Niels and Schneier, Bruce},
     year={2003},
     publisher={Wiley}
+}
+
+@online{SchneierBlog1998,
+    author={Schneier, Bruce},
+    title={Memo to the Amateur Cipher Designer},
+    date={1998-10-15},
+    url={https://www.schneier.com/crypto-gram/archives/1998/1015.html#cipherdesign},
+    urldate={2023-03-11},
+}
+
+@online{SchneierBlog2008,
+    author={Schneier, Bruce},
+    title={Random Number Bug in Debian Linux},
+    date={2008-05-19},
+    url={https://www.schneier.com/blog/archives/2008/05/random_number_b.html},
+    urldate={2023-03-11},
+}
+
+@online{SchneierNews2007,
+    author={Schneier, Bruce},
+    title={Bruce Almighty: Schneier preaches security to Linux faithful},
+    date={2007-12-27},
+    url={https://www.schneier.com/news/archives/2007/12/bruce_almighty_schne.html},
+    urldate={2023-03-11},
+}
+
+@online{CryptoPals23,
+    author={Thomas Ptacek and Sean Devlin and Alex Balducci and
+        Marcin Wielgoszewski},
+    title={CryptoPals Crypto Challenges: Challenge 23},
+    url={https://cryptopals.com/sets/3/challenges/23},
+    urldate={2023-03-10},
+}
+
+@online{ProfanityBreak,
+    author={{\texttt{johguse}}},
+    title={Private key safety \#61},
+    url={https://github.com/johguse/profanity/issues/61},
+    urldate={2023-03-11},
 }
 
 @inproceedings{poly1305,
@@ -697,15 +846,6 @@
     howpublished = {Cryptology ePrint Archive, Report 2004/356},
     year = {2004},
     note = {\url{https://ia.cr/2004/356}},
-}
-
-@misc{cryptoeprint:2020:014,
-    author = {Ga\"{e}tan Leurent and Thomas Peyrin},
-    title = {SHA-1 is a Shambles - First Chosen-Prefix Collision on SHA-1
-        and Application to the PGP Web of Trust},
-    howpublished = {Cryptology ePrint Archive, Report 2020/014},
-    year = {2020},
-    note = {\url{https://ia.cr/2020/014}},
 }
 
 @book{PairingBasedCrypto,
@@ -1162,7 +1302,8 @@
     publisher = {RFC Editor},
     doi = {10.17487/RFC4086},
     url = {https://www.rfc-editor.org/info/rfc4086},
-    author = {Donald E. Eastlake 3rd and Steve Crocker and Jeffrey I. Schiller},
+    author = {Donald E. {Eastlake 3rd} and Steve Crocker
+        and Jeffrey I. Schiller},
     title = {{Randomness Requirements for Security}},
     pagetotal = 48,
     year = 2005,
@@ -1306,7 +1447,6 @@
     url = {https://eprint.iacr.org/2019/492}
 }
 
-
 @misc{rfc6962,
     series = {Request for Comments},
     number = 6962,
@@ -1346,6 +1486,41 @@
     url = {https://toc.cryptobook.us/book.pdf},
 }
 
+@book{IntensiveCrypto,
+    author = {Boaz Barak},
+    title = {An Intensive Introduction to Cryptography},
+    year = {2021},
+    url = {https://intensecrypto.org/public/},
+}
+
+@book{CourseCrypto,
+    author = {Rafael Pass and Abhi Shelat},
+    title = {A Course in Cryptography},
+    year = {2010},
+    url = {https://www.cs.cornell.edu/courses/cs4830/2010fa/lecnotes.pdf},
+}
+
+@book{CourseDiscreteStructures,
+    author = {Rafael Pass and Wei-Lung Dustin Tseng},
+    title = {A Course in Discrete Structures},
+    year = {2011},
+    url = {https://www.cs.cornell.edu/~rafael/discmath.pdf},
+}
+
+@book{GoldwasserBellareLNC,
+    author = {Shafi Goldwasser and Mihir Bellare},
+    title = {Lecture Notes on Cryptography},
+    year = {2008},
+    url = {https://cseweb.ucsd.edu/~mihir/papers/gb.pdf},
+}
+
+@book{BellareRogawayIMC,
+    author = {Mihir Bellare and Phillip Rogaway},
+    title = {Introduction to Modern Cryptography},
+    year = {2005},
+    url = {https://www.cs.ucdavis.edu/~rogaway/classes/227/spring05/book/main.pdf},
+}
+
 @misc{rfc4772,
     series = {Request for Comments},
     number = 4772,
@@ -1374,6 +1549,45 @@
     year = 2015,
     month = feb,
     abstract = {This document requires that Transport Layer Security (TLS) clients and servers never negotiate the use of RC4 cipher suites when they establish connections. This applies to all TLS versions. This document updates RFCs 5246, 4346, and 2246.},
+}
+
+@article{sen2014non,
+    title={(Non-)Random Sequences from (Non-)Random Permutations --- Analysis
+        of RC4 Stream Cipher},
+    author={Sen Gupta, Sourav and Maitra, Subhamoy and Paul, Goutam and Sarkar, Santanu},
+    journal={Journal of Cryptology},
+    volume={27},
+    pages={67--108},
+    year={2014},
+    publisher={Springer},
+    url={https://link.springer.com/article/10.1007/s00145-012-9138-1},
+}
+
+@inproceedings{mantin2002practical,
+    title={A Practical Attack on Broadcast RC4},
+    author={Mantin, Itsik and Shamir, Adi},
+    booktitle={Fast Software Encryption: 8th International Workshop, FSE 2001 Yokohama, Japan, April 2--4, 2001 Revised Papers 8},
+    pages={152--164},
+    year={2002},
+    organization={Springer},
+    url={https://link.springer.com/chapter/10.1007/3-540-45473-X_13},
+}
+
+@inproceedings{alfardan2013security,
+    title={On the Security of RC4 in TLS},
+    author={AlFardan, Nadhem and Bernstein, Daniel J. and
+        Paterson, Kenneth G. and Poettering, Bertram and Schuldt, Jacob C.N.},
+    booktitle={USENIX Security Symposium},
+    year={2013},
+    url={https://www.usenix.org/system/files/conference/usenixsecurity13/sec13-paper_alfardan.pdf},
+}
+
+@online{alfardan2013full,
+  title={On the Security of RC4 in TLS and WPA},
+  author={AlFardan, Nadhem J. and Bernstein, Daniel J. and
+      Paterson, Kenneth G. and Poettering, Bertram and Schuldt, Jacob C.N.},
+  year={2013},
+  url={http://www.hpcc.ecs.soton.ac.uk/dan/talks/bullrun/RC4attack.pdf},
 }
 
 @techreport{AliceNetWhitepaper,
@@ -1408,6 +1622,37 @@
     url = {https://eprint.iacr.org/2017/190}
 }
 
+@inproceedings{leurent2020sha1,
+    title={SHA-1 is a shambles: First Chosen-Prefix Collision on SHA-1
+        and Application to the PGP Web of Trust},
+    author={Leurent, Ga{\"e}tan and Peyrin, Thomas},
+    booktitle={Proceedings of the 29th USENIX Conference on Security Symposium},
+    pages={1839--1856},
+    year={2020},
+    url={https://www.usenix.org/system/files/sec20-leurent.pdf},
+}
+
+@misc{cryptoeprint:2020/014,
+      author = {Gaëtan Leurent and Thomas Peyrin},
+      title = {SHA-1 is a Shambles --- First Chosen-Prefix Collision on SHA-1
+          and Application to the PGP Web of Trust},
+      howpublished = {Cryptology ePrint Archive, Paper 2020/014},
+      year = {2020},
+      note = {\url{https://eprint.iacr.org/2020/014}},
+      url = {https://eprint.iacr.org/2020/014},
+}
+
+@article{stevens2012chosen,
+    title={Chosen-prefix collisions for MD5 and applications},
+    author={Stevens, Marc and Lenstra, Arjen K and De Weger, Benne},
+    journal={International Journal of Applied Cryptography},
+    volume={2},
+    number={4},
+    pages={322--359},
+    year={2012},
+    publisher={Inderscience Publishers Ltd},
+    url={https://documents.epfl.ch/users/l/le/lenstra/public/papers/lat.pdf},
+}
 
 @misc{cryptoeprint:2006/223,
     author = {Daniel R. L. Brown},
