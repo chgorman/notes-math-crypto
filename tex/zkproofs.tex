@@ -657,7 +657,34 @@ to a linear combination of $n$ \gls{discrete log} values.
 
 
 
+\section{Proofs of Knowledge of BBS Signatures}
+\label{sec:zkproofs_bbs}
+
+We note it is possible to prove knowledge of BBS signatures;
+recall that BBS signatures were discussed in Chapter~\ref{sec:pairing_bbs}.
+
+Due to the nature of BBS signatures
+(multiple messages are signed with one signature),
+it is possible to take a BBS signature
+and selectively reveal a subset of the included messages;
+see Alg.~\ref{alg:nizk_bbs} for the description.
+The algorithm here is slightly modified
+from the one presented in~\cite[Section 5]{cryptoeprint:2023/275},
+and it is an example of a
+Non-Interactive Zero-Knowledge Proof;
+see Chapter~\ref{sec:zkproofs_concluding_discussion}.
+This selective revealing of messages is valuable when designing
+\emph{anonymous credentials}.
+A brief overview of anonymous credentials may be found
+in~\cite[Introduction]{cryptoeprint:2023/275}, and the included references
+will enable a more extended review.
+
+\input{algs/nizk_bbs.tex}
+
+
+
 \section{Concluding Discussion}
+\label{sec:zkproofs_concluding_discussion}
 
 We walked through some basic examples of \glspl{zkproof}
 by focusing on proving knowledge of \glspl{discrete log}.
@@ -667,7 +694,7 @@ See~\cite{GeneralDiscreteLogProofs} for more information
 and a more thorough discussion about \glspl{zkproof}
 about discrete logarithms.
 Additional references include an online course~\cite{OnlineMOOCZKProofs}
-and a related manuscript~\cite{ThalerProofsZK}.
+and online manuscripts~\cite{ThalerProofsZK,SnargsBook}.
 
 We note some extensions of \glspl{zkproof} include
 Non-Interactive Zero-Knowledge Proofs

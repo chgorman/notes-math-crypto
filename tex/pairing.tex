@@ -291,6 +291,12 @@ This is why we require $H_{1}$ and $H_{2}$ to be independent
 \glspl{hash function}
 and then add their deterministic outputs in Eq.~\eqref{eq:pairing_full_hash}.
 
+\subsection{Standardization}
+
+The difficulty in ensuring proper hash-to-curve functions
+has lead to a standardization effort;
+one example is~\cite{rfc9380}.
+
 
 
 \section{Multi-Signatures}
@@ -398,6 +404,53 @@ to 1 signature verification at the cost of aggregating $n$ signatures
 and public keys.
 Because signature verification is expensive,
 this is generally worthwhile.
+
+
+
+\section{BBS Signatures}
+\label{sec:pairing_bbs}
+
+Another signature scheme which uses a \gls{bilinear}
+is the BBS signature scheme.
+The scheme is specified in Alg.~\ref{alg:bbs};
+this specification is based on~\cite[Figure 3]{cryptoeprint:2023/275}
+(also see~\cite{tessaro2023revisiting}).
+The original description may be found
+in~\cite{boneh2004short,cryptoeprint:2004/174},
+where the focus is on short group signatures.
+
+\input{algs/bbs.tex}
+
+As before, we let $x\chooseRandom{}\Z_{p}^{*}$ be the private key
+and $X\mathDef{} g_{2}^{x}$ be the public key.
+Here, we will look at the case where there is just one message $m$ to sign;
+we let $h$ be a random generator of $G_{1}$.
+In this case, we have
+
+\begin{align}
+    C &\mathDef{} g_{1}h^{m} \nonumber\\
+    A &\mathDef{} C^{\frac{1}{x + e}}
+\end{align}
+
+\noindent
+for $e\chooseRandom{} \Z_{p}$.
+From here, we see
+
+\begin{align}
+    e\parens{A, g_{2}^{e}X} &= e\parens{C^{\frac{1}{x+e}}, g_{2}^{x+e}}
+            \nonumber\\
+        &= e\parens{C, g_{2}}.
+\end{align}
+
+\noindent
+Thus, the signature will validate.
+The general case is similar.
+
+A discussion on proofs of knowledge of BBS signatures may be found in
+Chapter~\ref{sec:zkproofs_bbs};
+this is valuable when looking to develop
+\emph{anonymous credentials}
+(see \cite[Introduction]{cryptoeprint:2023/275} and the references therein).
 
 
 

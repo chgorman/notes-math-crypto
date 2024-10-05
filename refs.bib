@@ -399,6 +399,22 @@
     abstract = {This document specifies a simple Hashed Message Authentication Code (HMAC)-based key derivation function (HKDF), which can be used as a building block in various protocols and applications. The key derivation function (KDF) is intended to support a wide range of applications and requirements, and is conservative in its use of cryptographic hash functions. This document is not an Internet Standards Track specification; it is published for informational purposes.},
 }
 
+@misc{rfc9380,
+    series = {Request for Comments},
+    number = 9380,
+    howpublished = {RFC 9380},
+    publisher = {RFC Editor},
+    doi = {10.17487/RFC9380},
+    url = {https://www.rfc-editor.org/info/rfc9380},
+    author = {Armando Faz-Hernandez and Sam Scott and Nick Sullivan
+        and Riad S. Wahby and Christopher A. Wood},
+    title = {{Hashing to Elliptic Curves}},
+    pagetotal = 145,
+    year = 2023,
+    month = aug,
+    abstract = {This document specifies a number of algorithms for encoding or hashing an arbitrary string to a point on an elliptic curve. This document is a product of the Crypto Forum Research Group (CFRG) in the IRTF.},
+}
+
 @article{RevocationTransparency2012,
     title={Revocation Transparency},
     author={Laurie, Ben and Kasper, Emilia},
@@ -562,6 +578,13 @@
     date={2023-01-24},
     url={https://people.cs.georgetown.edu/jthaler/ProofsArgsAndZK.pdf},
     urldate={2023-03-31},
+}
+
+@online{SnargsBook,
+    author={Alessandro Chiesa and Eylon Yogev},
+    title={Building Cryptographic Proofs from Hash Functions},
+    url={https://snargsbook.org/},
+    urldate={2024-08-17},
 }
 
 @online{EIP-2,
@@ -1713,3 +1736,116 @@
     urldate={2023-02-19},
     note={Commit \texttt{b3d9889}},
 }
+
+@online{MilkSadExploit,
+    author = {Anton Livaja and Lance R. Vick and Ryan Heywood and
+        Shane Engelman and Christian Reitter and Daniel Grove and
+        Dustin Johnson and Heiko Schaefer and James Callahan and
+        Jochen Hoenicke and John Naulty and Matthew Brooks},
+    title = {Milk Sad Disclosure},
+    year = {2023},
+    url = {https://milksad.info},
+    urldate = {2023-10-01},
+}
+
+@online{TrustWalletLedger,
+    author = {Donjon},
+    title = {Funds of every wallet created with the Trust Wallet
+        browser extension could have been stolen without any user interaction},
+    date = {2023-04-25},
+    url = {https://blog.ledger.com/Funds-of-every-wallet-created-with-the-Trust-Wallet-browser-extension-could-have-been-stolen/},
+    urldate = {2023-10-01},
+}
+
+@online{TrustWalletExploit,
+    author = {Team Trust},
+    title = {Browser Extension WASM Vulnerability Postmortem},
+    date = {2023-04-22},
+    url = {https://community.trustwallet.com/t/browser-extension-wasm-vulnerability-postmortem/750787},
+    urldate = {2023-10-01},
+}
+
+@misc{cryptoeprint:2023/275,
+    author = {Stefano Tessaro and Chenzhi Zhu},
+    title = {Revisiting BBS Signatures},
+    howpublished = {Cryptology ePrint Archive, Paper 2023/275},
+    year = {2023},
+    note = {\url{https://eprint.iacr.org/2023/275}},
+    url = {https://eprint.iacr.org/2023/275},
+}
+
+@inproceedings{tessaro2023revisiting,
+    title={Revisiting BBS Signatures},
+    author={Tessaro, Stefano and Zhu, Chenzhi},
+    booktitle={Annual International Conference on the Theory and Applications
+        of Cryptographic Techniques},
+    pages={691--721},
+    year={2023},
+    organization={Springer},
+    doi={10.1007/978-3-031-30589-4_24},
+}
+
+@misc{cryptoeprint:2004/174,
+    author = {Dan Boneh and Xavier Boyen and Hovav Shacham},
+    title = {Short Group Signatures},
+    howpublished = {Cryptology ePrint Archive, Paper 2004/174},
+    year = {2004},
+    note = {\url{https://eprint.iacr.org/2004/174}},
+    url = {https://eprint.iacr.org/2004/174},
+}
+
+@inproceedings{boneh2004short,
+    title={Short Group Signatures},
+    author={Boneh, Dan and Boyen, Xavier and Shacham, Hovav},
+    booktitle={Annual International Cryptology Conference},
+    pages={41--55},
+    year={2004},
+    organization={Springer},
+    doi={10.1007/978-3-540-28628-8_3},
+}
+
+@misc{rfc9380,
+    series = {Request for Comments},
+    number = 9380,
+    howpublished = {RFC 9380},
+    publisher = {RFC Editor},
+    doi = {10.17487/RFC9380},
+    url = {https://www.rfc-editor.org/info/rfc9380},
+    author = {Armando Faz-Hernandez and Sam Scott and Nick Sullivan
+        and Riad S. Wahby and Christopher A. Wood},
+    title = {{Hashing to Elliptic Curves}},
+    pagetotal = 145,
+    year = 2023,
+    month = aug,
+    abstract = {This document specifies a number of algorithms for encoding or hashing an arbitrary string to a point on an elliptic curve. This document is a product of the Crypto Forum Research Group (CFRG) in the IRTF.},
+}
+
+@misc{rfc8937,
+    series = {Request for Comments},
+    number = 8937,
+    howpublished = {RFC 8937},
+    publisher = {RFC Editor},
+    doi = {10.17487/RFC8937},
+    url = {https://www.rfc-editor.org/info/rfc8937},
+    author = {Cas Cremers and Luke Garratt and Stanislav V. Smyshlyaev
+        and Nick Sullivan and Christopher A. Wood},
+    title = {{Randomness Improvements for Security Protocols}},
+    pagetotal = 9,
+    year = 2020,
+    month = oct,
+    abstract = {Randomness is a crucial ingredient for Transport Layer Security (TLS) and related security protocols. Weak or predictable "cryptographically secure" pseudorandom number generators (CSPRNGs) can be abused or exploited for malicious purposes. An initial entropy source that seeds a CSPRNG might be weak or broken as well, which can also lead to critical and systemic security problems. This document describes a way for security protocol implementations to augment their CSPRNGs using long-term private keys. This improves randomness from broken or otherwise subverted CSPRNGs. This document is a product of the Crypto Forum Research Group (CFRG) in the IRTF.},
+}
+
+@INPROCEEDINGS{RandomnessImprovements2020,
+  author={Akhmetzyanova, Liliya and Cremers, Cas and Garratt, Luke
+      and Smyshlyaev, Stanislav and Sullivan, Nick},
+  booktitle={2020 IEEE 33rd Computer Security Foundations Symposium (CSF)},
+  title={Limiting the impact of unreliable randomness in deployed security protocols},
+  year={2020},
+  volume={},
+  number={},
+  pages={277-287},
+  keywords={Protocols;Cryptography;Generators;Hardware;Servers;Electronic mail},
+  doi={10.1109/CSF49147.2020.00027}
+}
+

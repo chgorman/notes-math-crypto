@@ -1,0 +1,26 @@
+\begin{algorithm}[t]
+\caption{BBS Signature Scheme}
+\label{alg:bbs}
+\begin{algorithmic}[1]
+\Require $h_{i}$ is a random generator for $G_{1}$
+\Require $\abs{G_{1}} = p$ prime
+\Require $m_{i}\in \Z_{p}$
+\Procedure{BBS-Sign}{$x$, $\braces{m_{i}}_{i=1}^{n}$}
+    \State $C \algAssign{} g_{1} \prod_{i=1}^{n}h_{i}^{m_{i}}$
+    \State $e \chooseRandom{} \Z_{p}$
+    \State $A \algAssign{} C^{\frac{1}{x+e}}$
+    \State $\sigma \algAssign{} \parens{A,e}$
+    \State \Return $\sigma$
+\EndProcedure
+\State
+\Procedure{BBS-Verify}{$X$, $\braces{m_{i}}_{i=1}^{n}$, $\sigma$}
+    \State $\parens{A,e} \algAssign{} \sigma$
+    \State $C \algAssign{} g_{1} \prod_{i=1}^{n}h_{i}^{m_{i}}$
+    \If{$e(A, g_{2}^{e}X) = e(C, g_{2})$}
+        \State \Return \textsf{True}
+    \Else
+        \State \Return \textsf{False}
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

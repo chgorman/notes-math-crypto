@@ -511,6 +511,8 @@ Hash\_DRBG~\cite[Section~10.1.1]{NIST-SP-800-90ARev1},
 and HMAC\_DRBG~\cite[Section~10.1.2]{NIST-SP-800-90ARev1}.
 In general, individuals should not worry about specific
 \glsfirstplural{csprng} functions.
+There has been recent work on ensuring quality randomness generation
+even when using poor entropy sources~\cite{rfc8937,RandomnessImprovements2020}.
 It should be possible to perform a generic call to retrieve
 cryptographically random bits within a cryptographic library;
 this is sufficient for normal users.
@@ -529,12 +531,16 @@ secure hardware random number generator.
 and related numbers which need to be drawn from a uniform bit distribution.
 They are also used when constructing large prime numbers.
 
+\subsection{Warning}
+
 Unless an algorithm has been \emph{specifically designed} to be a
 \glsfirstplural{csprng},
-it \emph{should not used} when cryptographic random numbers are required.
+it \emph{should not be used} when cryptographic random numbers are required.
 Otherwise, this could happen:
 your \gls{ethereum} private keys could be brute-forced due to
 insufficient randomization~\cite{ProfanityBreak}.
+Similar exploits have happened on other
+blockchains~\cite{MilkSadExploit,TrustWalletExploit,TrustWalletLedger}.
 \emph{You have been warned.}
 
 \input{figures/xkcd/xkcd_rng.tex}

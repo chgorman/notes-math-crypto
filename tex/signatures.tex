@@ -57,8 +57,24 @@ As modern cryptography developed, it became clear that it was best
 to separate the notions of an \gls{encryption scheme}
 and \gls{signature} scheme due to the different security objectives.
 
-This history explains why some may incorrectly describe \glspl{signature}
+This history explains why some incorrectly describe \glspl{signature}
 as ``reverse encryption.''
+We include the
+following~\cite[Chapter 13.1, Relation to Public-Key Encryption;
+footnote omitted, emphasis original]{IntroModernCrypto}:
+
+\begin{quote}
+Digital signatures are often mistakenly viewed as the ``inverse''
+of public-key encryption, with the roles of the sender and receiver
+interchanged.
+Historically, in fact, it has been suggested that digital signatures
+can be obtained by ``reversing'' public-key encryption \dots
+The suggestion to construct signature schemes in this way is
+\emph{completely unfounded}:
+in most cases, it is simply inapplicable,
+and even in cases where it can be applied it results in signature schemes
+that are not secure.
+\end{quote}
 
 
 

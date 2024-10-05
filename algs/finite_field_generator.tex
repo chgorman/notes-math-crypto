@@ -11,12 +11,12 @@
     \While{}
         \State $\alpha \chooseRandom{} \F_{p}^{*}$
         \Comment{Choose a random element in $\F_{p}^{*}$}
-        \State $\texttt{IsGenerator} \algAssign{} \texttt{true}$
+        \State $\texttt{IsGenerator} \algAssign{} \textsf{True}$
         \For {$k\algAssign{}1; k\le \ell; k{+}{+}$}
             \State $q_{k} \algAssign{} q/p_{k}$
             \State $\beta \algAssign{} \alpha^{q_{k}}$
             \If{$\beta = 1$}
-                \State $\texttt{IsGenerator} \algAssign{} \texttt{false}$
+                \State $\texttt{IsGenerator} \algAssign{} \textsf{False}$
                 \Break
             \EndIf
         \EndFor

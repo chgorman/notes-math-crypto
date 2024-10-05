@@ -2,6 +2,9 @@
 
 import hashlib
 
+def hash(data: bytes) -> bytes:
+    return hashlib.md5(data).digest()
+
 # Set up data
 x0 = bytes.fromhex(''.join('00' for i in range(16)))
 x1 = bytes.fromhex(''.join('11' for i in range(16)))
@@ -9,18 +12,15 @@ x2 = bytes.fromhex(''.join('22' for i in range(16)))
 x3 = bytes.fromhex(''.join('33' for i in range(16)))
 
 # Make hashes
-md5 = hashlib.md5(); md5.update(x0); y0 = md5.digest()
-md5 = hashlib.md5(); md5.update(x1); y1 = md5.digest()
-md5 = hashlib.md5(); md5.update(x2); y2 = md5.digest()
-md5 = hashlib.md5(); md5.update(x3); y3 = md5.digest()
+y0 = hash(x0)
+y1 = hash(x1)
+y2 = hash(x2)
+y3 = hash(x3)
 
-md5 = hashlib.md5(); md5.update(y0); md5.update(y1)
-y4 = md5.digest()
-md5 = hashlib.md5(); md5.update(y2); md5.update(y3)
-y5 = md5.digest()
+y4 = hash(y0 + y1)
+y5 = hash(y2 + y3)
 
-md5 = hashlib.md5(); md5.update(y4); md5.update(y5)
-y6 = md5.digest()
+y6 = hash(y4 + y5)
 print("2-Layer MD5 Merkle Tree")
 print("#"*72)
 print()

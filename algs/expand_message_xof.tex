@@ -1,0 +1,20 @@
+\begin{algorithm}[t]
+\caption{\ExpandMsgXof{}}
+\label{alg:expand_message_xof}
+\begin{algorithmic}[1]
+\Require \textsf{Xof} is an extendable-output function
+    indifferentiable from a random oracle.
+\Procedure{ExpandMessageXof}{\textsf{msg}, \textsf{dst}, $\ell$}
+    \State $\textsf{dst\_prime} \algAssign{} \textsf{dst} \|
+            \textsc{Length}(\textsf{dst})$
+    \Comment{Append the length of \textsf{dst} to \textsf{dst}}
+    \State $\textsf{lib} \algAssign{}
+        \textsc{Length}(\ell)$
+    \State $\textsf{msg\_prime} \algAssign{} 
+        \textsf{msg}\|
+        \textsf{lib}\|
+        \textsf{dst\_prime}$
+    \State \Return $\textsf{Xof}(\textsf{msg\_prime}, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

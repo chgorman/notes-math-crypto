@@ -1,23 +1,94 @@
-\begin{algorithm}[t]
+\begin{algorithm}[p]
 \caption{Compute Merkle Tree root hash using \gls{recursion}
     from~\cite{rfc9162}}
 \label{alg:merkle_tree_ctv}
 \begin{algorithmic}[1]
-\Procedure{MerkleRootCTV}{$x_{0}, x_{1}, \cdots, x_{n-1}$}
+\Procedure{MerkleTreeHashCTV}{$D_{n}$}
     \If {$n = 0$}
         \State \Return $\textsf{Hash}()$
         \Comment{Hash of empty byte string}
     \ElsIf {$n = 1$}
-        \State \Return $\textsf{Hash}(\texttt{0x00}, x_{0})$
+        \State \Return $\textsf{Hash}(\texttt{0x00} \| x_{0})$
     \Else
         \State $k \algAssign{}
             \max\braces{2^{\ell} \mid \ell\in\N \land 2^{\ell} < n}$
         \Comment{$k$ is largest power-of-two strictly less than $n$}
         \State $h_{0} \algAssign{}
-            \textsc{MerkleRootCTV}(x_{0}, x_{1}, \cdots, x_{k-1})$
+            \textsc{MerkleTreeHashCTV}(D_{n}[0\!:\!k])$
         \State $h_{1} \algAssign{}
-            \textsc{MerkleRootCTV}(x_{k}, x_{k+1}, \cdots, x_{n-1})$
-        \State \Return $\textsf{Hash}(\texttt{0x01}, h_{0}, h_{1})$
+            \textsc{MerkleTreeHashCTV}(D_{n}[k\!:\!n])$
+        \State \Return $\textsf{Hash}(\texttt{0x01} \| h_{0} \| h_{1})$
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[p]
+\caption{Generate Merkle Tree inclusion proof using \gls{recursion}
+    from~\cite{rfc9162}}
+\label{alg:merkle_proof_generate_ctv}
+\begin{algorithmic}[1]
+\Require $0\le m < n$
+\Procedure{GenerateProofCTV}{$m$, $D_{n}$}
+    \If {$m = 0$}
+        \State \Return $\parens{}$
+    \Else
+        \State $k \algAssign{}
+            \max\braces{2^{\ell} \mid \ell\in\N \land 2^{\ell} < n}$
+        \Comment{$k$ is largest power-of-two strictly less than $n$}
+        \If {$m < k$}
+            \State $p \algAssign{}
+                \textsc{GenerateProofCTV}(m, D_{n}[0\!:\!k])$
+            \State $q \algAssign{} 
+                \textsc{MerkleTreeHashCTV}(D_{n}[k\!:\!n])$
+        \Else
+            \State $p \algAssign{}
+                \textsc{GenerateProofCTV}(m-k, D_{n}[k\!:\!n])$
+            \State $q \algAssign{} 
+                \textsc{MerkleTreeHashCTV}(D_{n}[0\!:\!k])$
+        \EndIf
+        \State $\textsf{proof} \algAssign{} \textsc{Append}(p, q)$
+        \State \Return $\textsf{proof}$
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[p]
+\caption{Verify Merkle Tree inclusion proof using \gls{recursion}
+    from~\cite{rfc9162}}
+\label{alg:merkle_proof_verify_ctv}
+\begin{algorithmic}[1]
+\Procedure{VerifyProofCTV}{$\texttt{leaf\_index}$, $\texttt{tree\_size}$,
+        $\texttt{hash}$, $\texttt{root\_hash}$, $\texttt{proof}$}
+    \If {$\texttt{leaf\_index} \ge \texttt{tree\_size}$}
+        \State \Return \textsf{False}
+        \Comment{Invalid proof}
+    \EndIf
+    \State $f \algAssign{} \texttt{leaf\_index}$
+    \State $s \algAssign{} \texttt{tree\_size}$
+    \State $r \algAssign{} \texttt{hash}$
+    \For{$p \textbf{ in } \texttt{proof}$}
+        \If {$s = 0$}
+            \State \Return \textsf{False}
+            \Comment{Invalid proof}
+        \EndIf
+        \If {$(f \mod 2 = 1) \lor (s = f)$}
+            \State $r \algAssign{} \textsf{Hash}(\texttt{0x01} \| p \| r)$
+            \While {$(f \mod 2 = 0) \land (f \ne 0)$}
+                \State $f \algAssign{} f \gg 1$
+                \State $s \algAssign{} s \gg 1$
+            \EndWhile
+        \Else
+            \State $r \algAssign{} \textsf{Hash}(\texttt{0x01} \| r \| p)$
+        \EndIf
+        \State $f \algAssign{} f \gg 1$
+        \State $s \algAssign{} s \gg 1$
+    \EndFor
+    \If {$(s = 0) \land (r = \texttt{root\_hash})$}
+        \State \Return \textsf{True}
+    \Else
+        \State \Return \textsf{False}
     \EndIf
 \EndProcedure
 \end{algorithmic}

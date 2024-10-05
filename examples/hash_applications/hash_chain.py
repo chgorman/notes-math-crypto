@@ -2,28 +2,17 @@
 
 import hashlib
 
+def hash(data: bytes) -> bytes:
+    return hashlib.md5(data).digest()
+
 xStr = '00112233445566778899aabbccddeeff'
 x0 = bytes.fromhex(xStr)
 
-md5 = hashlib.md5()
-md5.update(x0)
-x1 = md5.digest()
-
-md5 = hashlib.md5()
-md5.update(x1)
-x2 = md5.digest()
-
-md5 = hashlib.md5()
-md5.update(x2)
-x3 = md5.digest()
-
-md5 = hashlib.md5()
-md5.update(x3)
-x4 = md5.digest()
-
-md5 = hashlib.md5()
-md5.update(x4)
-x5 = md5.digest()
+x1 = hash(x0)
+x2 = hash(x1)
+x3 = hash(x2)
+x4 = hash(x3)
+x5 = hash(x4)
 
 print("MD5 Hash Chain")
 print("#"*72)

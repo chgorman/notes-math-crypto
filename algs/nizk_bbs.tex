@@ -1,0 +1,52 @@
+\begin{algorithm}[p]
+\caption{Non-Interactive Zero-Knowledge BBS Signature Scheme}
+\label{alg:nizk_bbs}
+\begin{algorithmic}[1]
+\Require $h_{i}$ is a random generator for $G_{1}$
+\Require $\abs{G_{1}} = p$ prime
+\Require $J \subseteq \brackets{n} \algAssign{} \braces{1, 2, \cdots, n}$
+\Require $m_{i}\in \Z_{p}$
+\Procedure{Generate-NIZK-BBS-Proof}{$\sigma$, $\braces{m_{i}}_{i=1}^{n}$, $J$}
+    \State $m^{\prime} \algAssign{} \parens{m_{j} \text{ for } j\in J}$
+    \State $\parens{A,e} \algAssign{} \sigma$
+    \State $C     \algAssign{} g_{1} \prod_{k\in\brackets{n}}h_{k}^{m_{k}}$
+    \State $C_{J} \algAssign{} g_{1} \prod_{j\in J}h_{j}^{m_{j}}$
+    \State $r \chooseRandom{} \Z_{p}^{*}$
+    \State $\overline{A} \algAssign{} A^{r}$
+    \State $\overline{B} \algAssign{} \parens{C\cdot A^{-e}}^{r}$
+    \State $I \algAssign{} \brackets{n} \setminus J$
+    \State $\alpha \chooseRandom{} \Z_{p}$
+    \State $\beta \chooseRandom{} \Z_{p}$
+    \State $\delta_{i} \chooseRandom{} \Z_{p} \text{ for } i\in I$
+    \State $U \algAssign{} C_{J}^{\alpha}\cdot\overline{A}^{\beta}\cdot
+            \prod_{i\in I}h_{i}^{\delta_{i}}$
+    \State $c \algAssign{}
+        \textsf{Hash}(m^{\prime}, \overline{A}, \overline{B}, U)$
+    \State $s \algAssign{} \alpha + r\cdot c$
+    \State $t \algAssign{} \beta - e\cdot c$
+    \State $u_{i} \algAssign{} \delta_{i} + r\cdot m_{i}\cdot c \text{ for } i\in I$
+    \State $\pi \algAssign{} (\overline{A}, \overline{B}, c, s, t, (u_{i})_{i\in I})$
+    \State \Return $\pi$
+\EndProcedure
+\State
+\Procedure{Verify-NIZK-BBS-Proof}{$X$, $m^{\prime}$, $J$, $n$, $\pi$}
+    \State $(\overline{A}, \overline{B}, c, s, t, (u_{i})_{i\in I})
+        \algAssign{} \pi$
+    \If{$e(\overline{A}, X) \ne e(\overline{B}, g_{2})$}
+        \State \Return \textsf{False}
+    \EndIf
+    \State $C_{J} \algAssign{} g_{1} \prod_{j\in J}h_{j}^{m_{j}}$
+    \Comment{All these $m_{j}$ are in $m^{\prime}$}
+    \State $I \algAssign{} \brackets{n} \setminus J$
+    \State $U \algAssign{}
+        \overline{B}^{-c}\cdot C_{J}^{s}\cdot\overline{A}^{t}\cdot
+        \prod_{i\in I}h_{i}^{u_{i}}$
+    \If{$c =
+        \textsf{Hash}(m^{\prime}, \overline{A}, \overline{B}, U)$}
+        \State \Return \textsf{True}
+    \Else
+        \State \Return \textsf{False}
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

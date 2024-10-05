@@ -2,6 +2,16 @@
 
 import hashlib
 
+def hash_sha3(data: bytes) -> bytes:
+    return hashlib.sha3_256(data).digest()
+
+def kmac_sha3(key: bytes, msg: bytes) -> bytes:
+    block_size = hashlib.sha3_256().block_size
+    r = len(key) % block_size
+    pad = block_size-r
+    z_pad = bytes.fromhex(''.join('00' for i in range(pad)))
+    return hash_sha3(key + z_pad + msg)
+
 print("KMAC-SHA3")
 print("#"*72)
 print()
@@ -16,12 +26,6 @@ msg = bytes.fromhex(''.join('42' for i in range(32)))
 print('msg: %s' % (msg.hex()))
 print()
 
-# Pad key
-padding = sha3.block_size-len(key)
-zeroPad = bytes.fromhex(''.join('00' for i in range(padding)))
-keyPrime = key + zeroPad
-
 # Compute value
-sha3 = hashlib.sha3_256(); sha3.update(keyPrime); sha3.update(msg)
-t = sha3.digest()
+t = kmac_sha3(key, msg)
 print('tag: %s' % (t.hex()))

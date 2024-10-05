@@ -3,11 +3,11 @@
 
 Another useful application of \glspl{hash function} are
 \emph{\glspl{merkle tree}}.
-In this section, we will focus on \glspl{merkle tree} involving
+In this section, we will focus on \glspl{merkle tree} with
 leaves which are a power-of-two.
 We will look at trees with an arbitrary number of leaves in
-Chap.~\ref{sec:merkle_trees_2}.
-In Chap.~\ref{sec:sparse_merkle_trees},
+Chapter~\ref{sec:merkle_trees_2}.
+In Chapter~\ref{sec:sparse_merkle_trees},
 we will look at \emph{\glspl{smt}}.
 
 \subsection{Intuition}
@@ -34,8 +34,8 @@ These definitions are modified
 from~\cite[Chapter 8.9]{BonehShoupGraduateApplied}.
 This is valid only for trees with leaves
 which are a power-of-two;
-as mentioned, we will discuss the situation involving
-an arbitrary number of leaves in Chap.~\ref{sec:merkle_trees_2}.
+trees with an arbitrary number of leaves will be discussed
+in Chapter~\ref{sec:merkle_trees_2}.
 
 \input{algs/merkle_tree.tex}
 \input{algs/merkle_proof.tex}
@@ -44,12 +44,11 @@ an arbitrary number of leaves in Chap.~\ref{sec:merkle_trees_2}.
 
 As mentioned above, there is an associated proof of inclusion
 for each piece of data.
-These individual proofs are inexpensive.
+These individual proofs are inexpensive to compute.
 It is possible to perform multiple inclusion-proofs at once;
 this is a called a \emph{Merkle Multi-Proof}.
 We will not give a formal definition of a multi-proof
-but see Example~\ref{example:hash_app_merkle_tree_multi-proof}
-for an example.
+but see Example~\ref{example:hash_app_merkle_tree_multi-proof}.
 
 We note the following details which are useful
 but which will not be discussed any further here.
@@ -467,17 +466,38 @@ We will first look at the convention in~\cite{rfc6962,rfc9162},
 although we will use the general hash from~\cite{rfc9162}
 rather than \ShaTwo{}-256 from~\cite{rfc6962}.
 The precise definition for computing the \gls{merkle tree}
-root hash may be found in Alg.~\ref{alg:merkle_tree_ctv};
-the definition is defined using \gls{recursion}.
+root hash may be found in Alg.~\ref{alg:merkle_tree_ctv}
+while the generating inclusion proofs
+and verifying inclusion proofs may be found in
+Algs.~\ref{alg:merkle_proof_generate_ctv}
+and \ref{alg:merkle_proof_verify_ctv}, respectively;
+these are defined using \gls{recursion}.
 Some visualizations of these trees may be found in
 Figures~\ref{fig:merkle_tree_ctv_5},
 \ref{fig:merkle_tree_ctv_6},
 \ref{fig:merkle_tree_ctv_7}, and
 \ref{fig:merkle_tree_ctv_8}.
-Algorithms for constructing inclusion proofs and verifying them
-may be found in~\cite{rfc9162}.
 As mentioned above, second preimage security is ensured by
 using domain separation.
+
+The convention in~\cite{rfc9162} is that
+
+\begin{equation}
+    D_{n} \mathDef{} (x_{0}, x_{1}, \cdots, x_{n-1}).
+\end{equation}
+
+\noindent
+A contiguous subset of $D_{n}$ is denoted by
+
+\begin{equation}
+    D_{n}[j\!:\!k] \mathDef{} (x_{j}, x_{j+1}, \cdots, x_{k-1}).
+\end{equation}
+
+\noindent
+We use $x_{i}$ within our definition of $D_{n}$
+to be consistent with our convention for node values;
+in~\cite{rfc9162}, the convention is to use $d_{i}$ for node values.
+
 
 \input{algs/merkle_ctv.tex}
 \input{figures/hash_applications/merkle_tree_ctv.tex}

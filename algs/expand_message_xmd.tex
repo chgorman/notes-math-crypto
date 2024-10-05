@@ -1,0 +1,33 @@
+\begin{algorithm}[t]
+\caption{\ExpandMsgXmd{}}
+\label{alg:expand_message_xmd}
+\begin{algorithmic}[1]
+\Require \textsf{Hash} is a hash function indifferentiable from a random oracle.
+\Procedure{ExpandMessageXmd}{\textsf{msg}, \textsf{dst}, $\ell$}
+    \State $t \algAssign{} \ceil{\ell/n}$
+    \State $\textsf{dst\_prime} \algAssign{} \textsf{dst} \|
+            \textsc{Length}(\textsf{dst})$
+    \Comment{Append the length of \textsf{dst} to \textsf{dst}}
+    \State $\textsf{zero\_pad} \algAssign{} 0^{b}$
+    \Comment{A block of zeros matching the internal block size}
+    \State $\textsf{lib} \algAssign{}
+        \textsc{Length}(\ell)$
+    \State $\textsf{msg\_prime} \algAssign{} 
+        \textsf{zero\_pad}\|
+        \textsf{msg}\|
+        \textsf{lib}\|0\|
+        \textsf{dst\_prime}$
+    \State $\textsf{b\_0} \algAssign{} 
+        \textsf{Hash}(\textsf{msg\_prime})$
+    \State $\textsf{b\_1} \algAssign{} 
+        \textsf{Hash}(\textsf{b\_0}\|1\|\textsf{dst\_prime})$
+    \For{$i=2$; $i\le t$; $i{+}{+}$}
+        \State $\textsf{b\_i} \algAssign{} 
+            \textsf{Hash}(\textsf{b\_0}\oplus\textsf{b\_(i-1)}\|i\|
+            \textsf{dst\_prime})$
+    \EndFor
+    \State \Return $\textsf{trunc}(
+        \textsf{b\_1}\|\textsf{b\_2}\|\cdots\|\textsf{b\_t}, \ell)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}

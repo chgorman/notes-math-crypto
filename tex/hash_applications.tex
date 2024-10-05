@@ -23,7 +23,8 @@ Each private key $k$ produces a public key
 \end{equation}
 
 \noindent
-here, $G$ is the specified base point of the \gls{elliptic curve}.
+here, $G$ is the specified base point of the \gls{elliptic curve}
+(the generator for the \gls{cyclic group}).
 Uncompressed, the public key is two 256-bit unsigned integers
 (64 bytes).
 With the compressed or uncompressed designation byte,
@@ -286,7 +287,7 @@ of a \gls{hash function} is too short.
 A similar concept is an \gls{xof}.
 
 Further discussion about \glspl{mgf} and \glspl{xof} is relegated to
-Appendix~\ref{app:crypto_mgf_xof}.
+Appendix~\ref{app:crypto_additional_uniform_bytes}.
 
 
 

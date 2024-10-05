@@ -9,7 +9,7 @@
         \Comment{Compute leaf hashes}
     \EndFor
     \For {$i=0; i < n-1; i{+}{+}$}
-        \State $y_{n+i} \algAssign{} H(y_{2i}||y_{2i+1})$
+        \State $y_{n+i} \algAssign{} H(y_{2i}\|y_{2i+1})$
         \Comment{Compute internal hashes}
     \EndFor
     \State \Return $y_{2n-2}$

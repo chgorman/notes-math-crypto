@@ -8,14 +8,11 @@
     \Comment{The byte \texttt{36} is repeated $B$ times}
     \State $\textsf{opad} \algAssign{} \texttt{0x5c5c}\cdots\texttt{5c}$
     \Comment{The byte \texttt{5c} is repeated $B$ times}
-    \If {$\textsc{Length}($k$) \le B$}
-        \State $k' \algAssign{} k\|\texttt{0000}\cdots\texttt{00}$
-        \Comment{Concatenate $k$ with byte \texttt{00} until $k'$ has length $B$}
-    \Else
-        \State $k'' \algAssign{} \textsc{Hash}(k)$
-        \State $k' \algAssign{} k''\|\texttt{0000}\cdots\texttt{00}$
-        \Comment{Concatenate $k''$ with byte \texttt{00} until $k'$ has length $B$}
+    \If {$\textsc{Length}($k$) > B$}
+        \State $k \algAssign{} \textsc{Hash}(k)$
     \EndIf
+    \State $k' \algAssign{} k\|\texttt{0000}\cdots\texttt{00}$
+    \Comment{Concatenate $k$ with byte \texttt{00} until $k'$ has length $B$}
     \State $k_{1} \algAssign{} k' \oplus \textsf{ipad}$
     \State $k_{2} \algAssign{} k' \oplus \textsf{opad}$
     \State $t' \algAssign{} \textsf{Hash}(k_{1}, m)$

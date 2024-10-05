@@ -2,6 +2,9 @@
 
 import hashlib
 
+def hash(data: bytes) -> bytes:
+    return hashlib.md5(data).digest()
+
 root = bytes.fromhex('18446692e822581d02b096e1b77c9fff')
 
 # Set up data and proof
@@ -11,12 +14,9 @@ y11 = bytes.fromhex('70d0669eae8c7a5dce3b3ff4ccf4adbb')
 y12 = bytes.fromhex('a3f21dba8fa8de359220c29c00467556')
 
 # Merkle Proof
-md5 = hashlib.md5(); md5.update(x);    yHat = md5.digest()
-yHat10 = md5.digest()
-md5 = hashlib.md5(); md5.update(yHat); md5.update(y11)
-yHat13 = md5.digest()
-md5 = hashlib.md5(); md5.update(y12);  md5.update(yHat13)
-yHat14 = md5.digest()
+yHat   = hash(x)
+yHat13 = hash(yHat + y11   )
+yHat14 = hash(y12  + yHat13)
 
 print("3-Layer MD5 Merkle \"Proof\"")
 print("#"*72)

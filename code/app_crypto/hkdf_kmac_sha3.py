@@ -3,25 +3,26 @@
 import hashlib
 import math
 
+def hash_sha3(data: bytes) -> bytes:
+    return hashlib.sha3_256(data).digest()
+
 # This version of KMAC does not follow the NIST spec
-def kmac(key: bytes, msg: bytes):
-    sha3 = hashlib.sha3_256()
-    key_len = len(key)
-    assert key_len < sha3.block_size
-    padding = bytes.fromhex("00" * (sha3.block_size - key_len))
-    sha3.update(key); sha3.update(padding); sha3.update(msg)
-    return sha3.digest()
+def kmac_sha3(key: bytes, msg: bytes) -> bytes:
+    block_size = hashlib.sha3_256().block_size
+    r = len(key) % block_size
+    pad = block_size-r
+    z_pad = bytes.fromhex(''.join('00' for i in range(pad)))
+    return hash_sha3(key + z_pad + msg)
 
 def hkdf(length: int, skm, salt: bytes = b"", ctx: bytes = b""):
-    sha3 = hashlib.sha3_256()
-    hash_len = sha3.digest_size
+    hash_len = hashlib.sha3_256().digest_size
     if len(salt) == 0:
         salt = bytes([0] * hash_len)
-    prk = kmac(salt, skm)
+    prk = kmac_sha3(salt, skm)
     t = b""
     okm = b""
     for i in range(math.ceil(length / hash_len)):
-        t = kmac(prk, t + ctx + bytes([i + 1]))
+        t = kmac_sha3(prk, t + ctx + bytes([i + 1]))
         okm += t
     return okm[:length]
 

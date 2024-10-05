@@ -2,6 +2,9 @@
 
 import hashlib
 
+def hash(data: bytes) -> bytes:
+    return hashlib.md5(data).digest()
+
 root = bytes.fromhex('18446692e822581d02b096e1b77c9fff')
 
 # Set up data and proof
@@ -14,23 +17,17 @@ y7  = bytes.fromhex('a4aa9a02aa65f31d17dce9f944a57ab2')
 y10 = bytes.fromhex('524856d86cb1006e9e9e9149f36b2875')
 
 # Merkle Proof
-md5 = hashlib.md5(); md5.update(x1);     yHat1 = md5.digest()
-md5 = hashlib.md5(); md5.update(x3);     yHat3 = md5.digest()
-md5 = hashlib.md5(); md5.update(x6);     yHat6 = md5.digest()
+yHat1  = hash(x1)
+yHat3  = hash(x3)
+yHat6  = hash(x6)
 
-md5 = hashlib.md5(); md5.update(y0);     md5.update(yHat1)
-yHat8  = md5.digest()
-md5 = hashlib.md5(); md5.update(y2);     md5.update(yHat3)
-yHat9  = md5.digest()
-md5 = hashlib.md5(); md5.update(yHat6);  md5.update(y7)
-yHat11 = md5.digest()
+yHat8  = hash(y0     + yHat1 )
+yHat9  = hash(y2     + yHat3 )
+yHat11 = hash(yHat6  + y7    )
 
-md5 = hashlib.md5(); md5.update(yHat8);  md5.update(yHat9)
-yHat12 = md5.digest()
-md5 = hashlib.md5(); md5.update(y10);    md5.update(yHat11)
-yHat13 = md5.digest()
+yHat12 = hash(yHat8  + yHat9 )
+yHat13 = hash(y10    + yHat11)
 
-md5 = hashlib.md5(); md5.update(yHat12); md5.update(yHat13)
-yHat14 = md5.digest()
+yHat14 = hash(yHat12 + yHat13)
 
 assert yHat14 == root # Valid

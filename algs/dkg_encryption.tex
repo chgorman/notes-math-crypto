@@ -11,7 +11,7 @@
     \State $\texttt{s} \algAssign{} \texttt{toBytes}(s_{i\to j})$
     \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}\|\texttt{j})$
     \State $\overline{\texttt{s}}_{i\to j} \algAssign{}
-        \texttt{s} \oplus \texttt{HashKJ}$
+        \texttt{s} \oplus \texttt{hashKJ}$
     \State \Return $\overline{\texttt{s}}_{i\to j}$
 \EndProcedure
 \State
@@ -23,7 +23,7 @@
     \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
     \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}\|\texttt{j})$
     \State $\texttt{s} \algAssign{}
-        \overline{\texttt{s}}_{i\to j} \oplus \texttt{HashKJ}$
+        \overline{\texttt{s}}_{i\to j} \oplus \texttt{hashKJ}$
     \State $s_{i\to j} \algAssign{} \texttt{fromBytes}(\texttt{s})$
     \State \Return $s_{i\to j}$
 \EndProcedure
@@ -34,7 +34,7 @@
     \State $\texttt{j} \algAssign{} \texttt{toBytes}(j)$
     \State $\texttt{hashKJ} \algAssign{} \textsc{Hash}(\texttt{kX}\|\texttt{j})$
     \State $\texttt{s} \algAssign{}
-        \overline{\texttt{s}}_{i\to j} \oplus \texttt{HashKJ}$
+        \overline{\texttt{s}}_{i\to j} \oplus \texttt{hashKJ}$
     \State $s_{i\to j} \algAssign{} \texttt{fromBytes}(\texttt{s})$
     \State \Return $s_{i\to j}$
 \EndProcedure

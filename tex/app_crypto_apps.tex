@@ -398,11 +398,11 @@ We have the following results:
 \input{code/app_crypto/hkdf_kmac_sha3.tex}
 \end{example}
 
+\subsection{Additional Methods for Generating Uniform Random Bytes}
+\label{app:crypto_additional_uniform_bytes}
 
-\subsection{Mask Generation Function and Extendable Output Function}
-\label{app:crypto_mgf_xof}
-
-We now discuss \glspl{mgf} and \glspl{xof}.
+We now discuss \glspl{mgf}, \glspl{xof}, \ExpandMsgXmd{},
+and \ExpandMsgXof{}.
 
 \Glspl{hash function} are very useful,
 but when a random output is needed with length greater than
@@ -447,17 +447,48 @@ arbitrarily long output~\cite[Section 6.2]{FIPS-202}.
 This is due in part to the sponge function structure of \ShaThree{}.
 
 The difference between \glspl{mgf} and \glspl{xof}
-may be that a \gls{mgf} is designed to use a \gls{hash function}
+may be that a \gls{mgf} is designed to \emph{use} a \gls{hash function}
 to produce arbitrarily long output
-while an \gls{xof} is a ``hash function'' designed
+while an \gls{xof} is a ``hash function'' \emph{designed}
 to produce arbitrarily long output.
+
+With the increase in \gls{ecc},
+there was a need to standardize hashing to \glspl{elliptic curve};
+this lead to RFC 9380~\cite{rfc9380}.
+Part of hashing to \glspl{elliptic curve} requires the ability
+to generate uniform random bits;
+one method discussed is \ExpandMsgXmd{}.
+The main details may be found in Alg.~\ref{alg:expand_message_xmd}
+and an example in Listing~\ref{list:expand_msg_xmd_sha2};
+this is adapted from~\cite[Section 5.3.1]{rfc9380}.
+As discussed in~\cite[Section 10.6]{rfc9380},
+\ExpandMsgXmd{} is indifferentiable from a \gls{random oracle}
+when \textsf{Hash} is:
+indifferentiable from a \gls{random oracle};
+a sponge-based hash function (Appendix~\ref{app:crypto_sponge_construction});
+a \MD{}-based hash function (Appendix~\ref{app:crypto_md_construction}).
+Thus, using \ExpandMsgXmd{} with \ShaTwo{} or \ShaThree{}
+will produce secure uniform random bytes.
+
+\input{algs/expand_message_xmd.tex}
+\input{code/app_crypto/expand_msg_xmd_sha2.tex}
+
+Similarly, \ExpandMsgXof{} is defined
+in~\cite[Section 5.3.2]{rfc9380};
+the main details may be found in Alg.~\ref{alg:expand_message_xof}
+and an example in Listing~\ref{list:expand_msg_xof_shake128}.
+This uses an \gls{xof} rather than a hash function.
+
+\input{algs/expand_message_xof.tex}
+\input{code/app_crypto/expand_msg_xof_shake128.tex}
 
 In summary, the \gls{mgf} as defined in~\cite{rfc8017}
 \emph{should not be used except for backward compatibility}
 due to the weakness of its definition.
 If possible, use an \gls{xof} such as
 SHAKE128 or SHAKE256~\cite{FIPS-202,NIST-SP-800-185};
-otherwise, use \gls{hkdf} with \textsf{HMAC} or \textsf{KMAC}.
+otherwise, use \ExpandMsgXmd{}, \ExpandMsgXof{}, or
+\gls{hkdf}.
 
 
 \subsection{PBKDF2}
@@ -612,5 +643,7 @@ Appendix~\ref{app:crypto_hkdf} appears to be a reasonable decision.
 Although we are not interested in keys \emph{per se},
 we are looking to map random inputs
 to random outputs.
-These outputs will then be deterministically mapped to points
+Following~\cite{rfc9380},
+it may be better to use \ExpandMsgXmd{} or \ExpandMsgXof{}.
+In any case, the outputs will then be deterministically mapped to points
 on an \gls{elliptic curve}.
