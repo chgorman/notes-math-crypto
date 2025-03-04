@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: Notes on Mathematics and Cryptography
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Christopher
+    family-names: Gorman
+    orcid: 'https://orcid.org/0000-0002-3710-0094'
+repository-code: 'https://github.com/chgorman/notes-math-crypto'
+abstract: >-
+  A collection on notes related to the mathematics of public
+  key cryptography.
+keywords:
+  - Mathematics
+  - Public Key Cryptography
+  - Elliptic Curve Cryptography
+license: 0BSD
